@@ -11,10 +11,11 @@ const usePhantom = () => {
 
     const { connected, setConnected, setAccount, setWeb3, setSignedMessage, setSolanaKey, setBalance, solanaKey, setUserId } = useContext(LaunchPadContext);
     const connectToPhantom = async () => {
-
-        if (window.solana) {
+        if (window.solana) {        
+          
+            // debugger
             try {
-                if (!window.solana.isConnected) {
+                if (window.solana.isConnected) {
                     await window.solana.connect();
                     const solanaPublicKey = window.solana.publicKey.toString();
                     console.log(solanaPublicKey, ">>>>>>>");
