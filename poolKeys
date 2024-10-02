@@ -1,0 +1,16 @@
+{
+  "programId": "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",
+  "ammId": "5XWJ7Kuc8P2zKntaejTCkv7Tt5rGaLysFi5BHDEkxUMr",
+  "ammAuthority": "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+  "ammOpenOrders": "9XT5HFNPQbxjWif2xYDnKSQw6fDTpicmJgGH13N3PYba",
+  "lpMint": "CkKQC53YjyRXzyq9sQoy3sQPucipXj7PP4ast4YsrtKV",
+  "coinMint": "9Ttyez3xiruyj6cqaR495hbBkJU6SUWdV6AmQ9MvbyyS",
+  "pcMint": "So11111111111111111111111111111111111111112",
+  "coinVault": "68tYtaph9M6Z3aSCf6r62dvXKCWv6EStxcx12QCwCAiq",
+  "pcVault": "DD3Wta9xfag4rgH32MWhVTdk9FfHmhErjEq6dAcoWrqb",
+  "withdrawQueue": "AqGCUZwHfULMn1gBhyizKdb5271v2UGKGnqLwru6d6y",
+  "ammTargetOrders": "8Pjtk9RPJc1DRpm8dtzPFHnyWf3ZM1DbA5X2XKnuk23y",
+  "poolTempLp": "HLJnfCqAwgVGT25FRTL8PVLvTnovuPahi4kg98Uusxo2",
+  "marketProgramId": "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX",
+  "marketId": "CNnpGbtV14Dk9AfUEhEita1JvfR49ZdL9ptE2H6mLasN"
+}

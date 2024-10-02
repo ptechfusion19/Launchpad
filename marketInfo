@@ -1,0 +1,42 @@
+{
+  "programId": "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX",
+  "id": {
+    "publicKey": "8z8syyvmn95S3SDHKd8JhKTLWdBsYawZTFdWFAaBpUpk",
+    "seed": "GpU9NLQQvSBEBgzBTEJKyN9TsVBYEn8d"
+  },
+  "baseMint": "9Ttyez3xiruyj6cqaR495hbBkJU6SUWdV6AmQ9MvbyyS",
+  "quoteMint": "So11111111111111111111111111111111111111112",
+  "baseVault": {
+    "publicKey": "8mS6B9FVVz5w5JH2v7TumE8LiEbmEdH9PWrPBs5o2C2H",
+    "seed": "FVNRVGV6aweuo9BNNte4TuLQBvGHoQq2"
+  },
+  "quoteVault": {
+    "publicKey": "H1G6vLJ15ePvM122Nq6dHQucG3hGryx4zNoEW86eYVqe",
+    "seed": "3Ww3iVKiMNjjdZYVQ2oxzqgMe9hpf7tp"
+  },
+  "vaultOwner": "7Wx3chRuryoYKVXWq5g5k4JFsuaJ6vrrsomGr3RD9HpA",
+  "requestQueue": {
+    "publicKey": "9Gren5Si4oKq7yz4Ei8viXbUnuheNzN1QndqJRJxU3XH",
+    "seed": "UERH2hZgGUvJnWhDYBgcJdDrg7uXKCXx"
+  },
+  "eventQueue": {
+    "publicKey": "785WrQBe44LNSJWEUGHqoytQTzN6LK4E7kkdr6P25dfV",
+    "seed": "eJVxH4r1uVMwnTYSooTj4Sm3vcHQdx15"
+  },
+  "bids": {
+    "publicKey": "8nz5YwPnauHP5b8W3z3dkyqjNQnAtabSBvV25H5jcGko",
+    "seed": "FDme12hqdyBBS18fET8ua2nR1coz5B3c"
+  },
+  "asks": {
+    "publicKey": "7i81syFn6watK7khGj4jv8CvS1mQBTSPWTCqSeZxq9fR",
+    "seed": "Cyb6KGc5oD5MDAfgPrnhSUQooxzvYFzD"
+  },
+  "feeRateBps": 0,
+  "quoteDustThreshold": "64",
+  "vaultSignerNonce": "01",
+  "baseLotSize": "0f4240",
+  "quoteLotSize": "989680",
+  "requestQueueSpace": 36609600,
+  "eventQueueSpace": 79928640,
+  "orderbookQueueSpace": 113448000
+}

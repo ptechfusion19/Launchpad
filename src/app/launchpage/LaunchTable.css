@@ -1,0 +1,80 @@
+/* Table container */
+.relative {
+    background-color: #1e1e2d; /* Darker background */
+    border-radius: 10px;
+  }
+  
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  /* Header styling */
+  thead {
+    background: linear-gradient(to right, #6b46c1, #3182ce); /* Gradient background */
+  }
+  
+  thead th {
+    padding: 16px 12px;
+    color: #fff;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  /* Body styling */
+  tbody tr {
+    background-color: #2d2d44; /* Dark background for rows */
+    transition: background-color 0.3s ease;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #33334e; /* Slightly different background for even rows */
+  }
+  
+  /* Hover effect */
+  tbody tr:hover {
+    background-color: #805ad5; /* Purple background on hover */
+    box-shadow: 0px 4px 10px rgba(128, 90, 213, 0.2);
+  }
+  
+  /* Cell padding and text color */
+  td {
+    padding: 16px 12px;
+    color: #fff;
+  }
+  
+  /* First column styling */
+  td:first-child {
+    font-weight: bold;
+  }
+  
+  /* Table scroll styling */
+  .relative::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .relative::-webkit-scrollbar-track {
+    background: #1e1e2d;
+  }
+  
+  .relative::-webkit-scrollbar-thumb {
+    background-color: #805ad5;
+    border-radius: 4px;
+    border: 2px solid #1e1e2d;
+  }
+  
+  .relative::-webkit-scrollbar-thumb:hover {
+    background-color: #9f7aea;
+  }
+  
+  /* Make token balance text right-aligned */
+  td.text-right {
+    text-align: right;
+  }
+  

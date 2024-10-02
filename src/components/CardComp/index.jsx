@@ -1,0 +1,33 @@
+"use client";
+import React from "react";
+
+const CardComp = ({ children }) => {
+  return (
+    // <div
+    //   style={{
+    //     width: "80%",
+    //     padding: "1rem",
+    //     margin: "0 auto",
+    //     backgroundColor: "#383962",
+    //     border: "1px solid #383962",
+    //     borderRadius: "0.75rem",
+    //     boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
+    //     display: "flex",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    //     flexDirection : "column"
+    //   }}
+    // >
+    //   {children}
+    // </div>
+    // <div className="">
+    <div className="w-4/5 p-4 mx-auto bg-[#383962] border border-custom_bg rounded-xl shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+      <div className="flex items-center justify-center flex-col">
+        {children}
+      </div>
+    </div>
+    // </div>
+  );
+};
+
+export default CardComp;

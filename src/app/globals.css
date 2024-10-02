@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+  background-image: url('../assets/home/bgImg.png');
+  background-size: cover;
+}
+
+h3 {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 800;
+  color: #fff;
+}
+
+h4 {
+  font-size: 14px;
+  line-height: 17px;
+  font-weight: 600;
+  color: #fff;
+}
+
+p {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 500;
+  color: #fff;
+}

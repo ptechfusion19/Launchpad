@@ -1,0 +1,166 @@
+4poDrAkdH3mdsAbXBxfXbA2zhSutGDCVxtkFN4KwEGgVEzhZGv23a5DRTZwZxeUR4YwL5XU4KHvUoM2mH14euW8K
+Server responded with 429 Too Many Requests.  Retrying after 500ms delay...
+Server responded with 429 Too Many Requests.  Retrying after 1000ms delay...
+Error adding user: SendTransactionError: Simulation failed. 
+Message: Transaction simulation failed: Error processing Instruction 1: custom program error: 0x3.
+Logs:
+[
+  "Program 11111111111111111111111111111111 invoke [1]",
+  "Program 11111111111111111111111111111111 success",
+  "Program 11111111111111111111111111111111 invoke [1]",
+  "Allocate: requested 36609600, max allowed 10485760",
+  "Program 11111111111111111111111111111111 failed: custom program error: 0x3"
+].
+Catch the `SendTransactionError` and call `getLogs()` on it for full details.
+    at Connection.sendEncodedTransaction (webpack-internal:///(rsc)/./node_modules/@solana/web3.js/lib/index.esm.js:8226:13)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async Connection.sendRawTransaction (webpack-internal:///(rsc)/./node_modules/@solana/web3.js/lib/index.esm.js:8191:20)
+    at async launch (webpack-internal:///(rsc)/./src/app/launch.js:131:25)
+    at async POST (webpack-internal:///(rsc)/./src/app/api/signedTransaction/route.js:13:9)
+    at async H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:55038
+    at async ek.execute (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:45808)
+    at async ek.handle (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\compiled\next-server\app-route.runtime.dev.js:6:56292)
+    at async doRender (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:1377:42)
+    at async cacheEntry.responseCache.get.routeKind (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:1599:28)
+    at async DevServer.renderToResponseWithComponentsImpl (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:1507:28)
+    at async DevServer.renderPageComponent (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:1931:24)
+    at async DevServer.renderToResponseImpl (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:1969:32)
+    at async DevServer.pipeImpl (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:920:25)
+    at async NextNodeServer.handleCatchallRenderRequest (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\next-server.js:272:17)
+    at async DevServer.handleRequestImpl (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\base-server.js:816:17)
+    at async H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\dev\next-dev-server.js:339:20
+    at async Span.traceAsyncFn (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\trace\trace.js:154:20)
+    at async DevServer.handleRequest (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\dev\next-dev-server.js:336:24)
+    at async invokeRender (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\lib\router-server.js:174:21)
+    at async handleRequest (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\lib\router-server.js:353:24)
+    at async requestHandlerImpl (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\lib\router-server.js:377:13)
+    at async Server.requestListener (H:\PTechGit\launchpad_sol\dapp\node_modules\next\dist\server\lib\start-server.js:141:13) {
+  signature: '',
+  transactionMessage: 'Transaction simulation failed: Error processing Instruction 1: custom program error: 0x3',
+  transactionLogs: [
+    'Program 11111111111111111111111111111111 invoke [1]',
+    'Program 11111111111111111111111111111111 success',
+    'Program 11111111111111111111111111111111 invoke [1]',
+    'Allocate: requested 36609600, max allowed 10485760',
+    'Program 11111111111111111111111111111111 failed: custom program error: 0x3'
+  ]
+}
+ POST /api/signedTransaction 500 in 3586ms
+ ✓ Compiled in 30ms
+ ✓ Compiled /api/projectSettingsService/getProjectDetail in 139ms (701 modules)
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+Hello B4tdmPqLBoMFpyYoBitCtboGpakGfaB5tP1zw1Fh3t1h 2ru5SWVMRPkfH3a7gtxMhPddyahVD2dmDgEfVhvQwiAV 10000000 0.1 0.5
+9
+Unable to fetch minimum balance for rent exemption
+Unable to fetch minimum balance for rent exemption
+Unable to fetch minimum balance for rent exemption
+Unable to fetch minimum balance for rent exemption
+ POST /api/projectSettingsService/getProjectDetail 200 in 5906ms
+ ✓ Compiled /favicon.ico in 56ms (728 modules)
+ GET /favicon.ico 200 in 606ms
+ ✓ Compiled /api/signedTransaction in 66ms (733 modules)
+bigint: Failed to load bindings, pure JS will be used (try npm run rebuild?)
+{
+  _id: new ObjectId('66e2d54bd06d46f1aa967dea'),
+  projectId: '871054',
+  marketInfo: {
+    programId: 'srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX',
+    id: 'HNnwpA68miUYmjm7Vpkh9fG3eEQ6BLLfW9b1RbgV3w1E',
+    baseMint: 'B4tdmPqLBoMFpyYoBitCtboGpakGfaB5tP1zw1Fh3t1h',
+    quoteMint: 'So11111111111111111111111111111111111111112',
+    baseVault: '2WwHHejdqed4ZxUpuTbvLcNS4oTppHi5DPXE8We1hiNx',
+    quoteVault: '7c21KVAT4HaUGtYfrgAT3CYGLPGTwSQsP8tSx1YEyN8A',
+    vaultOwner: '6TtfDqYrgPqE3PKSmN8GtxGSepH1woUVkQuVtAhrgCsr',
+    requestQueue: '7zFhRosngTiKfk3pWBdjRVNGC55VWNJzXVuUYg3HR8ct',
+    eventQueue: 'EcdWLnLnQPT67HoWsHce9Ra5tgGVBCsSUHi3VBnjX9xG',
+    bids: '29VzfKgRRQ7wwqkgdtgi4uEX2bxaJ41RDHU2dQe43g1e',
+    asks: 'EA9jhE46Rvt9roHYDcqSUkJL5a9Wz73kHftsHKxb4ybG',
+    feeRateBps: 0,
+    quoteDustThreshold: '100',
+    vaultSignerNonce: '1',
+    baseLotSize: '1000000000',
+    quoteLotSize: '10000000',
+    requestQueueSpace: 36609600,
+    eventQueueSpace: 79928640,
+    orderbookQueueSpace: 113448000
+  },
+  mint: 'B4tdmPqLBoMFpyYoBitCtboGpakGfaB5tP1zw1Fh3t1h',
+  __v: 0
+} ____marketInfo
+MessageV0 {
+  header: {
+    numRequiredSignatures: 1,
+    numReadonlySignedAccounts: 0,
+    numReadonlyUnsignedAccounts: 7
+  },
+  staticAccountKeys: [
+    PublicKey [PublicKey(2ru5SWVMRPkfH3a7gtxMhPddyahVD2dmDgEfVhvQwiAV)] {
+      _bn: <BN: 1ba4079b32e9570c139cc425ba85454f85ea974afcac666ce7b98e679b809bea>
+    },
+    PublicKey [PublicKey(2WwHHejdqed4ZxUpuTbvLcNS4oTppHi5DPXE8We1hiNx)] {
+      _bn: <BN: 1686e7e8ff395c2be2546341be28878771eeaf6ff5fb1d12bca230998460c5dd>
+    },
+    PublicKey [PublicKey(7c21KVAT4HaUGtYfrgAT3CYGLPGTwSQsP8tSx1YEyN8A)] {
+      _bn: <BN: 621e96380bbdb026d0aa67b249a073f8fdb6e69ab88189283f6b02d764936b03>
+    },
+    PublicKey [PublicKey(HFqU5x63VTqvQss8hp11i4wVV8bD44PvwucfZ2bU7gRe)] {
+      _bn: <BN: f187ec87d1f745cb3a03384a26a69eda0ca2d1aa0f41e42416377e91ff5b5d31>
+    },
+    PublicKey [PublicKey(ComputeBudget111111111111111111111111111111)] {
+      _bn: <BN: 306466fe5211732ffecadba72c39be7bc8ce5bbc5f7126b2c439b3a40000000>
+    },
+    PublicKey [PublicKey(11111111111111111111111111111111)] {
+      _bn: <BN: 0>
+    },
+    PublicKey [PublicKey(TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA)] {
+      _bn: <BN: 6ddf6e1d765a193d9cbe146ceeb79ac1cb485ed5f5b37913a8cf5857eff00a9>
+    },
+    PublicKey [PublicKey(B4tdmPqLBoMFpyYoBitCtboGpakGfaB5tP1zw1Fh3t1h)] {
+      _bn: <BN: 9593fe8b3e0d931411e26185a67a0e1fdab2ceab16412d619f9623d1d9922be4>
+    },
+    PublicKey [PublicKey(6TtfDqYrgPqE3PKSmN8GtxGSepH1woUVkQuVtAhrgCsr)] {
+      _bn: <BN: 512df2591afb92e9fdf6056e18d4d1f7b2700fc8dcc9ac870321039f038580f9>
+    },
+    PublicKey [PublicKey(SysvarRent111111111111111111111111111111111)] {
+      _bn: <BN: 6a7d517192c5c51218cc94c3d4af17f58daee089ba1fd44e3dbd98a00000000>
+    },
+    PublicKey [PublicKey(So11111111111111111111111111111111111111112)] {
+      _bn: <BN: 69b8857feab8184fb687f634618c035dac439dc1aeb3b5598a0f00000000001>
+    }
+  ],
+  recentBlockhash: '22KUvZhEMXrSQZTQeWh9Rkm7Y5Ur1ywvB1yLHo62aNFr',
+  compiledInstructions: [
+    { programIdIndex: 4, accountKeyIndexes: [], data: [Uint8Array] },
+    { programIdIndex: 4, accountKeyIndexes: [], data: [Uint8Array] },
+    {
+      programIdIndex: 5,
+      accountKeyIndexes: [Array],
+      data: [Uint8Array]
+    },
+    {
+      programIdIndex: 5,
+      accountKeyIndexes: [Array],
+      data: [Uint8Array]
+    },
+    {
+      programIdIndex: 6,
+      accountKeyIndexes: [Array],
+      data: [Uint8Array]
+    },
+    {
+      programIdIndex: 6,
+      accountKeyIndexes: [Array],
+      data: [Uint8Array]
+    },
+    {
+      programIdIndex: 5,
+      accountKeyIndexes: [Array],
+      data: [Uint8Array]
+    }
+  ],
+  addressTableLookups: []
+}
+Confirming the jito transaction...
+3JgzBPn6mzBTGWjd5VXSoGLDJdXsFxnrECChWP7P6qEX5rStywr1yC5nBAz62SJEXJWYMPU5X4Zf4cJ36H84e8vq
+Terminate batch job (Y/N)? 
+y
