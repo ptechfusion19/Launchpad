@@ -16,10 +16,10 @@ function Header() {
     setIsMenuOpen(!isMenuOpen);
   };
   useEffect(() => {
-    debugger
+    // debugger
     // Call connectToPhantom when the wallet is connected
     if (publicKey) {
-      debugger
+      // debugger
       connectToPhantom();
     }
   }, [publicKey]); // This will trigger whenever publicKey changes
