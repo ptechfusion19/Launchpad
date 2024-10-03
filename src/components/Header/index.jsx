@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
-import logo from "/public/logo.png";
+
 import usePhantom from "../../hooks/usePhantom";
 import ConnectModalComp from "./ConnectModal";
 import LaunchPadContext from "../../context/LaunchPadContext";
