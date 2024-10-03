@@ -21,7 +21,7 @@ const CardComp = ({ children }) => {
     //   {children}
     // </div>
     // <div className="">
-    <div className="w-4/5 p-4 mx-auto bg-[#383962] border border-custom_bg rounded-xl shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <div className="w-4/5 p-4 mx-auto bg-[#755512] border border-custom_bg rounded-xl shadow sm:p-6 md:p-8  dark:border-gray-700">
       <div className="flex items-center justify-center flex-col">
         {children}
       </div>
