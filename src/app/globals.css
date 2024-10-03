@@ -29,3 +29,11 @@ p {
   font-weight: 500;
   color: #000!important; 
 }
+
+
+
+@media (max-width: 992px) {
+form .flex{
+  display: block;
+}
+}
