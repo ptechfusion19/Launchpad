@@ -515,13 +515,13 @@ const LaunchFormComp = () => {
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="mint"
                 >
                   Token Address
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="mint"
                   name="mint"
                   type="text"
@@ -534,13 +534,13 @@ const LaunchFormComp = () => {
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="amountTokens"
                 >
                   Token Initial Liquidity
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="amountTokens"
                   name="amountTokens"
                   type="text"
@@ -550,13 +550,13 @@ const LaunchFormComp = () => {
               </div>
               <div className="w-full md:w-1/3 px-3">
                 <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="amountSol"
                 >
                   SOL Initial Liquidity
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="amountSol"
                   name="amountSol"
                   value={formData.amountSol}
@@ -566,13 +566,13 @@ const LaunchFormComp = () => {
               </div>
               <div className="w-full md:w-1/3 px-3">
                 <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
                   htmlFor="amountSolForSnipping"
                 >
                   Snipe SOL Amount
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="amountSolForSnipping"
                   name="amountSolForSnipping"
                   value={formData.amountSolForSnipping}
@@ -584,7 +584,7 @@ const LaunchFormComp = () => {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm"
+              className="bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm"
               disabled={!connected} // Disable button if not connected
             >
               Save Settings
@@ -593,7 +593,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button"
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}
                   onClick={genWalletsHandler}
@@ -605,7 +605,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-4/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={downloadCSV} // Added onClick handler
@@ -617,7 +617,7 @@ const LaunchFormComp = () => {
                 <button
                   onClick={LaunchToken}
                   type="submit"
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                 >
@@ -630,7 +630,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={burnLP}
@@ -641,7 +641,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-8/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}  // Disable button if not connected
                   onClick={removeLP}
@@ -651,7 +651,7 @@ const LaunchFormComp = () => {
               </div>
             </div>
             <p className="pt-4 text-center">
-              For questions or support, reach out via t.me/Ptech_Inquiries 
+              For questions or support, reach out via t.me/Ptech_Inquiries
             </p>
           </form>
         </div>
