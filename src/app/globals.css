@@ -9,17 +9,16 @@ body {
 }
 
 h3 {
-  font-size: 18px;
-  line-height: 22px;
+  font-size: 40px;
+  line-height: 40px;
   font-weight: 800;
-  color: #fff;
 }
 
 h4 {
-  font-size: 14px;
-  line-height: 17px;
+  font-size: 18px;
+  line-height: 10px;
+  margin-bottom: 20px;
   font-weight: 600;
-  color: #fff;
 }
 
 p {

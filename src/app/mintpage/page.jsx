@@ -61,7 +61,7 @@ const MintPage = () => {
             Once minted, the tokens will be automatically deposited into the
             wallet you are connected with.
           </h4>
-          <h4 className="my-2">
+          <h4 className="mt-2 mb-5" >
             In addition to the network fees, a service fee of 1 SOL will be
             charged from your wallet.
           </h4>
