@@ -41,7 +41,7 @@ function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
-            <Image className="mx-2" width="100px" src={logo} alt="Logo" />
+            <Image className="mx-2" width="100px" src={logo} alt="Logo" /> 
              Bundle Bee
             </span>
           </Link>
