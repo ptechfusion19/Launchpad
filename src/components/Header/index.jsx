@@ -7,6 +7,7 @@ import ConnectModalComp from "./ConnectModal";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+import Image from "next/image";
 function Header() {
   const { publicKey, connect } = useWallet();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
