@@ -92,13 +92,13 @@ const BurnFormComp = () => {
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
                   htmlFor="mint"
                 >
                   Token Address
                 </label>
                 <input
-                  className="appearance-none block w-[450px] bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-[450px] bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="mint"
                   name="mint"
                   type="text"
@@ -111,13 +111,13 @@ const BurnFormComp = () => {
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full px-3 mb-6 md:mb-0">
                 <label
-                  className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
                   htmlFor="pairAddress"
                 >
                   Pair Address (Optional)
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="pairAddress"
                   name="pairAddress"
                   type="text"
@@ -130,7 +130,7 @@ const BurnFormComp = () => {
             <button
               onClick={burnLP}
               type="submit"
-              className="bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm"
+              className="bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm"
             >
               Burn LP
             </button>
