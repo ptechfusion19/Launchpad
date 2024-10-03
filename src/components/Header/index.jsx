@@ -7,7 +7,13 @@ import ConnectModalComp from "./ConnectModal";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { useWallet } from "@solana/wallet-adapter-react";
+
 import Image from "next/image";
+
+
+
+
+
 function Header() {
   const { publicKey, connect } = useWallet();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,7 +48,8 @@ function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
-            <Image className="mx-2" width="100px" src={logo} alt="Logo" /> 
+            <Image className="logoImage" src={logo} alt="Logo" />
+
              Bundle Bee
             </span>
           </Link>
@@ -112,16 +119,16 @@ function Header() {
                 </Link>
               </li> */}
 
-              <li className="relative group py-2">
+              {/* <li className="relative group py-2">
                 <Link
                   href="/"
                   className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-white-400 lg:dark:hover:text-white dark:hover:text-white lg:dark:hover:bg-transparent"
                 >
                   Liquidity
-                </Link>
+                </Link> */}
 
                 {/* Dropdown menu */}
-                <ul className="absolute w-44 hidden group-hover:block bg-white text-white-700  dark:text-white border border-gray-100 mt-2 rounded-lg shadow-lg">
+                {/* <ul className="absolute w-44 hidden group-hover:block bg-white text-white-700  dark:text-white border border-gray-100 mt-2 rounded-lg shadow-lg">
                   <li>
                     <Link
                       href="burnpage"
@@ -139,8 +146,8 @@ function Header() {
                     </Link>
                   </li>
 
-                </ul>
-              </li>
+                </ul> */}
+              {/* </li> */}
 
 
               <li className="py-2">

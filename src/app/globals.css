@@ -37,3 +37,9 @@ form .flex{
   display: block;
 }
 }
+
+
+.logoImage {
+  max-width: 75% !important; /* Use !important to override */
+  width: auto; /* To control size as needed */
+}
