@@ -51,8 +51,8 @@ const LauchTable = ({ tableData }) => {
               key={index}
               className={`bg-${index % 2 === 0 ? "light" : "dark"} hover:bg-purple-900 transition-all duration-200`}
             >
-              <td className="px-6 py-4 font-medium text-black">{index + 1}</td>
-              <td className="px-6 py-4 text-black flex gap-2">
+              <td className="px-6 py-4 font-medium text-white">{index + 1}</td>
+              <td className="px-6 py-4 text-white flex gap-2">
                 {formatPublicKey(item?.publicKey || item?.pubKey)}
                 <Image src={CopyImg} width={16}  // Desired width
                   height={14}
@@ -61,7 +61,7 @@ const LauchTable = ({ tableData }) => {
                   onClick={() => copyToClipboard(item?.publicKey || item?.pubKey)}
                 />
               </td>
-              <td className="px-6 py-4 text-black">
+              <td className="px-6 py-4 text-white">
                 <div className="flex gap-2">
                   {formatPublicKey(item?.secretKey || item?.privateKey)}
                   <Image src={CopyImg} width={16}  // Desired width
@@ -71,8 +71,8 @@ const LauchTable = ({ tableData }) => {
                   />
                 </div>
               </td>
-              <td className="px-6 py-4 text-black">{item?.solBalance || 0}</td>
-              <td className="px-6 py-4 text-black text-right">
+              <td className="px-6 py-4 text-white">{item?.solBalance || 0}</td>
+              <td className="px-6 py-4 text-white text-right">
                 {item?.tokenBalance || 0}
               </td>
             </tr>

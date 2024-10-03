@@ -98,7 +98,7 @@ const BurnFormComp = () => {
                   Token Address
                 </label>
                 <input
-                  className="appearance-none block w-[450px] bg-[#878787] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-[450px] bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="mint"
                   name="mint"
                   type="text"
@@ -117,7 +117,7 @@ const BurnFormComp = () => {
                   Pair Address (Optional)
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#878787] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
                   id="pairAddress"
                   name="pairAddress"
                   type="text"
