@@ -273,13 +273,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
               for="grid-first-name"
             >
               Token Name
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="tokenName"
               name="tokenName"
               type="text"
@@ -292,13 +292,13 @@ const FormComp = () => {
           </div>
           <div className="w-full md:w-1/2 px-3">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
               for="grid-last-name"
             >
               Symbol
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="symbol"
               name="symbol"
               value={formData.symbol}
@@ -313,13 +313,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold msb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold msb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Logo URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="logoUrl"
               name="logoUrl"
               value={formData.logoUrl}
@@ -341,13 +341,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Description
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="description"
               name="description"
               value={formData.description}
@@ -361,13 +361,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Website URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="websiteUrl"
               name="websiteUrl"
               value={formData.websiteUrl}
@@ -382,13 +382,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Twitter URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="twitterUrl"
               name="twitterUrl"
               value={formData.twitterUrl}
@@ -402,13 +402,13 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Telegram URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="telegramUrl"
               name="telegramUrl"
               value={formData.telegramUrl}
@@ -422,14 +422,14 @@ const FormComp = () => {
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
-              className="block uppercase tracking-wide text-white text-xs font-bold mb-2 mr-3 w-32"
+              className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
               Discord URL
             </label>
             <input
-              // className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  border-custom_bg rounded py-1 px-4 mb-3 leading-tight focus:outline-none  "
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              // className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  border-custom_bg rounded py-1 px-4 mb-3 leading-tight focus:outline-none  "
+              className="appearance-none block w-full bg-[#4b4b4b]   text-black border-2  py-1 px-4 mb-3 border-custom_bg"
               id="discordUrl"
               name="discordUrl"
               value={formData.discordUrl}
@@ -451,7 +451,7 @@ const FormComp = () => {
               onChange={handleToggle}
             />
             <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-custom_bg dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border-2 after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-custom_bg "></div>
-            <span className="ms-3 text-sm font-bold text-white">Freeze Authority</span>
+            <span className="ms-3 text-sm font-bold text-black">Freeze Authority</span>
           </label>
         </div>
         <div>
@@ -464,12 +464,12 @@ const FormComp = () => {
               onChange={handleMintToggle}
             />
             <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-custom_bg dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border-2 after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-custom_bg "></div>
-            <span className="ms-3 text-sm font-bold text-white">Mint Authority</span>
+            <span className="ms-3 text-sm font-bold text-black">Mint Authority</span>
           </label>
         </div>
         <button
           onClick={metaDataUpload}
-          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-3 px-4 rounded-3xl w-full"
+          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-black py-3 px-4 rounded-3xl w-full"
         >
           Upload MetaData
         </button>
@@ -478,7 +478,7 @@ const FormComp = () => {
 
         <button
           onClick={createToken}
-          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white font-bold py-3 px-4 rounded-3xl w-full"
+          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-black font-bold py-3 px-4 rounded-3xl w-full"
         >
           Create Token
         </button>
@@ -486,13 +486,13 @@ const FormComp = () => {
       <div className="flex flex-wrap -mx-3 my-3">
         <div className="w-full px-3 flex items-center">
           <label
-            className="block uppercase tracking-wide text-white text-xs font-bold mr-3 w-44"
+            className="block uppercase tracking-wide text-black text-xs font-bold mr-3 w-44"
             htmlFor="grid-password"
           >
             Token Address
           </label>
           <input
-            className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 border-custom_bg"
+            className="appearance-none block w-full bg-[#4b4b4b] text-black border-2 py-1 px-4 border-custom_bg"
             id="tokenAddress"
             name="tokenAddress"
             value={tokenAddress}
