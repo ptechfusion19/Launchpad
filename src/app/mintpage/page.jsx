@@ -16,8 +16,7 @@ const MintPage = () => {
               Welcome to the $Ptech Vanity Mint
             </h3>
             <h4 className="py-2">
-              Please note that all tokens are minted with the following default
-              settings:
+             
             </h4>
             <div className="flex items-center mb-2">
               <span className="bg-transparent border-custom_bg border-2 text-white font-bold px-2 h-6 flex items-baseline justify-center rounded leading-none">
