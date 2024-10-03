@@ -24,7 +24,7 @@ const MintPage = () => {
                 -
               </span>
 
-              <p className="pl-4">1 Billion supply</p>
+              <p className="pl-4">1 Billion supply ---</p>
             </div>
             <div className="flex items-center mb-2">
               <span className="bg-transparent border-custom_bg border-2 text-white font-bold px-2 h-6 flex items-baseline justify-center rounded leading-none">
