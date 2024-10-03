@@ -521,7 +521,7 @@ const LaunchFormComp = () => {
                   Token Address
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="mint"
                   name="mint"
                   type="text"
@@ -540,7 +540,7 @@ const LaunchFormComp = () => {
                   Token Initial Liquidity
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountTokens"
                   name="amountTokens"
                   type="text"
@@ -556,7 +556,7 @@ const LaunchFormComp = () => {
                   SOL Initial Liquidity
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountSol"
                   name="amountSol"
                   value={formData.amountSol}
@@ -572,7 +572,7 @@ const LaunchFormComp = () => {
                   Snipe SOL Amount
                 </label>
                 <input
-                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg rounded-xl"
+                  className="appearance-none block w-full bg-[#686784] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountSolForSnipping"
                   name="amountSolForSnipping"
                   value={formData.amountSolForSnipping}
