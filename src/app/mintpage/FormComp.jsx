@@ -501,7 +501,7 @@ const FormComp = () => {
             placeholder="Upload token logo image to IPFS"
           />
           <a href={`https://explorer.solana.com/address/${tokenAddress}`} target="_blank" rel="noopener noreferrer">
-            <Image src={forwardImg} alt="View Token on Explorer" />
+            <Image className="mx-2 w-full " src={forwardImg} alt="View Token on Explorer" />
           </a>
 
         </div>
