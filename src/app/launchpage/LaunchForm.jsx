@@ -584,7 +584,7 @@ const LaunchFormComp = () => {
             <button
               onClick={handleSubmit}
               type="submit"
-              className="bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm"
+              className="bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm"
               disabled={!connected} // Disable button if not connected
             >
               Save Settings
@@ -593,7 +593,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button"
-                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}
                   onClick={genWalletsHandler}
@@ -605,7 +605,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-4/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={downloadCSV} // Added onClick handler
@@ -617,7 +617,7 @@ const LaunchFormComp = () => {
                 <button
                   onClick={LaunchToken}
                   type="submit"
-                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                 >
@@ -630,7 +630,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={burnLP}
@@ -641,7 +641,7 @@ const LaunchFormComp = () => {
               <div className="w-full md:w-8/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}  // Disable button if not connected
                   onClick={removeLP}
