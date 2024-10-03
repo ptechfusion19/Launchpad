@@ -13,7 +13,7 @@ const MintPage = () => {
         <CardComp>
           <div className="px-2">
             <h3 className="text-center pb-2  mt-3">
-              Welcome to the $Ptech Vanity ABC
+              Welcome to the $Ptech Vanity Mint
             </h3>
             <h4 className="py-2">
             Please note that all tokens are minted with the following default
@@ -24,7 +24,7 @@ const MintPage = () => {
                 -
               </span>
 
-              <p className="pl-4">1 Billion supply ---</p>
+              <p className="pl-4">1 Billion supply</p>
             </div>
             <div className="flex items-center mb-2">
               <span className="bg-transparent border-custom_bg border-2 text-white font-bold px-2 h-6 flex items-baseline justify-center rounded leading-none">
