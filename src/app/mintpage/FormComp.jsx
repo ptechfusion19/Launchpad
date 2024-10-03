@@ -469,7 +469,7 @@ const FormComp = () => {
         </div>
         <button
           onClick={metaDataUpload}
-          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-black py-3 px-4 rounded-3xl w-full"
+          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-3 px-4 rounded-3xl w-full"
         >
           Upload MetaData
         </button>
@@ -478,7 +478,7 @@ const FormComp = () => {
 
         <button
           onClick={createToken}
-          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-black font-bold py-3 px-4 rounded-3xl w-full"
+          className=" bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white font-bold py-3 px-4 rounded-3xl w-full"
         >
           Create Token
         </button>

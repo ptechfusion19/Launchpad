@@ -130,7 +130,7 @@ const BurnFormComp = () => {
             <button
               onClick={burnLP}
               type="submit"
-              className="bg-gradient-to-r from-[#29285F] to-[#5319A0] text-black py-2 px-2 rounded-3xl w-full text-sm"
+              className="bg-gradient-to-r from-[#29285F] to-[#5319A0] text-white py-2 px-2 rounded-3xl w-full text-sm"
             >
               Burn LP
             </button>
