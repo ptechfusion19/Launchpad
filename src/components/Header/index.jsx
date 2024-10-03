@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
+import logo from "/public/logo.png";
 import usePhantom from "../../hooks/usePhantom";
 import ConnectModalComp from "./ConnectModal";
 import LaunchPadContext from "../../context/LaunchPadContext";
@@ -40,6 +41,7 @@ function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
+            <Image className="mx-2" width="100px" src={logo} alt="Logo" />
              Bundle Bee
             </span>
           </Link>
