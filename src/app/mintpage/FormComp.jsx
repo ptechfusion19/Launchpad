@@ -279,7 +279,7 @@ const FormComp = () => {
               Token Name
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="tokenName"
               name="tokenName"
               type="text"
@@ -298,7 +298,7 @@ const FormComp = () => {
               Symbol
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="symbol"
               name="symbol"
               value={formData.symbol}
@@ -319,7 +319,7 @@ const FormComp = () => {
               Logo URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="logoUrl"
               name="logoUrl"
               value={formData.logoUrl}
@@ -347,7 +347,7 @@ const FormComp = () => {
               Description
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="description"
               name="description"
               value={formData.description}
@@ -367,7 +367,7 @@ const FormComp = () => {
               Website URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="websiteUrl"
               name="websiteUrl"
               value={formData.websiteUrl}
@@ -388,7 +388,7 @@ const FormComp = () => {
               Twitter URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="twitterUrl"
               name="twitterUrl"
               value={formData.twitterUrl}
@@ -408,7 +408,7 @@ const FormComp = () => {
               Telegram URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="telegramUrl"
               name="telegramUrl"
               value={formData.telegramUrl}
@@ -428,8 +428,8 @@ const FormComp = () => {
               Discord URL
             </label>
             <input
-              // className="appearance-none block w-full bg-[#512DA8]   text-white border-2  border-custom_bg rounded py-1 px-4 mb-3 leading-tight focus:outline-none  "
-              className="appearance-none block w-full bg-[#512DA8]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              // className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  border-custom_bg rounded py-1 px-4 mb-3 leading-tight focus:outline-none  "
+              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="discordUrl"
               name="discordUrl"
               value={formData.discordUrl}
@@ -492,7 +492,7 @@ const FormComp = () => {
             Token Address
           </label>
           <input
-            className="appearance-none block w-full bg-[#512DA8] text-white border-2 py-1 px-4 border-custom_bg"
+            className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 border-custom_bg"
             id="tokenAddress"
             name="tokenAddress"
             value={tokenAddress}
