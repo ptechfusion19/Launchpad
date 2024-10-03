@@ -40,7 +40,7 @@ function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
-              LaunchPad
+             Bundle Bee
             </span>
           </Link>
           <div className="flex items-center lg:order-2">
