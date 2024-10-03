@@ -24,7 +24,7 @@ const RemoveTable = ({ tableData }) => {
       style={{ height: "500px" }}
     >
       <table className="w-full text-sm text-left text-gray-400 h-full">
-        <thead className="text-xs text-gray-100 uppercase bg-gradient-to-r from-purple-700 to-blue-600 sticky top-0">
+        <thead className="text-xs text-gray-100 uppercase bg-gradient-to-r from-black-700 to-blue-600 sticky top-0">
           <tr>
             <th scope="col" className="px-6 py-3">
               #
