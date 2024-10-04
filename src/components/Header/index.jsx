@@ -50,7 +50,7 @@ function Header() {
             <span className="flex flex-row items-center justify-center text-xl font-semibold whitespace-nowrap text-white text-center">
               <Image className="logoImage" src={logo} alt="Logo" height={60} width={60} />
 
-              <span className="ml-2">Bundle Bee</span>
+              <span className="ml-2  pt-2">Bundle Bee</span>
             </span>
 
           </Link>
