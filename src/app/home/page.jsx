@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
 import CardComp from "@/components/CardComp";
 import NewCardComp from "@/components/NewCardComp";
-
+import Logo from "../../../public/logo.png"
 const LaunchPage = () => {
     return (
         <>
@@ -40,7 +40,7 @@ const LaunchPage = () => {
                             </li>
                         </ul>
                         <br />
-                         <h3 className="text-center pb-2 mb-4 text-2xl">
+                        <h3 className="text-center pb-2 mb-4 text-2xl">
                             What We Offer
                         </h3>
                         <ul className="list-disc list-inside text-left mx-auto w-2/3 text-lg font-medium space-y-2">
