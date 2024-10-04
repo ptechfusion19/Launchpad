@@ -490,6 +490,11 @@ const LaunchFormComp = () => {
       // document.getElementById("statusMessage").innerText = "An error occurred while processing the transaction.";
     }
   };
+  const sellAll=async(e)=>{
+    toast.error("Failed to Sell All . try in a little while...")
+    e.preventDefault();
+   
+  }
   const [solPrice, setSolPrice] = useState(0);
   const fetchSolPrice = () => {
     fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd")
@@ -514,13 +519,6 @@ const LaunchFormComp = () => {
     }
   }, [connected, userId]);
 
-  // useEffect(() => {
-
-  //   if (localStorage.getItem("userId") && connected) {
-  //     fetchInitialData(userId);
-
-  //   }
-  // }, [connected, localStorage.getItem("userId")]);
   return (
     <div>
       {
@@ -674,6 +672,7 @@ const LaunchFormComp = () => {
                   Burn LP
                 </button>
               </div>
+            
               <div className="w-full md:w-8/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
@@ -683,6 +682,18 @@ const LaunchFormComp = () => {
                   onClick={removeLP}
                 >
                   Remove Liquidity
+                </button>
+              </div>
+         
+              <div className="w-full mt-4">
+                <button
+                  type="button" // Changed to type="button" to avoid form submission
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                  disabled={!connected && projectId}  // Disable button if not connected
+                  onClick={sellAll}
+                >
+                  Sell All
                 </button>
               </div>
             </div>
