@@ -166,6 +166,19 @@ export const meteDataUpload = async (data) => {
     }
 };
 
+export const sellAllAPi = async (data) => {
+    //  
+    try {
+        const response = await axios.post(`${BASE_URL}/sellAll`, {
+            metadata: data
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error getting User", error);
+        throw error;
+    }
+};
+
 export const tokenCreate = async (hash, metadata, key, freeze, mint) => {
     // debugger
     //  

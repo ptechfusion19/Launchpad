@@ -1,26 +1,4 @@
 
-async function uploadMetadata(imageUrl, metadata) {
-    const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-    const metadataWithImage = {
-        ...metadata,
-        image: imageUrl
-    };
-    try {
-        const metadataResponse = await axios.post(url, metadataWithImage, {
-            headers: {
-                pinata_api_key: API_KEY,
-                pinata_secret_api_key: API_SECRET,
-                Authorization: `Bearer ${JWT}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        console.log('Metadata uploaded successfully:', metadataResponse.data);
-        return metadataResponse.data.IpfsHash;
-    } catch (error) {
-        console.error('Error uploading metadata:', error.response.data);
-        throw error;
-    }
-}
 // async function main() {
 //     const imagePath = './image.png';
 //     const metadata = {

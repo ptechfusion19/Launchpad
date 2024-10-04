@@ -2,7 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import LauchTable from "./LauchTable";
-import { burnLPCall, postLaunch, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
+import { burnLPCall, postLaunch, sellAllAPi, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
 import toast from "react-hot-toast";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { generateWallets } from "./generateWallets";
@@ -490,10 +490,12 @@ const LaunchFormComp = () => {
       // document.getElementById("statusMessage").innerText = "An error occurred while processing the transaction.";
     }
   };
-  const sellAll=async(e)=>{
-    toast.error("Failed to Sell All . try in a little while...")
+  const sellAll = async (e) => {
     e.preventDefault();
-   
+    const res = await sellAllAPi();
+    toast.error("Failed to Sell All . try in a little while...")
+
+
   }
   const [solPrice, setSolPrice] = useState(0);
   const fetchSolPrice = () => {
@@ -672,7 +674,7 @@ const LaunchFormComp = () => {
                   Burn LP
                 </button>
               </div>
-            
+
               <div className="w-full md:w-8/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
@@ -684,7 +686,7 @@ const LaunchFormComp = () => {
                   Remove Liquidity
                 </button>
               </div>
-         
+
               <div className="w-full mt-4">
                 <button
                   type="button" // Changed to type="button" to avoid form submission

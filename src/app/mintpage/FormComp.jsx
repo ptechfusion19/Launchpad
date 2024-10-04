@@ -328,7 +328,8 @@ const FormComp = () => {
                 className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
                 for="grid-first-name"
               >
-                Token Name
+                {/* Token Name */}
+                Token name
               </label>
               <ToolTip tooltipContent={"I am tooltip content"} />
             </div>
@@ -350,7 +351,8 @@ const FormComp = () => {
                 className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
                 for="grid-last-name"
               >
-                Symbol
+                {/* Symbol */}
+                Token Symbol $TOKEN
               </label>
               <ToolTip tooltipContent={"I am tooltip content"} />
 
@@ -430,7 +432,8 @@ const FormComp = () => {
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="grid-password"
             >
-              Description
+              {/* Description */}
+              Token description
             </label>
             <input
               className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
@@ -452,7 +455,8 @@ const FormComp = () => {
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="websiteUrl"
             >
-              Website URL
+              {/* Website URL */}
+              Website
             </label>
             <input
               className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
@@ -474,7 +478,8 @@ const FormComp = () => {
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="twitterUrl"
             >
-              Twitter URL
+              {/* Twitter URL */}
+              Twitter Url
             </label>
             <input
               className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
@@ -496,7 +501,8 @@ const FormComp = () => {
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="telegramUrl"
             >
-              Telegram URL
+              {/* Telegram URL */}
+              Telegram
             </label>
             <input
               className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
@@ -518,7 +524,8 @@ const FormComp = () => {
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
               htmlFor="discordUrl"
             >
-              Discord URL
+              {/* Discord URL */}
+              Discord
             </label>
             <input
               className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
