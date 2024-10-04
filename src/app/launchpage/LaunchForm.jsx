@@ -490,8 +490,22 @@ const LaunchFormComp = () => {
       // document.getElementById("statusMessage").innerText = "An error occurred while processing the transaction.";
     }
   };
+  const [solPrice, setSolPrice] = useState(0);
+  const fetchSolPrice = () => {
+    fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd")
+      .then((res) => res.json())
+      .then((data) => setSolPrice(data?.solana?.usd))
+      .catch((error) => console.error("Failed to fetch SOL price", error));
+  };
+  useEffect(() => {
 
 
+    fetchSolPrice();
+
+
+
+
+  }, []);
 
   useEffect(() => {
     // debugger
@@ -585,19 +599,19 @@ const LaunchFormComp = () => {
             {
               (formData.mint && formData.amountSol && formData.amountTokens) && <> <div className="flex justify-between mb-2">
                 <h4>Launch MCAP</h4>
-                <h4>$0</h4>
+                <h4>${(formData.amountSol * solPrice).toFixed(4)}</h4>
               </div>
                 <div className="flex justify-between mb-2">
                   <h4>Launch Price</h4>
-                  <h4>$0</h4>
+                  <h4>${(formData.amountSol * solPrice) / formData.amountTokens} / {(formData.amountSol / formData.amountTokens).toFixed(9)} SOL</h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>MCAP after Snipe</h4>
-                  <h4>$0</h4>
+                  <h4>${((formData.amountSol * solPrice) + (formData.amountSolForSnipping * solPrice)).toFixed()}</h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>Price after Snipe</h4>
-                  <h4>$0</h4>
+                  <h4>${((formData.amountSol * solPrice) + (formData.amountSolForSnipping * solPrice)) / formData.amountTokens} / {((Number(formData.amountSol) + Number(formData.amountSolForSnipping)) / Number(formData.amountTokens)).toFixed(9)} SOL</h4>
                 </div>
               </>
             }
