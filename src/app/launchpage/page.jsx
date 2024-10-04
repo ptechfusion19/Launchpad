@@ -14,14 +14,14 @@ const LaunchPage = () => {
       <Header />
       <div className="py-20 h-fit flex items-center">
         <CardComp>
-          <div className="px-2">
+          <div className="px-2 w-2/4 mx-auto">
             <h3 className="text-center pb-2 mb-4 text-2xl">
             {/* Welcome to Bundle Bee Token Launch */}
             Welcome to Bundle Bee Token Dex Launch
             </h3>
             {/* <h4 className="py-2">The FusionX Smart Launch Allows You To:</h4> */}
             <h4 className="py-2"> The Bundle Bee allows you to :</h4>
-            <div className="flex items-center mb-2 w-2/3 mx-auto">
+            <div className="flex items-center mb-2 ">
               <span className="bg-transparent border-custom_bg border-2 text-white font-bold px-2 h-6 flex items-baseline justify-center rounded leading-none">
                 -
               </span>

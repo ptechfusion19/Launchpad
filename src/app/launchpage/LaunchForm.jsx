@@ -700,7 +700,7 @@ const LaunchFormComp = () => {
               </div>
             </div>
             <p className="pt-4 text-center">
-              For questions or support, reach out via t.me/Ptech_Inquiries
+               
             </p>
           </form>
         </div>
