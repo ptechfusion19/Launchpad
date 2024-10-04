@@ -8,7 +8,7 @@ import { imageUpload, mintToken, meteDataUpload, tokenCreate } from "@/hooks/use
 import { getMintsettings } from "@/hooks/useLaunch";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { Connection, VersionedTransaction } from "@solana/web3.js";
-
+import ToolTip from "@/components/ToolTip";
 const FormComp = () => {
   const {
     connected,
@@ -36,8 +36,8 @@ const FormComp = () => {
   });
   const [file, setFile] = useState(null)
   const [tokenAddress, setTokenAddress] = useState("")
-  const [isFreezeChecked, setIsFreezeChecked] = useState(false);
-  const [isMintChecked, setIsmintChecked] = useState(false);
+  const [isFreezeChecked, setIsFreezeChecked] = useState(true);
+  const [isMintChecked, setIsmintChecked] = useState(true);
 
   const [errors, setErrors] = useState({})
   const handleToggle = () => {
@@ -60,14 +60,14 @@ const FormComp = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // debugger
+    // 
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
       console.log(formData);
-      const res = await mintToken(formData);
+
       console.log(res)
 
-      toast.success("Token Created successfully")
+      // toast.success("Token Created successfully")
     } else {
       setErrors(validationErrors);
     }
@@ -143,6 +143,8 @@ const FormComp = () => {
   }, [userId])
 
   const Uploading = async (event) => {
+    event.preventDefault();
+
     const imageUrl = await toast.promise(
       fileUpload(event),
       {
@@ -201,7 +203,27 @@ const FormComp = () => {
   const [hash, sethash] = useState("")
   const [data, setMetaData] = useState({})
 
-  const metaDataUpload = async () => {
+  const metaDataUpload = async (e) => {
+    e.preventDefault();
+
+
+    // Check for required fields and show error messages if any are missing
+    if (!formData.tokenName) {
+      toast.error("Token name is required");
+      return; // Exit the function early
+    }
+
+    if (!formData.symbol) {
+      toast.error("Token symbol is required");
+      return; // Exit the function early
+    }
+
+    if (!formData.logoUrl) {
+      toast.error("Token image is required");
+      return; // Exit the function early
+    }
+    const saveData = await mintToken(formData);
+    console.log(saveData);
     const metadata = {
       name: formData.tokenName,
       symbol: formData.symbol,
@@ -229,19 +251,23 @@ const FormComp = () => {
 
     try {
       const hash = await meteDataUpload(metadata);
-      toast.success("Metadata uploaded successfully");
-      setMetaData(metadata)
 
+      // toast.success("Metadata uploaded successfully");
+      setMetaData(metadata);
       sethash(hash);
+      return { hash, metadata };
     } catch (error) {
-      toast.error("Failed to upload metadata");
+      // toast.error("Failed to upload metadata");
       console.error("Metadata upload error:", error);
     }
   };
-  const createToken = async () => {
+
+  const createToken = async (e) => {
+    e.preventDefault();
+
 
     const imageUrl = await toast.promise(
-      newtoken(),
+      newtoken(e),
       {
         loading: 'Please Wait, minting token ...',
         success: <b>Token Mint Successfuly</b>,
@@ -251,17 +277,30 @@ const FormComp = () => {
 
   }
 
-  const newtoken = async () => {
-    const res = await tokenCreate(hash, data, solanaKey, isFreezeChecked, isMintChecked)
+  const newtoken = async (e) => {
+    const { hash, metadata } = await toast.promise(metaDataUpload(e),
+      {
+        loading: 'Please Wait, Uploading Metadata ...',
+        success: <b>Metadata Uploaded Successfully</b>,
+        error: <b>Failed to upload Metadata, Try Again Later ...</b>,
+      })
+
+    const res = await tokenCreate(hash, metadata, solanaKey, isFreezeChecked, isMintChecked)
     try {
+
       const itemArray = Object.values(res.transactions);
       const tx = VersionedTransaction.deserialize(itemArray);
       let mintToken = await window.solana.signAndSendTransaction(tx)
+
       console.log(mintToken);
+
+
       toast.success("Token Mint Successfully")
       setTokenAddress(res?.key)
+
     } catch (error) {
 
+      toast.error("Failed to Mint Token")
     }
   }
 
@@ -269,15 +308,18 @@ const FormComp = () => {
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
-      <form className="w-full max-w-2xl" onSubmit={handleSubmit}>
+      <form className="w-full max-w-2xl" >
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-              for="grid-first-name"
-            >
-              Token Name
-            </label>
+            <div className="flex justify-between items-center">
+              <label
+                className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                for="grid-first-name"
+              >
+                Token Name
+              </label>
+              <ToolTip tooltipContent={"I am tooltip content"} />
+            </div>
             <input
               className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="tokenName"
@@ -291,12 +333,16 @@ const FormComp = () => {
             {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
           </div>
           <div className="w-full md:w-1/2 px-3">
-            <label
-              className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-              for="grid-last-name"
-            >
-              Symbol
-            </label>
+            <div className="flex justify-between items-center">
+              <label
+                className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                for="grid-last-name"
+              >
+                Symbol
+              </label>
+              <ToolTip tooltipContent={"I am tooltip content"} />
+
+            </div>
             <input
               className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="symbol"
@@ -327,6 +373,7 @@ const FormComp = () => {
               type="text"
               placeholder="Upload token logo image to IPFS"
             />
+
             {errors.logoUrl && <p className="error text-red-500">{errors.logoUrl}</p>}
             <Image src={uploadImg} className="mx-3 cursor-pointer" alt="Upload" />
 
@@ -336,7 +383,9 @@ const FormComp = () => {
               className="cursor-pointer"
               onChange={Uploading}
             />
+
           </div>
+
         </div>
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full px-3 flex items-center">
@@ -347,7 +396,7 @@ const FormComp = () => {
               Description
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
               id="description"
               name="description"
               value={formData.description}
@@ -355,19 +404,21 @@ const FormComp = () => {
               type="text"
               placeholder="Enter Description"
             />
+            <ToolTip tooltipContent={"I am tooltip content"} /> {/* Tooltip for Description */}
             {errors.description && <p className="error text-red-500">{errors.description}</p>}
           </div>
         </div>
+
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
-              htmlFor="grid-password"
+              htmlFor="websiteUrl"
             >
               Website URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
               id="websiteUrl"
               name="websiteUrl"
               value={formData.websiteUrl}
@@ -375,6 +426,7 @@ const FormComp = () => {
               type="text"
               placeholder="Enter Website URL"
             />
+            <ToolTip tooltipContent={"I am tooltip content"} /> {/* Tooltip for Website URL */}
             {errors.websiteUrl && <p className="error text-red-500">{errors.websiteUrl}</p>}
           </div>
         </div>
@@ -383,12 +435,12 @@ const FormComp = () => {
           <div className="w-full px-3 flex items-center">
             <label
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
-              htmlFor="grid-password"
+              htmlFor="twitterUrl"
             >
               Twitter URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
               id="twitterUrl"
               name="twitterUrl"
               value={formData.twitterUrl}
@@ -396,19 +448,21 @@ const FormComp = () => {
               type="text"
               placeholder="Enter Twitter URL"
             />
+            <ToolTip tooltipContent={"I am tooltip content"} /> {/* Tooltip for Twitter URL */}
             {errors.twitterUrl && <p className="error text-red-500">{errors.twitterUrl}</p>}
           </div>
         </div>
+
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
-              htmlFor="grid-password"
+              htmlFor="telegramUrl"
             >
               Telegram URL
             </label>
             <input
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
               id="telegramUrl"
               name="telegramUrl"
               value={formData.telegramUrl}
@@ -416,32 +470,35 @@ const FormComp = () => {
               type="text"
               placeholder="Enter Telegram URL"
             />
+            <ToolTip tooltipContent={"I am tooltip content"} /> {/* Tooltip for Telegram URL */}
             {errors.telegramUrl && <p className="error text-red-500">{errors.telegramUrl}</p>}
           </div>
         </div>
+
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 flex items-center">
             <label
               className="block uppercase tracking-wide text-black text-xs font-bold mb-2 mr-3 w-32"
-              htmlFor="grid-password"
+              htmlFor="discordUrl"
             >
               Discord URL
             </label>
             <input
-              // className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  border-custom_bg rounded py-1 px-4 mb-3 leading-tight focus:outline-none  "
-              className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
+              className="appearance-none block w-full bg-[#4b4b4b] text-white border-2 py-1 px-4 mb-3 border-custom_bg"
               id="discordUrl"
               name="discordUrl"
               value={formData.discordUrl}
               onChange={handleChange}
               type="text"
-              placeholder="Enter Discord  URL"
+              placeholder="Enter Discord URL"
             />
+            <ToolTip tooltipContent={"I am tooltip content"} /> {/* Tooltip for Discord URL */}
             {errors.discordUrl && <p className="error text-red-500">{errors.discordUrl}</p>}
           </div>
         </div>
 
-        <div>
+
+        {/* <div>
           <label className="inline-flex items-center mb-5 cursor-pointer">
             <input
               type="checkbox"
@@ -466,14 +523,14 @@ const FormComp = () => {
             <div className="relative w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-custom_bg dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border-2 after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-gray-600 peer-checked:bg-custom_bg "></div>
             <span className="ms-3 text-sm font-bold text-black">Mint Authority</span>
           </label>
-        </div>
-        <button
+        </div> */}
+        {/* <button
           onClick={metaDataUpload}
           className=" bg-gradient-to-r from-[#565656] to-[#000000] text-white py-3 px-4 rounded-3xl w-full"
         >
           Upload MetaData
         </button>
-        <br />
+        <br /> */}
         <br />
 
         <button
@@ -492,13 +549,14 @@ const FormComp = () => {
             Token Address
           </label>
           <input
-            className="appearance-none block w-full bg-[#4b4b4b] text-black border-2 py-1 px-4 border-custom_bg"
+            className="appearance-none block w-full bg-[#4b4b4b] border-2 py-1 px-4 border-custom_bg text-white"
             id="tokenAddress"
             name="tokenAddress"
             value={tokenAddress}
             onChange={handleTokenChange}
             type="text"
-            placeholder="Upload token logo image to IPFS"
+            disabled
+            placeholder="Token Address will be shown here"
           />
           <a href={`https://explorer.solana.com/address/${tokenAddress}`} target="_blank" rel="noopener noreferrer">
             <Image className="mx-2 w-full " src={forwardImg} alt="View Token on Explorer" />

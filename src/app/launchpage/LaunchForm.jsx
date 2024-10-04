@@ -214,11 +214,12 @@ const LaunchFormComp = () => {
       "SOL Balance",
       "Token Balance",
     ];
+
     // Map data to CSV rows
     const rows = tableData.map((item, index) => [
       index + 1,
-      item.publicKey,
-      item.secretKey,
+      item.pubKey,
+      item.privateKey,
       0, // Placeholder for SOL Balance
       0, // Placeholder for Token Balance
     ]);
@@ -581,6 +582,27 @@ const LaunchFormComp = () => {
                 />
               </div>
             </div>
+            {
+              (formData.mint && formData.amountSol && formData.amountTokens) && <> <div className="flex justify-between mb-2">
+                <h4>Launch MCAP</h4>
+                <h4>$0</h4>
+              </div>
+                <div className="flex justify-between mb-2">
+                  <h4>Launch Price</h4>
+                  <h4>$0</h4>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <h4>MCAP after Snipe</h4>
+                  <h4>$0</h4>
+                </div>
+                <div className="flex justify-between mb-2">
+                  <h4>Price after Snipe</h4>
+                  <h4>$0</h4>
+                </div>
+              </>
+            }
+
+
             <button
               onClick={handleSubmit}
               type="submit"
@@ -656,7 +678,7 @@ const LaunchFormComp = () => {
           </form>
         </div>
       }
-    </div>
+    </div >
 
   );
 };

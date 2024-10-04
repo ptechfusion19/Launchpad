@@ -12,12 +12,13 @@ const MintPage = () => {
       <div className="py-20 h-fit flex justify-center items-center">
         <CardComp>
           <div className="px-2">
-            <h3 className="text-center pb-2  mt-3">
-              Welcome to the $Ptech Vanity Mint
+          <h3 className="text-center pb-2 mb-4 text-2xl">
+            Welcome to Bundle Bee Token Launch
             </h3>
             <h4 className="py-2">
-            Please note that all tokens are minted with the following default
-            settings:
+            The token launch cost fee is 0.2 SOL, the total cost to launch token will be X SOL. 
+            <br/>
+            Please note, all tokens are minted with the settings mentioned below.
             </h4>
             <div className="flex items-center mb-2">
               <span className="bg-transparent border-custom_bg border-2 text-white font-bold px-2 h-6 flex items-baseline justify-center rounded leading-none">
@@ -62,8 +63,7 @@ const MintPage = () => {
             wallet you are connected with.
           </h4>
           <h4 className="mt-2 mb-5" >
-            In addition to the network fees, a service fee of 1 SOL will be
-            charged from your wallet.
+          In addition to the network fees, a service fee of 0.2 SOL will be charged from your wallet as a Platforms commission.
           </h4>
 
           <FormComp />

@@ -16,7 +16,7 @@ const LaunchPage = () => {
         <CardComp>
           <div className="px-2">
             <h3 className="text-center pb-2 mb-4 text-2xl">
-              Welcome to the FusionX Launchpad
+            Welcome to Bundle Bee Token Launch
             </h3>
             <h4 className="py-2">The FusionX Smart Launch Allows You To:</h4>
             <div className="flex items-center mb-2">

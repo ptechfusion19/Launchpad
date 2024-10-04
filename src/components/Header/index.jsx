@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
 import Link from "next/link";
-import logo from "/public/logo.png"; 
+import logo from "/public/logo.png";
 import usePhantom from "../../hooks/usePhantom";
 import ConnectModalComp from "./ConnectModal";
 import LaunchPadContext from "../../context/LaunchPadContext";
@@ -47,11 +47,11 @@ function Header() {
       <nav className=" border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800  bg-gradient-to-r from-[#F7AA00] to-[#F7AA00] w-full">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-white">
-            <Image className="logoImage" src={logo} alt="Logo" />
-
-             Bundle Bee
+            <span className="flex flex-col items-center justify-center text-xl font-semibold whitespace-nowrap text-white text-center">
+              <Image className="logoImage" src={logo} alt="Logo" height={60} width={60} />
+              <span className="ml-2">Bundle Bee</span>
             </span>
+
           </Link>
           <div className="flex items-center lg:order-2">
             {/* <ConnectModalComp
@@ -59,7 +59,16 @@ function Header() {
               // connectToSolflare={connectToSolflare}
               disconnectFromWallet={disconnectFromWallet}
             /> */}
-            <WalletMultiButton style={{}} />
+            <WalletMultiButton
+              style={{
+                background: 'linear-gradient(to right, #565656, #000000)',
+                color: 'white',
+                borderRadius: '1.5rem',
+                width: '100%',
+                fontSize: '0.875rem', // This is equivalent to text-sm
+              }}
+            />
+
             <button
               onClick={toggleMenu}
               type="button"
@@ -127,8 +136,8 @@ function Header() {
                   Liquidity
                 </Link> */}
 
-                {/* Dropdown menu */}
-                {/* <ul className="absolute w-44 hidden group-hover:block bg-white text-white-700  dark:text-white border border-gray-100 mt-2 rounded-lg shadow-lg">
+              {/* Dropdown menu */}
+              {/* <ul className="absolute w-44 hidden group-hover:block bg-white text-white-700  dark:text-white border border-gray-100 mt-2 rounded-lg shadow-lg">
                   <li>
                     <Link
                       href="burnpage"
@@ -150,14 +159,7 @@ function Header() {
               {/* </li> */}
 
 
-              <li className="py-2">
-                <Link
-                  href="/"
-                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-white-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
-                >
-                  Marketplace
-                </Link>
-              </li>
+
               <li className="py-2">
                 <Link
                   href="/"
@@ -171,7 +173,15 @@ function Header() {
                   href="/"
                   className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-white-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
                 >
-                  TG Bot
+                  Telegram
+                </Link>
+              </li>
+              <li className="py-2">
+                <Link
+                  href="/"
+                  className="block py-2 pr-4 pl-3 text-white border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-primary-700 lg:p-0 dark:text-white-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700"
+                >
+                  Twitter
                 </Link>
               </li>
               <li className="py-2">
@@ -179,7 +189,7 @@ function Header() {
                   href="/"
                   className="text-white"
                 >
-                  Mint
+                  Create Token
                 </Link>
               </li>
               <li className="py-2">
@@ -187,7 +197,15 @@ function Header() {
                   href="launchpage"
                   className="text-white"
                 >
-                  Launch
+                  Launch Token
+                </Link>
+              </li>
+              <li className="py-2">
+                <Link
+                  href="launchpage"
+                  className="text-white"
+                >
+                  Support
                 </Link>
               </li>
             </ul>

@@ -148,7 +148,7 @@ export async function POST(req) {
     const { metadata } = await req.json();
     console.log(metadata, "Iam euygds")
     try {
-        // await connectDB();
+        await connectDB();
         // let projectSettings = await ProjectSettings.findOneAndUpdate(
         //     { projectId },
         //     { ...settingsData, projectId }, // Ensure projectId is set in both update and insert cases
