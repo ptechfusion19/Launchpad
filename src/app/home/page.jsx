@@ -44,13 +44,13 @@ const HomePage = () => {
                             What We Offer
                         </h3>
                         <ul className="list-disc list-inside text-left mx-auto w-2/3 text-lg font-medium space-y-2">
-                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                            <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
                                 <strong className="text-yellow-600">For Developers:</strong> A robust platform to launch with confidence. We provide tools and support to ensure your project stands out and succeeds.
                             </li>
-                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                            <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
                                 <strong className="text-yellow-600">For Users:</strong> More than just a launchpad, we're rolling out tools tailored for Solana users, enhancing your interaction with the ecosystem.
                             </li>
-                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                            <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
                                 <strong className="text-yellow-600">Revenue Reinvestment:</strong> We use platform revenue for buybacks and marketing, ensuring growth for both Bundle Bee and its community.
                             </li>
                         </ul>
