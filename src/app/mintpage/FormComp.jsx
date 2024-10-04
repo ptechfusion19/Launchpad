@@ -34,6 +34,18 @@ const FormComp = () => {
     discordUrl: ""
 
   });
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
+
+  const handlePreview = (e) => {
+    e.preventDefault()
+    setShowModal(true); // Open modal on preview button click
+  };
+
+  const closeModal = (e) => {
+    e.preventDefault()
+    setShowModal(false); // Close modal
+  };
+
   const [file, setFile] = useState(null)
   const [tokenAddress, setTokenAddress] = useState("")
   const [isFreezeChecked, setIsFreezeChecked] = useState(true);
@@ -383,8 +395,33 @@ const FormComp = () => {
               className="cursor-pointer"
               onChange={Uploading}
             />
-
+            {
+              formData.logoUrl && <button
+                onClick={handlePreview}
+                className=" bg-gradient-to-r from-[#565656] to-[#000000] text-white font-light py-3 px-4 rounded-3xl "
+              >
+                Preview
+              </button>
+            }
+            {showModal && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeModal}>
+                <div className="bg-white p-6 rounded-md shadow-lg max-w-sm">
+                  <button onClick={closeModal} className="absolute top-2 right-2 text-gray-600">
+                    Close
+                  </button>
+                  <h2 className="text-lg font-bold mb-4">Logo Preview</h2>
+                  <Image
+                    src={formData.logoUrl}
+                    alt="Logo Preview"
+                    className="w-full h-auto object-cover"
+                    width={400}
+                    height={400}
+                  />
+                </div>
+              </div>
+            )}
           </div>
+
 
         </div>
         <div className="flex flex-wrap -mx-3 mb-3">

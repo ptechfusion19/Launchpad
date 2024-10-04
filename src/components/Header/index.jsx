@@ -48,7 +48,7 @@ function Header() {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <Link href="/" className="flex items-center">
             <span className="flex flex-row items-center justify-center text-xl font-semibold whitespace-nowrap text-white text-center">
-            <Image className="logoImage" src={logo} alt="Logo" height={60} width={60} />
+              <Image className="logoImage" src={logo} alt="Logo" height={60} width={60} />
 
               <span className="ml-2">Bundle Bee</span>
             </span>
