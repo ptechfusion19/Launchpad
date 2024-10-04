@@ -414,8 +414,8 @@ const FormComp = () => {
                     src={formData.logoUrl}
                     alt="Logo Preview"
                     className="w-full h-auto object-cover"
-                    width={400}
-                    height={400}
+                    width={500}
+                    height={500}
                   />
                 </div>
               </div>
