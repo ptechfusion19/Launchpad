@@ -186,7 +186,7 @@ function Header() {
               </li>
               <li className="py-2">
                 <Link
-                  href="/"
+                  href="mintpage"
                   className="text-white"
                 >
                   Create Token

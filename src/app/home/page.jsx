@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import CardComp from "@/components/CardComp";
 import NewCardComp from "@/components/NewCardComp";
 import Logo from "../../../public/logo.png"
-const LaunchPage = () => {
+const HomePage = () => {
     return (
         <>
             <Toaster position="top-center" reverseOrder={false} />
@@ -25,18 +25,18 @@ const LaunchPage = () => {
                             Why Bundle Bee?
                         </h3>
 
-                        <ul className="list-disc list-inside text-left mx-auto w-2/3 text-lg font-medium">
+                        <ul className="list-item list-inside text-left mx-auto w-2/3 text-lg font-medium">
                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
-                                <strong>Strategic Launches</strong>: We bundle launches to secure better positioning for developers, steering clear of snipers. It's about strategic placement, not just speed.
+                                <strong className="text-yellow-600">Strategic Launches</strong>: We bundle launches to secure better positioning for developers, steering clear of snipers. It's about strategic placement, not just speed.
                             </li>
                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
-                                <strong>Cost-Effective</strong>: We pride ourselves on being the most cost-effective launchpad on the market. With JITO, we empower teams to keep more of what they earn.
+                                <strong className="text-yellow-600">Cost-Effective</strong>: We pride ourselves on being the most cost-effective launchpad on the market. With JITO, we empower teams to keep more of what they earn.
                             </li>
                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
-                                <strong>Beyond the Pump</strong>: Tired of the 'pump and dump' culture? We are too. Bundle Bee is committed to fostering sustainable projects, not transient hype.
+                                <strong className="text-yellow-600">Beyond the Pump</strong>: Tired of the 'pump and dump' culture? We are too. Bundle Bee is committed to fostering sustainable projects, not transient hype.
                             </li>
                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
-                                <strong>Support for Creators</strong>: Launching tokens isn't cheap, and not every project hits the jackpot. We're here to support creators in making each launch count.
+                                <strong className="text-yellow-600">Support for Creators</strong>: Launching tokens isn't cheap, and not every project hits the jackpot. We're here to support creators in making each launch count.
                             </li>
                         </ul>
                         <br />
@@ -44,14 +44,14 @@ const LaunchPage = () => {
                             What We Offer
                         </h3>
                         <ul className="list-disc list-inside text-left mx-auto w-2/3 text-lg font-medium space-y-2">
-                            <li>
-                                <strong className="text-blue-600">For Developers:</strong> A robust platform to launch with confidence. We provide tools and support to ensure your project stands out and succeeds.
+                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                                <strong className="text-yellow-600">For Developers:</strong> A robust platform to launch with confidence. We provide tools and support to ensure your project stands out and succeeds.
                             </li>
-                            <li>
-                                <strong className="text-blue-600">For Users:</strong> More than just a launchpad, we're rolling out tools tailored for Solana users, enhancing your interaction with the ecosystem.
+                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                                <strong className="text-yellow-600">For Users:</strong> More than just a launchpad, we're rolling out tools tailored for Solana users, enhancing your interaction with the ecosystem.
                             </li>
-                            <li>
-                                <strong className="text-blue-600">Revenue Reinvestment:</strong> We use platform revenue for buybacks and marketing, ensuring growth for both Bundle Bee and its community.
+                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
+                                <strong className="text-yellow-600">Revenue Reinvestment:</strong> We use platform revenue for buybacks and marketing, ensuring growth for both Bundle Bee and its community.
                             </li>
                         </ul>
 
@@ -86,4 +86,4 @@ const LaunchPage = () => {
     );
 };
 
-export default LaunchPage;
+export default HomePage;
