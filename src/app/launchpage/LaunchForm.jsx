@@ -400,8 +400,15 @@ const LaunchFormComp = () => {
         const { signature } = await window.solana.signAndSendTransaction(txn);
         const solscanLink = `https://solscan.io/tx/${signature}`;
 
-        toast.success(`Transaction sent successfully. 
-          <a href="${solscanLink}" target="_blank">View on Solscan</a> . Click Here to Copy the transaction Hash`)
+        toast.success(
+          <div>
+            Transaction sent successfully. 
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+              Click Here to Copy the transaction Hash
+            </span>
+          </div>
+        );
       } else {
         toast.error("Error in Burning LP");
       }
@@ -433,8 +440,15 @@ const LaunchFormComp = () => {
         const { signature } = await window.solana.signAndSendTransaction(txn);
         const solscanLink = `https://solscan.io/tx/${signature}`;
 
-        toast.success(`Transaction sent successfully. 
-          <a href="${solscanLink}" target="_blank">View on Solscan</a> . Click Here to Copy the transaction Hash`)
+        toast.success(
+          <div>
+            Transaction sent successfully. 
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+              Click Here to Copy the transaction Hash
+            </span>
+          </div>
+        );
 
       } else {
         toast.error("Error in Removing LP");
