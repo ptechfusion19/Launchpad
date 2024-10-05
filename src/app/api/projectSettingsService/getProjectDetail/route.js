@@ -607,6 +607,9 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     //console.log(returnObject, "This is return object")
     return returnObject;
 }
+
+
+
 export async function POST(req) {
     await connectDB();
 

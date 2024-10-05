@@ -1,4 +1,4 @@
-import { PublicKey, SystemProgram, TransactionMessage, VersionedTransaction, Keypair, AddressLookupTableProgram } from "@solana/web3.js";
+import { PublicKey, SystemProgram, TransactionMessage, VersionedTransaction, Keypair, Connection, AddressLookupTableProgram } from "@solana/web3.js";
 import { getAssociatedTokenAddressSync, createAssociatedTokenAccountInstruction, createSyncNativeInstruction } from "@solana/spl-token";
 import { Liquidity, MarketV2, MAINNET_PROGRAM_ID, MARKET_STATE_LAYOUT_V2 } from "@raydium-io/raydium-sdk";
 import { jito_executeAndConfirm, getJitoTipInstruction } from "@/app/jito";
@@ -215,6 +215,59 @@ export const prepareSwapTxs = async (connection, distributorWallet, wallets, poo
         console.log(wallets[i]);
         const swapInstruction = await makeSwapInstructions(wallet.publicKey, poolKeys, wallets[i].lamports, coinATA, solATA);
         console.log(swapInstruction);
+        instructions.push(swapInstruction);
+        signers.push(wallet);
+        keys.push(...swapInstruction.keys);
+        // if (instructions.length==8) {
+        //    tx = await buildUnsignedTransaction(connection, payer.publicKey, instructions);
+        //     console.log("Transaction size:", tx.serialize().length); 
+        //    tx.sign(signers);
+        //    transactions.push(tx);
+        //    instructions = []
+        //    signers = [payer];
+        // }
+
+    }
+    // if (instructions.length>=0) {
+    //     tx = await buildUnsignedTransaction(connection, payer.publicKey, instructions);
+    //     tx.sign(signers);
+    //     transactions.push(tx);
+    //     instructions = []
+    //     signers = [payer];
+    //  }
+    return { instructions: instructions, keys: keys, signers: signers };
+}  
+
+
+async function getTokenBalanceWeb3(connection, tokenAccount) {    
+    const info = await connection.getTokenAccountBalance(tokenAccount);    
+    if (info.value.uiAmount == null) throw new Error('No balance found');    
+    console.log('Balance (using Solana-Web3.js): ', info.value.uiAmount);    
+    return info.value.amount ;
+}
+
+
+
+
+export const prepareSellTxs = async (connection, distributorWallet, wallets, poolKeys) => {
+    const payerWallet = distributorWallet;
+    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+
+    const transactions = [];
+    let instructions = [];
+    let keys = [];
+    let tokenBalance;
+    let signers = [];
+    let tx;
+    for (let i = 0; i < wallets.length - 1; i++) {
+        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const coinATA = new PublicKey(wallets[i].coinATA);
+        const solATA = new PublicKey(wallets[i].solATA);
+        
+        
+        tokenBalance = await getTokenBalanceWeb3(connection, coinATA);
+        const swapInstruction = await makeSwapInstructions(wallet.publicKey, poolKeys, tokenBalance, solATA, coinATA);
+        // console.log(swapInstruction);
         instructions.push(swapInstruction);
         signers.push(wallet);
         keys.push(...swapInstruction.keys);

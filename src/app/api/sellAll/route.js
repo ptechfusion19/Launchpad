@@ -1,75 +1,19 @@
-
-
-import axios from "axios";
-import FormData from 'form-data';
-import fs from 'fs';
 import { NextResponse } from 'next/server';
-import ProjectSettings from '@/models/projectSettingsModel';
 import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
+import LaunchSettings from '../../../models/launchSettingsModel';
+// import Wallet from '../../../models/walletModel';
+import User from '../../../models/userModel';
+import connectDB from '../../../config/database';
+// const solanaWeb3 = require('@solana/web3.js');
+import { Connection, TransactionMessage, VersionedTransaction, TransactionInstruction } from "@solana/web3.js";
+import { PublicKey, Keypair } from '@solana/web3.js';
 
-// async function uploadImage(imagePath) {
 
-// }
+// const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
+const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
 
 
-// async function uploadMetadata(imageUrl, metadata) {
-//     const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
-//     const metadataWithImage = {
-//         ...metadata,
-//         image: imageUrl
-//     };
-//     try {
-//         const metadataResponse = await axios.post(url, metadataWithImage, {
-//             headers: {
-//                 pinata_api_key: API_KEY,
-//                 pinata_secret_api_key: API_SECRET,
-//                 Authorization: `Bearer ${JWT}`,
-//                 'Content-Type': 'application/json'
-//             }
-//         });
-//         console.log('Metadata uploaded successfully:', metadataResponse.data);
-//         return metadataResponse.data.IpfsHash;
-//     } catch (error) {
-//         console.error('Error uploading metadata:', error.response.data);
-//         throw error;
-//     }
-// }
-// async function main() {
-//     const imagePath = './image.png';
-//     const metadata = {
-//         name: "Token Name",
-//         symbol: "TKN",
-//         description: "This is a description for the token",
-//         attributes: [
-//             {
-//                 trait_type: "Twitter URL",
-//                 value: "https://twitter.com/yourtoken"
-//             },
-//             {
-//                 trait_type: "Telegram URL",
-//                 value: "https://t.me/yourtoken"
-//             },
-//             {
-//                 trait_type: "Discord URL",
-//                 value: "https://discord.gg/yourtoken"
-//             },
-//             {
-//                 trait_type: "Website URL",
-//                 value: "https://yourtokenwebsite.com"
-//             }
-//         ]
-//     };
-//     try {
-//         const imageUrl = await uploadImage(imagePath);
-//         console.log('Uploaded Image URL:', imageUrl);
-//         const metadataHash = await uploadMetadata(imageUrl, metadata);
-//         console.log('Metadata IPFS Hash:', metadataHash);
-//         console.log(`View the metadata at: https://gateway.pinata.cloud/ipfs/${metadataHash}`);
-//     } catch (error) {
-//         console.error('Error:', error);
-//     }
-// }
-// main();
 
 
 
@@ -78,11 +22,17 @@ import connectDB from '@/config/database';
 
 
 export async function POST(req) {
-    const { metadata } = await req.json();
-    console.log(metadata, "Iam euygds")
+    const {  projectId, userId  } = await req.json();
+    
     try {
         await connectDB();
-
+        const project = await LaunchSettings.findOne({
+            projectId: projectId
+        });
+        const user = await User.findById(project.userId);
+        let mint = project.mint;
+        let lookupTableAddress = new PublicKey(project.lookupTableAddress);
+        const owner = new PublicKey(user.walletAddress);
        
         return NextResponse.json({ hello: "hello" }, { status: 200 });
     } catch (error) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import LauchTable from "./LauchTable";
-import { burnLPCall, postLaunch, sellAllAPi, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
+import { burnLPCall, sellAllAPi, postLaunch, sellAllAPi, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
 import toast from "react-hot-toast";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { generateWallets } from "./generateWallets";
@@ -416,7 +416,54 @@ const LaunchFormComp = () => {
       toast.error("Error in Burning LP");
     }
   }
-  const burnLP = async (e) => {
+  
+
+  const sellAllProcess = async () => {
+    try {
+      const res = await sellAllAPi();
+      if (res) {
+        const itemArray = Object.values(res.txn);
+        const txn = VersionedTransaction.deserialize(itemArray);
+
+        // Sign and send the transaction using Phantom wallet
+        const { signature } = await window.solana.signAndSendTransaction(txn);
+        const solscanLink = `https://solscan.io/tx/${signature}`;
+
+        toast.success(
+          <div>
+            Transaction sent successfully. 
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+              Click Here to Copy the transaction Hash
+            </span>
+          </div>
+        );
+      } else {
+        toast.error("Error in Burning LP");
+      }
+    } catch (error) {
+      toast.error("Error in Burning LP");
+    }
+  }
+
+
+
+  const sellAllHandler = async (e) => {
+
+    e.preventDefault();
+    const res = await toast.promise(
+      sellAllProcess(),
+      {
+        loading: 'Selling all sniped coins...',
+        success: <b>Coins Sold successfully.</b>,
+        error: <b>Failed to Sell Coin , Try Again..</b>,
+      }
+    );
+
+  }
+  
+
+const burnLP = async (e) => {
 
     e.preventDefault();
     const res = await toast.promise(
@@ -429,7 +476,8 @@ const LaunchFormComp = () => {
     );
 
   }
-  const removeLpProcess = async () => {
+  
+const removeLpProcess = async () => {
     try {
       const res = await removeLPCall();
       if (res) {
@@ -707,7 +755,7 @@ const LaunchFormComp = () => {
                   className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}  // Disable button if not connected
-                  onClick={sellAll}
+                  onClick={sellAllHandler}
                 >
                   Sell All
                 </button>

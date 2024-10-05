@@ -170,7 +170,8 @@ export const sellAllAPi = async (data) => {
     //  
     try {
         const response = await axios.post(`${BASE_URL}/sellAll`, {
-            metadata: data
+            projectId: localStorage.getItem("projectId"),
+            userId: localStorage.getItem("solanaKey"),
         });
         return response.data;
     } catch (error) {
