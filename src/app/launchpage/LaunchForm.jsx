@@ -1,8 +1,13 @@
-"use client"
+"use client";
 
 import React, { useState, useContext, useEffect } from "react";
 import LauchTable from "./LauchTable";
-import { burnLPCall, sellAllAPi, postLaunch, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
+import {
+  burnLPCall,
+  sellAllAPi,
+  postLaunch,
+  upsertWallet,
+} from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
 import toast from "react-hot-toast";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { generateWallets } from "./generateWallets";
@@ -52,7 +57,7 @@ const LaunchFormComp = () => {
     setBalance,
     solanaKey,
     setUserId,
-    userId
+    userId,
   } = useContext(LaunchPadContext);
   // const { publicKey, signAllTransactions } = useWallet();
 
@@ -83,7 +88,6 @@ const LaunchFormComp = () => {
     setProjectId(generateProjectId());
   }
 
-
   function generateProjectId() {
     return Math.floor(Math.random() * 1000000).toString();
   }
@@ -107,18 +111,15 @@ const LaunchFormComp = () => {
             ...formData,
             amountSol: parseFloat(amountSol),
             amountTokens: parseFloat(amountTokens),
-            amountSolForSnipping: parseFloat(
-              formData.amountSolForSnipping
-            ),
+            amountSolForSnipping: parseFloat(formData.amountSolForSnipping),
           },
         }),
         {
-          loading: 'Saving...',
+          loading: "Saving...",
           success: <b>Upserted Successfully!</b>,
           error: <b>Error in Upserting Settings.</b>,
         }
       );
-
 
       localStorage.setItem("projectId", projectId);
       //console.log(res);
@@ -139,16 +140,13 @@ const LaunchFormComp = () => {
     return Math.random().toString(36).substr(2, 9); // Adjust length as needed
   };
 
-
-
-
   const genWalletsHandler = async () => {
-    console.log(projectId)
+    console.log(projectId);
 
     try {
       // Generate wallets
       const lamportsArray = calculatePercentages(
-        (formData.amountSolForSnipping - 0.2)
+        formData.amountSolForSnipping - 0.2
       );
       const response = await generateWallets(
         25,
@@ -157,50 +155,52 @@ const LaunchFormComp = () => {
         projectId
       );
       console.log("Generated Wallets:", response);
-      console.log(response?.wallets)
+      console.log(response?.wallets);
       // Transform the data
-      
+
       const formattedWallets = response?.wallets.map((wallet, index) => ({
         projectId: projectId,
         pubKey: wallet.publicKey || wallet.pubKey,
-        privateKey: encryptPrivateKey(wallet.secretKey) || encryptPrivateKey(wallet.privateKey),
+        privateKey:
+          encryptPrivateKey(wallet.secretKey) ||
+          encryptPrivateKey(wallet.privateKey),
         solATA: wallet.solATA,
         coinATA: wallet.coinATA,
         // lamports: wallet.lamports || 0, // Default to 0 if lamports is null
         lamports: wallet.lamports,
       }));
-      //  
+      //
       // console.log(formattedWallets, "These are formatted wallets");
       // Call upsertWallet API with the formatted wallets
       const res = await toast.promise(
         upsertWallet(formattedWallets, projectId),
         {
-          loading: 'Generating Wallets...',
+          loading: "Generating Wallets...",
           success: <b>Successfully Generated Wallets</b>,
           error: <b>Failed to generate or upsert wallets.</b>,
         }
       );
-      //  
+      //
       // const res = await upsertWallet(formattedWallets, projectId);
       console.log("Upsert Wallets API Response:", res);
+
       // setProjectId("");
       // Update tableData with generated wallets
-      setTableData(response?.wallets);
+      // debugger
+      setTableData(res);
       // Optionally, handle success message
       if (response?.message == "") {
-        toast.success("Wallets generated, formatted, and upserted successfully.");
+        toast.success(
+          "Wallets generated, formatted, and upserted successfully."
+        );
       } else {
         toast.success("wallets Already Generated");
       }
-
-
     } catch (error) {
       console.error("Error in generating or upserting wallets:", error);
       toast.error("Failed to generate or upsert wallets.");
     }
   };
-
-
 
   const downloadCSV = () => {
     // Check if tableData is not empty
@@ -268,8 +268,7 @@ const LaunchFormComp = () => {
       }));
       //console.log(res?.data?.wallet);
       setTableData(res?.data?.wallet);
-      setProjectId(res?.data?.launch.projectId)
-
+      setProjectId(res?.data?.launch.projectId);
     }
   };
 
@@ -313,7 +312,6 @@ const LaunchFormComp = () => {
     });
   };
   const launch = async () => {
-
     const res = await TokenLaunch();
     try {
       const vTxn = res.allTxs.map((item) => {
@@ -324,15 +322,11 @@ const LaunchFormComp = () => {
       });
       //console.log(vTxn, "These are Version TXNs");
 
-      let signedTransactions = await window.solana.signAllTransactions(
-        vTxn
-      );
+      let signedTransactions = await window.solana.signAllTransactions(vTxn);
       // console.log(signedTransactions,"____ before serializeing");
       signedTransactions = signedTransactions.map((item) => {
         return item.serialize();
-      }
-
-      )
+      });
       console.log(signedTransactions);
       const response = await axios.post("/api/signedTransaction", {
         signedTransactions: signedTransactions,
@@ -340,12 +334,11 @@ const LaunchFormComp = () => {
         projectId: localStorage.getItem("projectId"),
       });
       console.log("res", response);
-
     } catch (error) {
       console.error("Error signing or sending transactions:", error);
       console.error("Error details:", error.stack);
     }
-  }
+  };
   const LaunchToken = async (e) => {
     e.preventDefault();
 
@@ -353,17 +346,24 @@ const LaunchFormComp = () => {
       console.error("Phantom wallet not connected or unavailable");
       return;
     }
-    if (balance < Number(formData.amountSol) + Number(formData.amountSolForSnipping) + 0.83108017) {
+    if (
+      balance <
+      Number(formData.amountSol) +
+        Number(formData.amountSolForSnipping) +
+        0.83108017
+    ) {
       // if (balance < 0) {
       // debugger
-      toast.error("U dont have sufficient Balance to Launch Token ! Please recharge your wallet")
+      toast.error(
+        "U dont have sufficient Balance to Launch Token ! Please recharge your wallet"
+      );
     } else {
       try {
         const res = await toast.promise(
           launch(),
 
           {
-            loading: 'Launching...',
+            loading: "Launching...",
             success: <b>Token Launched Successfully!</b>,
             error: <b>Could not Launch Token .. Try Again in a few moments.</b>,
           }
@@ -371,25 +371,24 @@ const LaunchFormComp = () => {
         // const res = await TokenLaunch();
         //console.log(res, "this is res");
         // toast.success(" Token Launched");
-        const connection = new Connection("https://api.mainnet-beta.solana.com");
+        const connection = new Connection(
+          "https://api.mainnet-beta.solana.com"
+        );
         const strFeePayer = localStorage.getItem("solanaKey");
-        //  
+        //
         // if (
         //   !strFeePayer ||
         //   !PublicKey.isOnCurve(Buffer.from(strFeePayer, "hex"))
         // ) {
-        //    
+        //
         //   console.error("Invalid fee payer public key");
         //   return;
         // }
         const feePayerPubKey = new PublicKey(strFeePayer);
-
-
       } catch (error) {
         toast.error("Error in Launching Token");
       }
     }
-
   };
   const burnLpProcess = async () => {
     try {
@@ -404,9 +403,15 @@ const LaunchFormComp = () => {
 
         toast.success(
           <div>
-            Transaction sent successfully. 
-            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
+            Transaction sent successfully.
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">
+              View on Solscan
+            </a>
+            .
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => navigator.clipboard.writeText(signature)}
+            >
               Click Here to Copy the transaction Hash
             </span>
           </div>
@@ -417,8 +422,7 @@ const LaunchFormComp = () => {
     } catch (error) {
       toast.error("Error in Burning LP");
     }
-  }
-  
+  };
 
   const sellAllProcess = async () => {
     try {
@@ -433,9 +437,15 @@ const LaunchFormComp = () => {
 
         toast.success(
           <div>
-            Transaction sent successfully. 
-            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
+            Transaction sent successfully.
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">
+              View on Solscan
+            </a>
+            .
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => navigator.clipboard.writeText(signature)}
+            >
               Click Here to Copy the transaction Hash
             </span>
           </div>
@@ -446,40 +456,27 @@ const LaunchFormComp = () => {
     } catch (error) {
       toast.error("Error in Selling All Tokens");
     }
-  }
-
-
+  };
 
   const sellAllHandler = async (e) => {
-
     e.preventDefault();
-    const res = await toast.promise(
-      sellAllProcess(),
-      {
-        loading: 'Selling all sniped coins...',
-        success: <b>Coins Sold successfully.</b>,
-        error: <b>Failed to Sell Coin , Try Again..</b>,
-      }
-    );
+    const res = await toast.promise(sellAllProcess(), {
+      loading: "Selling all sniped coins...",
+      success: <b>Coins Sold successfully.</b>,
+      error: <b>Failed to Sell Coin , Try Again..</b>,
+    });
+  };
 
-  }
-  
-
-const burnLP = async (e) => {
-
+  const burnLP = async (e) => {
     e.preventDefault();
-    const res = await toast.promise(
-      burnLpProcess(),
-      {
-        loading: 'Burning LP...',
-        success: <b>LP Burned successfully.</b>,
-        error: <b>Failed to Burn LP , Try Again..</b>,
-      }
-    );
+    const res = await toast.promise(burnLpProcess(), {
+      loading: "Burning LP...",
+      success: <b>LP Burned successfully.</b>,
+      error: <b>Failed to Burn LP , Try Again..</b>,
+    });
+  };
 
-  }
-  
-const removeLpProcess = async () => {
+  const removeLpProcess = async () => {
     try {
       const res = await removeLPCall();
       if (res) {
@@ -492,41 +489,37 @@ const removeLpProcess = async () => {
 
         toast.success(
           <div>
-            Transaction sent successfully. 
-            <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
+            Transaction sent successfully.
+            <a href={solscanLink} target="_blank" rel="noopener noreferrer">
+              View on Solscan
+            </a>
+            .
+            <span
+              style={{ cursor: "pointer" }}
+              onClick={() => navigator.clipboard.writeText(signature)}
+            >
               Click Here to Copy the transaction Hash
             </span>
           </div>
         );
-
       } else {
         toast.error("Error in Removing LP");
       }
-
     } catch (error) {
       toast.error("Error in Removing LP");
-
     }
-
-
-
-  }
+  };
 
   const removeLP = async (e) => {
     e.preventDefault();
 
     try {
-
       // Call the removeLP function that interacts with the backend or Solana API
-      const res = await toast.promise(
-        removeLpProcess(),
-        {
-          loading: 'Removing LP...',
-          success: <b>LP Removed successfully.</b>,
-          error: <b>Failed to Remove LP , Try Again..</b>,
-        }
-      );
+      const res = await toast.promise(removeLpProcess(), {
+        loading: "Removing LP...",
+        success: <b>LP Removed successfully.</b>,
+        error: <b>Failed to Remove LP , Try Again..</b>,
+      });
 
       // const res = await removeLPCall();
 
@@ -540,16 +533,14 @@ const removeLpProcess = async () => {
       // Deserialize the transaction data received
 
       // Display success message with a Solscan link
-      // document.getElementById("statusMessage").innerHTML = `Transaction sent successfully. 
+      // document.getElementById("statusMessage").innerHTML = `Transaction sent successfully.
       //   <a href="${solscanLink}" target="_blank">View on Solscan</a>`;
 
       console.log("Transaction sent successfully. Signature:", signature);
-
     } catch (error) {
       // Catch and log any errors during the process
       // console.error("Error during the removeLP transaction process:", error);
       // toast.error("An error occurred while processing the transaction.")
-
       // Display error message to the user on the frontend
       // document.getElementById("statusMessage").innerText = "An error occurred while processing the transaction.";
     }
@@ -559,24 +550,18 @@ const removeLpProcess = async () => {
     await sellAllProcess();
 
     // toast.error("Failed to Sell All . try in a little while...")
-
-
-  }
+  };
   const [solPrice, setSolPrice] = useState(0);
   const fetchSolPrice = () => {
-    fetch("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd")
+    fetch(
+      "https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd"
+    )
       .then((res) => res.json())
       .then((data) => setSolPrice(data?.solana?.usd))
       .catch((error) => console.error("Failed to fetch SOL price", error));
   };
   useEffect(() => {
-
-
     fetchSolPrice();
-
-
-
-
   }, []);
 
   useEffect(() => {
@@ -588,8 +573,10 @@ const removeLpProcess = async () => {
 
   return (
     <div>
-      {
-        loading ? <Loader /> : <div>
+      {loading ? (
+        <Loader />
+      ) : (
+        <div>
           {/* <div id="statusMessage"></div> */}
           <form className="w-full max-w-2xl my-3">
             <div className="flex flex-wrap -mx-3 mb-3">
@@ -661,26 +648,49 @@ const removeLpProcess = async () => {
                 />
               </div>
             </div>
-            {
-              (formData.mint && formData.amountSol && formData.amountTokens) && <> <div className="flex justify-between mb-2">
-                <h4>Launch MCAP</h4>
-                <h4>${(formData.amountSol * solPrice).toFixed(4)}</h4>
-              </div>
+            {formData.mint && formData.amountSol && formData.amountTokens && (
+              <>
+                {" "}
+                <div className="flex justify-between mb-2">
+                  <h4>Launch MCAP</h4>
+                  <h4>${(formData.amountSol * solPrice).toFixed(4)}</h4>
+                </div>
                 <div className="flex justify-between mb-2">
                   <h4>Launch Price</h4>
-                  <h4>${(formData.amountSol * solPrice) / formData.amountTokens} / {(formData.amountSol / formData.amountTokens).toFixed(9)} SOL</h4>
+                  <h4>
+                    ${(formData.amountSol * solPrice) / formData.amountTokens} /{" "}
+                    {(formData.amountSol / formData.amountTokens).toFixed(9)}{" "}
+                    SOL
+                  </h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>MCAP after Snipe</h4>
-                  <h4>${((formData.amountSol * solPrice) + (formData.amountSolForSnipping * solPrice)).toFixed()}</h4>
+                  <h4>
+                    $
+                    {(
+                      formData.amountSol * solPrice +
+                      formData.amountSolForSnipping * solPrice
+                    ).toFixed()}
+                  </h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>Price after Snipe</h4>
-                  <h4>${((formData.amountSol * solPrice) + (formData.amountSolForSnipping * solPrice)) / formData.amountTokens} / {((Number(formData.amountSol) + Number(formData.amountSolForSnipping)) / Number(formData.amountTokens)).toFixed(9)} SOL</h4>
+                  <h4>
+                    $
+                    {(formData.amountSol * solPrice +
+                      formData.amountSolForSnipping * solPrice) /
+                      formData.amountTokens}{" "}
+                    /{" "}
+                    {(
+                      (Number(formData.amountSol) +
+                        Number(formData.amountSolForSnipping)) /
+                      Number(formData.amountTokens)
+                    ).toFixed(9)}{" "}
+                    SOL
+                  </h4>
                 </div>
               </>
-            }
-
+            )}
 
             <button
               onClick={handleSubmit}
@@ -694,20 +704,25 @@ const removeLpProcess = async () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button"
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   disabled={!connected && projectId}
                   onClick={genWalletsHandler}
                 >
                   1 Generate Wallets
                 </button>
-
               </div>
               <div className="w-full md:w-4/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={downloadCSV} // Added onClick handler
                 >
@@ -718,8 +733,11 @@ const removeLpProcess = async () => {
                 <button
                   onClick={LaunchToken}
                   type="submit"
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   disabled={!connected && projectId} // Disable button if not connected
                 >
                   3 Launch Token
@@ -731,8 +749,11 @@ const removeLpProcess = async () => {
               <div className="w-full md:w-3/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
                   disabled={!connected && projectId} // Disable button if not connected
                   onClick={burnLP}
                 >
@@ -743,9 +764,12 @@ const removeLpProcess = async () => {
               <div className="w-full md:w-8/12">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  disabled={!connected && projectId}  // Disable button if not connected
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  disabled={!connected && projectId} // Disable button if not connected
                   onClick={removeLP}
                 >
                   Remove Liquidity
@@ -755,23 +779,23 @@ const removeLpProcess = async () => {
               <div className="w-full mt-4">
                 <button
                   type="button" // Changed to type="button" to avoid form submission
-                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
-                    }`}
-                  disabled={!connected && projectId}  // Disable button if not connected
+                  className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${
+                    !connected && projectId
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
+                  }`}
+                  disabled={!connected && projectId} // Disable button if not connected
                   onClick={sellAll}
                 >
                   Sell All
                 </button>
               </div>
             </div>
-            <p className="pt-4 text-center">
-               
-            </p>
+            <p className="pt-4 text-center"></p>
           </form>
         </div>
-      }
-    </div >
-
+      )}
+    </div>
   );
 };
 export default LaunchFormComp;

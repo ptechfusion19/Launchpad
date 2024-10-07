@@ -1,8 +1,6 @@
-
-
 import React from "react";
 import "./LaunchTable.css"; // Import the CSS file for styling
-import CopyImg from "./copywhite.png"
+import CopyImg from "./copywhite.png";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { decryptPrivateKey } from "../utils";
@@ -17,7 +15,7 @@ const formatPublicKey = (key, start = 4, end = 4) => {
 const LauchTable = ({ tableData }) => {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
-    toast.success("Copied Successfully")// You can replace this with a toast notification for better UX
+    toast.success("Copied Successfully"); // You can replace this with a toast notification for better UX
   };
   return (
     <div
@@ -32,11 +30,9 @@ const LauchTable = ({ tableData }) => {
             </th>
             <th scope="col" className="px-6 py-3">
               Address
-
             </th>
             <th scope="col" className="px-6 py-3">
               Private Key
-
             </th>
             <th scope="col" className="px-6 py-3">
               SOL Balance
@@ -50,26 +46,39 @@ const LauchTable = ({ tableData }) => {
           {tableData?.map((item, index) => (
             <tr
               key={index}
-              className={`bg-${index % 2 === 0 ? "light" : "dark"} hover:bg-purple-900 transition-all duration-200`}
+              className={`bg-${
+                index % 2 === 0 ? "light" : "dark"
+              } hover:bg-purple-900 transition-all duration-200`}
             >
               <td className="px-6 py-4 font-medium text-white">{index + 1}</td>
               <td className="px-6 py-4 text-white flex gap-2">
                 {formatPublicKey(item?.publicKey || item?.pubKey)}
-                <Image src={CopyImg} width={16}  // Desired width
+                <Image
+                  src={CopyImg}
+                  width={16} // Desired width
                   height={14}
                   style={{ cursor: "pointer" }}
-
-                  onClick={() => copyToClipboard(item?.publicKey || item?.pubKey)}
+                  onClick={() =>
+                    copyToClipboard(item?.publicKey || item?.pubKey)
+                  }
                 />
               </td>
               <td className="px-6 py-4 text-white">
                 <div className="flex gap-2">
-                  {formatPublicKey(decryptPrivateKey(item?.secretKey) || decryptPrivateKey(item?.privateKey))}
-                  <Image src={CopyImg} width={16}  // Desired width
-                    height={14}
-                    style={{ cursor: "pointer" }}
-                    onClick={() => copyToClipboard(decryptPrivateKey(item?.secretKey) || decryptPrivateKey(item?.privateKey))}
-                  />
+                  {(item?.privateKey || item?.secretKey) && (
+                    <>
+                      {formatPublicKey(decryptPrivateKey(item?.privateKey))}
+                      <Image
+                        src={CopyImg}
+                        width={16} // Desired width
+                        height={14}
+                        style={{ cursor: "pointer" }}
+                        onClick={() =>
+                          copyToClipboard(decryptPrivateKey(item?.privateKey))
+                        }
+                      />
+                    </>
+                  )}
                 </div>
               </td>
               <td className="px-6 py-4 text-white">{item?.solBalance || 0}</td>
