@@ -1,10 +1,78 @@
-import { PublicKey, SystemProgram, TransactionMessage, VersionedTransaction, Keypair, Connection, AddressLookupTableProgram } from "@solana/web3.js";
-import { getAssociatedTokenAddressSync, createAssociatedTokenAccountInstruction, createSyncNativeInstruction } from "@solana/spl-token";
+import { PublicKey,SystemProgram, TransactionMessage, VersionedTransaction,Keypair, Connection, AddressLookupTableProgram } from "@solana/web3.js";
+import { getAssociatedTokenAddressSync, createCloseAccountInstruction, createTransferInstruction, createAssociatedTokenAccountInstruction, createSyncNativeInstruction } from "@solana/spl-token";
 import { Liquidity, MarketV2, MAINNET_PROGRAM_ID, MARKET_STATE_LAYOUT_V2 } from "@raydium-io/raydium-sdk";
 import { jito_executeAndConfirm, getJitoTipInstruction } from "@/app/jito";
 import bs58 from "bs58";
 const transferSolInstruction = async (from_wallet, to_wallet, lamports) => {
     return SystemProgram.transfer({ fromPubkey: from_wallet, toPubkey: to_wallet, lamports: lamports })
+}
+
+async function prepareTransferAndCloseAccountInstruction(connection, senderPubkey, recipeintPubKey, mint) {
+    const owner = senderPubkey;
+    const associatedTokenSender = getAssociatedTokenAddressSync(mint, owner);
+    const associatedSOLTokenSender = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), owner);
+    const associatedTokenAReciever = getAssociatedTokenAddressSync(mint, recipeintWallet);
+    const balance = getTokenBalanceWeb3(connection, associatedTokenSender);
+    const transferInstruction = createTransferInstruction(associatedTokenSender, associatedTokenAReciever, owner, balance);
+    const mintCloseAccount = createCloseAccountInstruction(associatedTokenSender, owner, owner);
+    const solCloseAccount = createCloseAccountInstruction(associatedSOLTokenSender, owner, owner);
+    const lamports = Math.floor((0.00203928)*2*10**9);
+    const transferSOLInstractiion = SystemProgram.transfer({
+        fromPubkey: senderPubkey,
+        toPubkey: recipeintPubKey,
+        lamports: lamports,
+    })
+    return {instructions: [transferInstruction, mintCloseAccount, solCloseAccount, transferSOLInstractiion]}
+
+}
+
+
+export async function transferAllCoins(connection, distributorWallet, wallets, mint, recipient, poolKeys) {
+    const payerWallet = distributorWallet;
+    const mintPubKey = new PublicKey(mint);
+    //console.log(payerWallet.secretKey);
+    const recipeintPubKey = new PublicKey(recipient);
+    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+    const associatedToken = getAssociatedTokenAddressSync(mint, owner);
+    let accountInfo = await connection.getAccountInfo(associatedToken);
+    let instructions = [];
+    let ataCheck = 0;
+    if (!accountInfo) {
+        const mintATAIns = createAssociatedTokenAccountInstruction(
+            payer,
+            associatedToken,
+            recipeintPubKey,
+            mintPubKey
+        );    
+        instructions.push(mintATAIns);
+        ataCheck+=1;
+    };
+    const wsolATA = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), owner);
+    accountInfo =  await connection.getAccountInfo(wsolATA);
+    if (!accountInfo) {
+        const mintATAIns = createAssociatedTokenAccountInstruction(
+            payer,
+            associatedToken,
+            recipeintPubKey,
+            mintPubKey
+        );    
+        instructions.push(mintATAIns);
+        ataCheck+=1;
+    };
+    let signers = [];
+    for (let i = 0; i < wallets.length; i++) {
+        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const closeInstructions = await prepareTransferAndCloseAccountInstruction(connection, wallet.publicKey, recipeintPubKey, mintPubKey)
+        instructions.push(...closeInstructions.instructions);
+        signers.push(wallet);
+    }
+    const swapInstruction = await makeSellSwapInstructions(recipeintPubKey, poolKeys, connection, associatedToken, wsolATA);
+    const solCloseAccount = createCloseAccountInstruction(wsolATA, recipeintPubKey, recipeintPubKey);
+    const mintCloseAccount = createCloseAccountInstruction(associatedToken,recipeintPubKey, recipeintPubKey);
+    const swapTxInstructions = [swapInstruction, solCloseAccount, mintCloseAccount];
+    const transferAndCloseInstructions = instructions;
+
+    return {swap: swapTxInstructions, transferAndClose: transferAndCloseInstructions, signers: signers, ataCheck: ataCheck};
 }
 
 
@@ -192,6 +260,15 @@ export const makeSwapInstructions = async (owner, poolKeys, amountIn, mintAToken
     const minAmountOut = 1;
     const userKeys = { tokenAccountIn: mintBTokenAccount, tokenAccountOut: mintATokenAccount, owner: owner };
     const swapInstruction = Liquidity.makeSwapFixedInInstruction({ poolKeys, userKeys, amountIn, minAmountOut }, 4);
+    return swapInstruction.innerTransaction.instructions[0];
+}
+
+
+export const makeSellSwapInstructions = async (owner, poolKeys, connection, tokenInTokenAccount, tokenOutTokenAccount) => {
+    const minAmountOut = 1;
+    const balance = await getTokenBalanceWeb3(connection, tokenInTokenAccount);
+    const userKeys = {tokenAccountIn: tokenInTokenAccount, tokenAccountOut: tokenOutTokenAccount, owner: owner};
+    const swapInstruction = Liquidity.makeSwapFixedInInstruction({ poolKeys, userKeys, balance, minAmountOut }, 4);
     return swapInstruction.innerTransaction.instructions[0];
 }
 

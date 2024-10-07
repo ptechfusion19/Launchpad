@@ -404,7 +404,7 @@ const LaunchFormComp = () => {
           <div>
             Transaction sent successfully. 
             <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
               Click Here to Copy the transaction Hash
             </span>
           </div>
@@ -433,16 +433,16 @@ const LaunchFormComp = () => {
           <div>
             Transaction sent successfully. 
             <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
               Click Here to Copy the transaction Hash
             </span>
           </div>
         );
       } else {
-        toast.error("Error in Burning LP");
+        toast.error("Error in Selling All Tokens");
       }
     } catch (error) {
-      toast.error("Error in Burning LP");
+      toast.error("Error in Selling All Tokens");
     }
   }
 
@@ -492,7 +492,7 @@ const removeLpProcess = async () => {
           <div>
             Transaction sent successfully. 
             <a href={solscanLink} target="_blank" rel="noopener noreferrer">View on Solscan</a>.
-            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(transactionHash)}>
+            <span style={{ cursor: 'pointer' }} onClick={() => navigator.clipboard.writeText(signature)}>
               Click Here to Copy the transaction Hash
             </span>
           </div>
@@ -554,7 +554,8 @@ const removeLpProcess = async () => {
   };
   const sellAll = async (e) => {
     e.preventDefault();
-    const res = await sellAllAPi();
+    await sellAllProcess();
+
     toast.error("Failed to Sell All . try in a little while...")
 
 
@@ -755,7 +756,7 @@ const removeLpProcess = async () => {
                   className={`bg-gradient-to-r from-[#565656] to-[#000000] text-white py-2 px-2 rounded-3xl w-full text-sm ${!connected && projectId ? 'opacity-50 cursor-not-allowed' : ''
                     }`}
                   disabled={!connected && projectId}  // Disable button if not connected
-                  onClick={sellAllHandler}
+                  onClick={sellAll}
                 >
                   Sell All
                 </button>

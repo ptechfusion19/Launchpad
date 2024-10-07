@@ -5,10 +5,14 @@ import LaunchSettings from '../../../models/launchSettingsModel';
 // import Wallet from '../../../models/walletModel';
 import User from '../../../models/userModel';
 import connectDB from '../../../config/database';
+import { getJitoTipInstruction, jito_executeAndConfirm } from "@/app/jito";
+import { transferAllCoins, getPoolKeys, buildUnsignedTransaction } from "@/app/utils";
+import MarketInfo from "../../../models/marketInfoModel"
 // const solanaWeb3 = require('@solana/web3.js');
 import { Connection, TransactionMessage, VersionedTransaction, TransactionInstruction } from "@solana/web3.js";
 import { PublicKey, Keypair } from '@solana/web3.js';
-
+import { CurrencyAmount, Currency, Token, TokenAmount, PoolInfoLayout, SPL_MINT_LAYOUT } from '@raydium-io/raydium-sdk';
+import Wallet from "@/models/walletModel";
 
 // const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
 const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
@@ -31,10 +35,67 @@ export async function POST(req) {
         });
         const user = await User.findById(project.userId);
         let mint = project.mint;
-        let lookupTableAddress = new PublicKey(project.lookupTableAddress);
         const owner = new PublicKey(user.walletAddress);
-       
-        return NextResponse.json({ hello: "hello" }, { status: 200 });
+        
+        const distributorWallet = await Wallet.findOne({
+            projectId: projectId,
+            lamports: 0
+          });
+        
+          const distKeypair = Keypair.fromSecretKey(bs58.decode(distributorWallet.privateKey));
+        
+          const wallets = await Wallet.find({
+            projectId: projectId,
+            lamports: { $gt: 0 }
+          });
+
+
+        let marketInfo = await MarketInfo.find({ projectId });
+        marketInfo = marketInfo[marketInfo.length-1];
+        const marketId = new PublicKey(marketInfo.marketInfo.id);
+        const baseMint = new PublicKey(marketInfo.marketInfo.baseMint);
+        const quoteMint = new PublicKey(marketInfo.marketInfo.quoteMint);
+        // console.log(baseMint , quoteMint , "we are m,ints")
+        
+        const baseDecimals = SPL_MINT_LAYOUT.decode((await connection.getAccountInfo(baseMint)).data).decimals;
+        const quoteDecimals = 9;
+        const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
+
+        const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys);
+        const jitoTipIns = await getJitoTipInstruction(distKeypair.publicKey, 0.00001);
+        const batchITxs = [];
+        let batchIIns = [jitoTipIns];
+        let tx;
+        let firstBatch = true;
+        let instructionsSize = 12 + allInstructions.ataCheck;
+
+        for (i; i<allInstructions.transferAndClose.length; i++) {
+            if (!firstBatch) {
+                instructionsSize = 12;
+            };
+            if (batchIIns.length<instructionsSize) {
+                batchIIns.push(allInstructions.transferAndClose[i]);
+            }
+            else {
+                tx = await buildUnsignedTransaction(connection, distKeypair.publicKey, batchIIns);
+                tx.sign([distKeypair, ...allInstructions.signers.slice(i/4,(i+12)/4)]);
+                batchITxs.push(tx);
+                batchIIns = [jitoTipIns];
+                firstBatch = false;
+            };
+
+            if (batchITxs.length===5 || i==allInstructions.transferAndClose.length-1) {
+                if (batchITxs) {
+                    const jitoResp = await jito_executeAndConfirm(connection, batchITxs, distKeypair.publicKey, 0.0001, false);
+                }
+            }
+
+        }
+
+        const swapTx = await buildUnsignedTransaction(connection, owner, allInstructions.swap);
+
+
+        return NextResponse.json({txn: swapTx.serialize()}, { status: 200 });
     } catch (error) {
         console.error('Error In Uploading MetaData', error);
         return NextResponse.json({ error: 'Error In Uploading MetaData' }, { status: 500 });
