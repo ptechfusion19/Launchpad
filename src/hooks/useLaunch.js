@@ -1,6 +1,6 @@
 import axios from "axios";
 import FormData from 'form-data';
-import { cors } from "./cors";
+// import { cors } from "./cors";
 
 //const BASE_URL = "http://localhost:3000/api";
 const API_KEY = 'b0d3c83fda71caff078b';
