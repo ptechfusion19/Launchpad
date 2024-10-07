@@ -1,11 +1,10 @@
-// /** @type {import('next').NextConfig} */
+/** @type {import('next').NextConfig} */
 // const nextConfig = {
 //     images: {
 //       domains: ['gateway.pinata.cloud'], // Allow images from this domain
 //     },
 //   };
 
-// export default nextConfig;
 
 
 const nextConfig = {
@@ -25,4 +24,6 @@ const nextConfig = {
   }
 }
 
-module.exports = nextConfig
+export default nextConfig;
+
+// module.exports = nextConfig

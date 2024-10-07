@@ -107,7 +107,7 @@ const BurnFormComp = () => {
                   id="mint"
                   name="mint"
                   type="text"
-                  placeholder="Enter Token Address"
+                  placeholder=""
                   value={mint}
                   onChange={handleChange}
                 />
@@ -126,7 +126,7 @@ const BurnFormComp = () => {
                   id="pairAddress"
                   name="pairAddress"
                   type="text"
-                  placeholder="Enter Pair Address"
+                  placeholder=""
                   value={pairAddress}
                   onChange={handleChange}
                 />
