@@ -10,7 +10,7 @@ const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaW
 
 // const BASE_URL = "https://launch-pad-g69q.vercel.app/api";
 
- const BASE_URL = "https://launchpad-gules.vercel.app/api";
+ const BASE_URL = "https://bundlebee.tech/api";
 
 
 
