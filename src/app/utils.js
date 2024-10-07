@@ -3,9 +3,58 @@ import { getAssociatedTokenAddressSync, createCloseAccountInstruction, createTra
 import { Liquidity, MarketV2, MAINNET_PROGRAM_ID, MARKET_STATE_LAYOUT_V2 } from "@raydium-io/raydium-sdk";
 import { jito_executeAndConfirm, getJitoTipInstruction } from "@/app/jito";
 import bs58 from "bs58";
+const crypto = require('crypto');
+require('dotenv').config();
+
+const encryptionKey = process.env.encryptionKey;
 const transferSolInstruction = async (from_wallet, to_wallet, lamports) => {
     return SystemProgram.transfer({ fromPubkey: from_wallet, toPubkey: to_wallet, lamports: lamports })
 }
+
+export function encryptPrivateKey(privateKey) {
+    console.log(process.env.encryptionKey);
+    // debugger
+    const iv = crypto.randomBytes(16); 
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
+
+    let encrypted = cipher.update(privateKey, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+
+    return iv.toString('hex') + ':' + encrypted;
+}
+
+
+
+function generateEncryptionKey() {
+    return crypto.randomBytes(32).toString('hex');
+}
+
+// const encryptionKey =  generateEncryptionKey();
+// console.log('Generated Encryption Key:', encryptionKey);
+
+
+
+export function decryptPrivateKey(encryptedPrivateKey) {
+    const parts = encryptedPrivateKey.split(':');
+    const iv = Buffer.from(parts[0], 'hex');
+    const encryptedText = parts[1];
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
+
+    let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
+    decrypted += decipher.final('utf8');
+
+    return decrypted;
+}
+
+
+// const encryptedPrivateKey = encryptPrivateKey(bs58PrivateKey, encryptionKey);
+// console.log('Encrypted Private Key:', encryptedPrivateKey);
+
+
+// const decryptedPrivateKey = decryptPrivateKey(encryptedPrivateKey, encryptionKey);
+
+
+
 
 async function prepareTransferAndCloseAccountInstruction(connection, senderPubkey, recipeintPubKey, mint) {
     const owner = senderPubkey;
@@ -62,7 +111,7 @@ export async function transferAllCoins(connection, distributorWallet, wallets, m
     const mintPubKey = new PublicKey(mint);
     //console.log(payerWallet.secretKey);
     const recipeintPubKey = new PublicKey(recipient);
-    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+    const payer = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(payerWallet.privateKey)));
     const associatedToken = getAssociatedTokenAddressSync(mintPubKey, recipeintPubKey);
 
     let accountInfo = await connection.getAccountInfo(associatedToken);
@@ -104,7 +153,7 @@ export async function transferAllCoins(connection, distributorWallet, wallets, m
     
     
     for (let i = 0; i < wallets.length; i++) {
-        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const wallet = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(wallets[i].privateKey)));
         const closeInstructions = await prepareTransferAndCloseAccountInstruction(connection, wallet.publicKey, recipeintPubKey, mintPubKey)
         totalTokens += Number(closeInstructions.tokens);
         // console.log(closeInstructions.instructions);
@@ -269,13 +318,13 @@ export const prepareWallets = async (connection, distributorWallet, wallets, min
     const payerWallet = distributorWallet;
     const mintPubKey = new PublicKey(mint);
     //console.log(payerWallet.secretKey);
-    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+    const payer = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(payerWallet.privateKey)));
     let instructions = [];
     let tx;
     let walletTest;
     let accountInfo;
     for (let i = 0; i < wallets.length; i++) {
-        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const wallet = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(wallets[i].privateKey)));
         const walletInstruction = await prepareWalletPreSwapInstruction(wallet.publicKey, payer.publicKey, mintPubKey, wallets[i].lamports);
         // // console.log(walletInstruction);
         walletTest = walletInstruction.mintATA;
@@ -358,7 +407,7 @@ export const makeSellSwapInstructions = async (owner, poolKeys, connection, toke
 
 export const prepareSwapTxs = async (connection, distributorWallet, wallets, poolKeys) => {
     const payerWallet = distributorWallet;
-    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+    const payer = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(payerWallet.privateKey)));
 
     const transactions = [];
     let instructions = [];
@@ -367,7 +416,7 @@ export const prepareSwapTxs = async (connection, distributorWallet, wallets, poo
     let signers = [];
     let tx;
     for (let i = 0; i < wallets.length; i++) {
-        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const wallet = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(wallets[i].privateKey)));
         const coinATA = new PublicKey(wallets[i].coinATA);
         const solATA = new PublicKey(wallets[i].solATA);
         // console.log(wallet.publicKey, poolKeys, wallet.lamports, coinATA, solATA);
@@ -412,7 +461,7 @@ async function getTokenBalanceWeb3(connection, tokenAccount) {
 
 export const prepareSellTxs = async (connection, distributorWallet, wallets, poolKeys) => {
     const payerWallet = distributorWallet;
-    const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
+    const payer = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(payerWallet.privateKey)));
 
     const transactions = [];
     let instructions = [];
@@ -421,7 +470,7 @@ export const prepareSellTxs = async (connection, distributorWallet, wallets, poo
     let signers = [];
     let tx;
     for (let i = 0; i < wallets.length - 1; i++) {
-        const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
+        const wallet = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(wallets[i].privateKey)));
         const coinATA = new PublicKey(wallets[i].coinATA);
         const solATA = new PublicKey(wallets[i].solATA);
         

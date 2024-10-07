@@ -42,7 +42,7 @@ export async function POST(req) {
             lamports: 0
           });
         
-          const distKeypair = Keypair.fromSecretKey(bs58.decode(distributorWallet.privateKey));
+          const distKeypair = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(distributorWallet.privateKey)));
         
           const wallets = await Wallet.find({
             projectId: projectId,

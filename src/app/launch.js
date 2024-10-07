@@ -6,7 +6,7 @@ import { Token, MintLayout } from "@solana/spl-token";
 import PoolKey from "@/models/poolKeysModel";
 import MarketInfo from "@/models/marketInfoModel";
 import { getJitoTipInstruction, jito_executeAndConfirm } from "@/app/jito";
-import { prepareWallets, getPoolKeys, prepareSwapTxs, createLookupTableInstruction, extendLookupTableInstruction, deactivateLookupTableInstruction, closeLookupTableInstruction, buildUnsignedTransactionwithLookup, buildUnsignedTransaction } from "@/app/utils";
+import { decryptPrivateKey, prepareWallets, getPoolKeys, prepareSwapTxs, createLookupTableInstruction, extendLookupTableInstruction, deactivateLookupTableInstruction, closeLookupTableInstruction, buildUnsignedTransactionwithLookup, buildUnsignedTransaction } from "@/app/utils";
 import Wallet from "@/models/walletModel";
 import User from "@/models/userModel";
 import connectDB from '@/config/database';
@@ -66,7 +66,7 @@ export async function launch(signedTransactions, userId, projectId) {
     lamports: 0
   });
 
-  const distKeypair = Keypair.fromSecretKey(bs58.decode(distributorWallet.privateKey));
+  const distKeypair = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(distributorWallet.privateKey)));
 
   const wallets = await Wallet.find({
     projectId: projectId,
@@ -225,7 +225,7 @@ export async function sellAllSnipes(signedTransactions, settings, user) {
     lamports: 0
   });
 
-  const distKeypair = Keypair.fromSecretKey(bs58.decode(distributorWallet.privateKey));
+  const distKeypair = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(distributorWallet.privateKey)));
 
   const wallets = await Wallet.find({
     projectId: projectId,

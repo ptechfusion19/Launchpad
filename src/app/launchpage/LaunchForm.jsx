@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { generateWallets } from "./generateWallets";
 import { TokenLaunch, removeLPCall } from "../../hooks/useLaunch";
+import { encryptPrivateKey, decryptPrivateKey } from "../utils";
 import axios from "axios";
 import {
   Connection,
@@ -158,17 +159,18 @@ const LaunchFormComp = () => {
       console.log("Generated Wallets:", response);
       console.log(response?.wallets)
       // Transform the data
+      
       const formattedWallets = response?.wallets.map((wallet, index) => ({
         projectId: projectId,
         pubKey: wallet.publicKey || wallet.pubKey,
-        privateKey: wallet.secretKey || wallet.privateKey,
+        privateKey: encryptPrivateKey(wallet.secretKey) || encryptPrivateKey(wallet.privateKey),
         solATA: wallet.solATA,
         coinATA: wallet.coinATA,
         // lamports: wallet.lamports || 0, // Default to 0 if lamports is null
         lamports: wallet.lamports,
       }));
       //  
-      console.log(formattedWallets, "These are formatted wallets");
+      // console.log(formattedWallets, "These are formatted wallets");
       // Call upsertWallet API with the formatted wallets
       const res = await toast.promise(
         upsertWallet(formattedWallets, projectId),
@@ -219,7 +221,7 @@ const LaunchFormComp = () => {
     const rows = tableData.map((item, index) => [
       index + 1,
       item.pubKey,
-      item.privateKey,
+      decryptPrivateKey(item.privateKey),
       0, // Placeholder for SOL Balance
       0, // Placeholder for Token Balance
     ]);

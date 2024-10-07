@@ -5,6 +5,7 @@ import "./LaunchTable.css"; // Import the CSS file for styling
 import CopyImg from "./copywhite.png"
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { decryptPrivateKey } from "../utils";
 const formatPublicKey = (key, start = 4, end = 4) => {
   if (!key || key.length <= start + end) return key; // Return key if it's too short
 
@@ -63,11 +64,11 @@ const LauchTable = ({ tableData }) => {
               </td>
               <td className="px-6 py-4 text-white">
                 <div className="flex gap-2">
-                  {formatPublicKey(item?.secretKey || item?.privateKey)}
+                  {formatPublicKey(decryptPrivateKey(item?.secretKey) || decryptPrivateKey(item?.privateKey))}
                   <Image src={CopyImg} width={16}  // Desired width
                     height={14}
                     style={{ cursor: "pointer" }}
-                    onClick={() => copyToClipboard(item?.secretKey || item?.privateKey)}
+                    onClick={() => copyToClipboard(decryptPrivateKey(item?.secretKey) || decryptPrivateKey(item?.privateKey))}
                   />
                 </div>
               </td>
