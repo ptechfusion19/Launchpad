@@ -1,10 +1,8 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/config/database';
-import { NextResponse } from 'next/server';
 import LaunchSettings from '../../../models/launchSettingsModel';
 // import Wallet from '../../../models/walletModel';
 import User from '../../../models/userModel';
-import connectDB from '../../../config/database';
 import { getJitoTipInstruction, jito_executeAndConfirm } from "@/app/jito";
 import { transferAllCoins, getPoolKeys, buildUnsignedTransaction } from "@/app/utils";
 import MarketInfo from "../../../models/marketInfoModel"
@@ -13,6 +11,8 @@ import { Connection, TransactionMessage, VersionedTransaction, TransactionInstru
 import { PublicKey, Keypair } from '@solana/web3.js';
 import { CurrencyAmount, Currency, Token, TokenAmount, PoolInfoLayout, SPL_MINT_LAYOUT } from '@raydium-io/raydium-sdk';
 import Wallet from "@/models/walletModel";
+import bs58 from "bs58";
+// import { i } from '@raydium-io/raydium-sdk-v2/lib/raydium-a023305c';
 
 // const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
 const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
@@ -28,7 +28,7 @@ const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090
 export async function POST(req) {
     const {  projectId, userId  } = await req.json();
     
-    try {
+    // try {
         await connectDB();
         const project = await LaunchSettings.findOne({
             projectId: projectId
@@ -62,42 +62,19 @@ export async function POST(req) {
         const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
 
         const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys);
-        const jitoTipIns = await getJitoTipInstruction(distKeypair.publicKey, 0.00001);
-        const batchITxs = [];
-        let batchIIns = [jitoTipIns];
-        let tx;
-        let firstBatch = true;
-        let instructionsSize = 12 + allInstructions.ataCheck;
-
-        for (i; i<allInstructions.transferAndClose.length; i++) {
-            if (!firstBatch) {
-                instructionsSize = 12;
-            };
-            if (batchIIns.length<instructionsSize) {
-                batchIIns.push(allInstructions.transferAndClose[i]);
-            }
-            else {
-                tx = await buildUnsignedTransaction(connection, distKeypair.publicKey, batchIIns);
-                tx.sign([distKeypair, ...allInstructions.signers.slice(i/4,(i+12)/4)]);
-                batchITxs.push(tx);
-                batchIIns = [jitoTipIns];
-                firstBatch = false;
-            };
-
-            if (batchITxs.length===5 || i==allInstructions.transferAndClose.length-1) {
-                if (batchITxs) {
-                    const jitoResp = await jito_executeAndConfirm(connection, batchITxs, distKeypair.publicKey, 0.0001, false);
-                }
-            }
-
-        }
+        // const bundles = allInstructions.bundles;
+        // console.log(bundles.length);
+        // for (let i=0; i<bundles.length; i++) {
+        //     const jitoResp = await jito_executeAndConfirm(connection, bundles[i], distKeypair.publicKey, 0.0001, false);
+        //     console.log(jitoResp);
+        // }
 
         const swapTx = await buildUnsignedTransaction(connection, owner, allInstructions.swap);
 
-
         return NextResponse.json({txn: swapTx.serialize()}, { status: 200 });
-    } catch (error) {
-        console.error('Error In Uploading MetaData', error);
-        return NextResponse.json({ error: 'Error In Uploading MetaData' }, { status: 500 });
-    }
+    // } 
+    // catch (error) {
+    //     console.error('Error In Uploading MetaData', error);
+    //     return NextResponse.json({ error: 'Error In Uploading MetaData' }, { status: 500 });
+    // }
 }

@@ -1,4 +1,4 @@
-import { PublicKey,SystemProgram, TransactionMessage, VersionedTransaction,Keypair, Connection, AddressLookupTableProgram } from "@solana/web3.js";
+import { PublicKey,SystemProgram, TransactionInstruction, TransactionMessage, VersionedTransaction,Keypair, Connection, AddressLookupTableProgram } from "@solana/web3.js";
 import { getAssociatedTokenAddressSync, createCloseAccountInstruction, createTransferInstruction, createAssociatedTokenAccountInstruction, createSyncNativeInstruction } from "@solana/spl-token";
 import { Liquidity, MarketV2, MAINNET_PROGRAM_ID, MARKET_STATE_LAYOUT_V2 } from "@raydium-io/raydium-sdk";
 import { jito_executeAndConfirm, getJitoTipInstruction } from "@/app/jito";
@@ -11,8 +11,8 @@ async function prepareTransferAndCloseAccountInstruction(connection, senderPubke
     const owner = senderPubkey;
     const associatedTokenSender = getAssociatedTokenAddressSync(mint, owner);
     const associatedSOLTokenSender = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), owner);
-    const associatedTokenAReciever = getAssociatedTokenAddressSync(mint, recipeintWallet);
-    const balance = getTokenBalanceWeb3(connection, associatedTokenSender);
+    const associatedTokenAReciever = getAssociatedTokenAddressSync(mint, recipeintPubKey);
+    const balance = await getTokenBalanceWeb3(connection, associatedTokenSender);
     const transferInstruction = createTransferInstruction(associatedTokenSender, associatedTokenAReciever, owner, balance);
     const mintCloseAccount = createCloseAccountInstruction(associatedTokenSender, owner, owner);
     const solCloseAccount = createCloseAccountInstruction(associatedSOLTokenSender, owner, owner);
@@ -21,11 +21,41 @@ async function prepareTransferAndCloseAccountInstruction(connection, senderPubke
         fromPubkey: senderPubkey,
         toPubkey: recipeintPubKey,
         lamports: lamports,
-    })
-    return {instructions: [transferInstruction, mintCloseAccount, solCloseAccount, transferSOLInstractiion]}
-
+    });
+    // console.log(transferInstruction.keys);
+    // console.log(mintCloseAccount.keys);
+    // console.log(solCloseAccount.keys);
+    // console.log(transferSOLInstractiion.keys);
+    if (balance) {
+        return {instructions: [transferInstruction, mintCloseAccount, solCloseAccount, transferSOLInstractiion], tokens: balance}
+    }
+    else {
+        return {instructions: [mintCloseAccount, solCloseAccount, transferSOLInstractiion], tokens: 0}
+    }
 }
-
+function displayInstructions(instructions) {
+    instructions.forEach((instruction, index) => {
+      console.log(`\nInstruction ${index + 1}:`);
+      console.log("Program ID:", instruction.programId.toBase58());
+      
+      // Display the keys involved in the instruction
+      console.log("Keys:");
+      instruction.keys.forEach((keyObj, keyIndex) => {
+        console.log(`  Key ${keyIndex + 1}:`);
+        console.log(`    Pubkey: ${keyObj.pubkey.toBase58()}`);
+        console.log(`    IsSigner: ${keyObj.isSigner}`);
+        console.log(`    IsWritable: ${keyObj.isWritable}`);
+      });
+  
+      // Display the data in hex or base64 format
+      const dataHex = Buffer.from(instruction.data).toString('hex');
+      console.log("Data (hex):", dataHex);
+  
+      // Optionally, show the base64 format of the data
+      const dataBase64 = Buffer.from(instruction.data).toString('base64');
+      console.log("Data (base64):", dataBase64);
+    });
+  }
 
 export async function transferAllCoins(connection, distributorWallet, wallets, mint, recipient, poolKeys) {
     const payerWallet = distributorWallet;
@@ -33,13 +63,16 @@ export async function transferAllCoins(connection, distributorWallet, wallets, m
     //console.log(payerWallet.secretKey);
     const recipeintPubKey = new PublicKey(recipient);
     const payer = Keypair.fromSecretKey(bs58.decode(payerWallet.privateKey));
-    const associatedToken = getAssociatedTokenAddressSync(mint, owner);
+    const associatedToken = getAssociatedTokenAddressSync(mintPubKey, recipeintPubKey);
+
     let accountInfo = await connection.getAccountInfo(associatedToken);
-    let instructions = [];
+    const jitoTipIns = await getJitoTipInstruction(payer.publicKey, 0.00001);
+    let instructions = [jitoTipIns];
     let ataCheck = 0;
+    // console.log(accountInfo);
     if (!accountInfo) {
         const mintATAIns = createAssociatedTokenAccountInstruction(
-            payer,
+            payer.publicKey,
             associatedToken,
             recipeintPubKey,
             mintPubKey
@@ -47,32 +80,64 @@ export async function transferAllCoins(connection, distributorWallet, wallets, m
         instructions.push(mintATAIns);
         ataCheck+=1;
     };
-    const wsolATA = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), owner);
+    const wsolATA = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), recipeintPubKey);
+    
     accountInfo =  await connection.getAccountInfo(wsolATA);
+    // console.log(accountInfo);
     if (!accountInfo) {
         const mintATAIns = createAssociatedTokenAccountInstruction(
-            payer,
-            associatedToken,
+            payer.publicKey,
+            wsolATA,
             recipeintPubKey,
-            mintPubKey
+            new PublicKey("So11111111111111111111111111111111111111112")
         );    
         instructions.push(mintATAIns);
         ataCheck+=1;
     };
     let signers = [];
+    let totalTokens = 0;
+    
+    let batchITxs = [];
+    let batchIIns = [jitoTipIns];
+    let tx;
+    const bundles = [];
+    
+    
     for (let i = 0; i < wallets.length; i++) {
         const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
         const closeInstructions = await prepareTransferAndCloseAccountInstruction(connection, wallet.publicKey, recipeintPubKey, mintPubKey)
+        totalTokens += Number(closeInstructions.tokens);
+        // console.log(closeInstructions.instructions);
         instructions.push(...closeInstructions.instructions);
         signers.push(wallet);
+
+        if (instructions.length>=12) {
+            tx = await buildUnsignedTransaction(connection, payer.publicKey, instructions);
+            tx.sign([payer, ...signers]);
+            signers = [];
+            batchITxs.push(tx);
+            instructions = [jitoTipIns];
+        }
+        if (batchITxs.length==5) {
+            bundles.push(batchITxs);
+            batchITxs = []
+        }
     }
-    const swapInstruction = await makeSellSwapInstructions(recipeintPubKey, poolKeys, connection, associatedToken, wsolATA);
+    if (batchITxs) {
+        bundles.push(batchITxs);
+    }
+    for (let i=0; i<bundles.length; i++) {
+        const jitoResp = await jito_executeAndConfirm(connection, bundles[i], payer.publicKey, 0.0001, false);
+        console.log(jitoResp);
+    }
+    const tokenBalance = await getTokenBalanceWeb3(connection, associatedToken);
+    const swapInstruction = await makeSellSwapInstructions(recipeintPubKey, poolKeys, connection, associatedToken, wsolATA, tokenBalance);
     const solCloseAccount = createCloseAccountInstruction(wsolATA, recipeintPubKey, recipeintPubKey);
     const mintCloseAccount = createCloseAccountInstruction(associatedToken,recipeintPubKey, recipeintPubKey);
     const swapTxInstructions = [swapInstruction, solCloseAccount, mintCloseAccount];
     const transferAndCloseInstructions = instructions;
 
-    return {swap: swapTxInstructions, transferAndClose: transferAndCloseInstructions, signers: signers, ataCheck: ataCheck};
+    return {bundles:bundles, swap: swapTxInstructions, transferAndClose: transferAndCloseInstructions, signers: signers, ataCheck: ataCheck};
 }
 
 
@@ -121,7 +186,20 @@ export const closeLookupTableInstruction = async (owner, lookupTableAddress) => 
 }
 
 export const buildUnsignedTransaction = async (connection, feePayer, instructionss) => {
-
+    // const instructions = instructionss.map(item => {
+    //     const updatedKeys = item.keys.map(key => {
+    //         // Check if pubkey is a string, and convert it to PublicKey
+    //         return {
+    //             ...key,
+    //             pubkey: typeof key.pubkey === 'string' ? new PublicKey(key.pubkey) : key.pubkey
+    //         };
+    //     });
+    //     return new TransactionInstruction({
+    //         keys: updatedKeys,
+    //         data: item.data,
+    //         programId: new PublicKey(item.programId) // Assuming programId is already a string or PublicKey object
+    //     });
+    // });
     const lastestBlockhash = (await connection.getLatestBlockhash());
     const txnMessage = new TransactionMessage({
         payerKey: feePayer,
@@ -130,7 +208,7 @@ export const buildUnsignedTransaction = async (connection, feePayer, instruction
             ...instructionss
         ],
     });
-    // //console.log(txnMessage);
+    // console.log(txnMessage);
     return new VersionedTransaction(txnMessage.compileToV0Message());
 }
 
@@ -238,7 +316,7 @@ export const prepareWallets = async (connection, distributorWallet, wallets, min
 
 
 export const getPoolKeys = async (connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId) => {
-    console.log(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId, "We are necessary")
+    // console.log(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId, "We are necessary")
     let poolKeys = Liquidity.getAssociatedPoolKeys({ marketId: marketId, version: 4, marketVersion: 3, baseMint: baseMint, quoteMint: quoteMint, baseDecimals: baseDecimals, quoteDecimals: quoteDecimals, programId: MAINNET_PROGRAM_ID.AmmV4, marketProgramId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET })
     const marketInfo = await connection.getAccountInfoAndContext(marketId);
     const marketData = MARKET_STATE_LAYOUT_V2.decode(marketInfo.value.data);
@@ -251,7 +329,7 @@ export const getPoolKeys = async (connection, baseMint, quoteMint, baseDecimals,
     }
     const minAmountOut = 1;
     poolKeys = { ...modifiedMarketData, ...poolKeys }
-    console.log(poolKeys, "we are pool keys")
+    // console.log(poolKeys, "we are pool keys")
     return poolKeys
 }
 
@@ -264,11 +342,12 @@ export const makeSwapInstructions = async (owner, poolKeys, amountIn, mintAToken
 }
 
 
-export const makeSellSwapInstructions = async (owner, poolKeys, connection, tokenInTokenAccount, tokenOutTokenAccount) => {
+export const makeSellSwapInstructions = async (owner, poolKeys, connection, tokenInTokenAccount, tokenOutTokenAccount, amountIn) => {
     const minAmountOut = 1;
-    const balance = await getTokenBalanceWeb3(connection, tokenInTokenAccount);
+    
+    // const balance = await getTokenBalanceWeb3(connection, tokenInTokenAccount);
     const userKeys = {tokenAccountIn: tokenInTokenAccount, tokenAccountOut: tokenOutTokenAccount, owner: owner};
-    const swapInstruction = Liquidity.makeSwapFixedInInstruction({ poolKeys, userKeys, balance, minAmountOut }, 4);
+    const swapInstruction = Liquidity.makeSwapFixedInInstruction({ poolKeys, userKeys, amountIn, minAmountOut }, 4);
     return swapInstruction.innerTransaction.instructions[0];
 }
 
@@ -283,7 +362,7 @@ export const prepareSwapTxs = async (connection, distributorWallet, wallets, poo
 
     let signers = [];
     let tx;
-    for (let i = 0; i < wallets.length - 1; i++) {
+    for (let i = 0; i < wallets.length; i++) {
         const wallet = Keypair.fromSecretKey(bs58.decode(wallets[i].privateKey));
         const coinATA = new PublicKey(wallets[i].coinATA);
         const solATA = new PublicKey(wallets[i].solATA);
@@ -316,10 +395,11 @@ export const prepareSwapTxs = async (connection, distributorWallet, wallets, poo
 }  
 
 
-async function getTokenBalanceWeb3(connection, tokenAccount) {    
+async function getTokenBalanceWeb3(connection, tokenAccount) { 
+    // console.log(tokenAccount);
     const info = await connection.getTokenAccountBalance(tokenAccount);    
     if (info.value.uiAmount == null) throw new Error('No balance found');    
-    console.log('Balance (using Solana-Web3.js): ', info.value.uiAmount);    
+    // console.log('Balance (using Solana-Web3.js): ', info.value.uiAmount);    
     return info.value.amount ;
 }
 

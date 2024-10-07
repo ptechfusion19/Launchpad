@@ -556,7 +556,7 @@ const removeLpProcess = async () => {
     e.preventDefault();
     await sellAllProcess();
 
-    toast.error("Failed to Sell All . try in a little while...")
+    // toast.error("Failed to Sell All . try in a little while...")
 
 
   }
