@@ -587,7 +587,7 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     const liquidityInstructions = addLiquidityResponse.liqInstructions;
     
     const jitoTipLiq = await getJitoTipInstruction(ownerPubkey, jitofee_sol);
-    const feeReceiver = new PublicKey("BWCuWKwCEi1SVz99UtdMMRT772n7YXkjJfBDbNfUqgRg");
+    const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
     const fee = 0.5;
     const platformFeeInstruction = await transferSolInstruction(ownerPubkey,feeReceiver,fee*10**9);
     liquidityInstructions.push(jitoTipLiq);

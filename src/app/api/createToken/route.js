@@ -197,7 +197,7 @@ export async function POST(req) {
                 programId: new PublicKey(item.programId) // Assuming programId is already a string or PublicKey object
             });
         });
-        const feeReceiver = new PublicKey("BWCuWKwCEi1SVz99UtdMMRT772n7YXkjJfBDbNfUqgRg");
+        const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
         const fee = 0.2;
         const platformFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: feeReceiver, lamports: fee*10**9 });
         instructions.push(platformFeeInstruction);

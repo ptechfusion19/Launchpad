@@ -134,7 +134,11 @@ export async function transferAllCoins(connection, distributorWallet, wallets, m
     const swapInstruction = await makeSellSwapInstructions(recipeintPubKey, poolKeys, connection, associatedToken, wsolATA, tokenBalance);
     const solCloseAccount = createCloseAccountInstruction(wsolATA, recipeintPubKey, recipeintPubKey);
     const mintCloseAccount = createCloseAccountInstruction(associatedToken,recipeintPubKey, recipeintPubKey);
-    const swapTxInstructions = [swapInstruction, solCloseAccount, mintCloseAccount];
+    const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
+    const fee = 0.5;
+    const platformFeeInstruction = SystemProgram.transfer({ fromPubkey: recipeintPubKey, toPubkey: feeReceiver, lamports: fee*10**9 });
+    // instructions.push(platformFeeInstruction);
+    const swapTxInstructions = [swapInstruction, solCloseAccount, mintCloseAccount, platformFeeInstruction];
     const transferAndCloseInstructions = instructions;
 
     return {bundles:bundles, swap: swapTxInstructions, transferAndClose: transferAndCloseInstructions, signers: signers, ataCheck: ataCheck};
