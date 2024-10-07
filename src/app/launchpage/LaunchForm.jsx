@@ -351,7 +351,7 @@ const LaunchFormComp = () => {
       console.error("Phantom wallet not connected or unavailable");
       return;
     }
-    if (balance < formData.amountSol + formData.amountSolForSnipping + 0.83108017) {
+    if (balance < Number(formData.amountSol) + Number(formData.amountSolForSnipping) + 0.83108017) {
       // if (balance < 0) {
       // debugger
       toast.error("U dont have sufficient Balance to Launch Token ! Please recharge your wallet")
