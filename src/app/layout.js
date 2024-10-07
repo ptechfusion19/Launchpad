@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import LaunchPadProvider from "@/context/LauchPadProvider";
 import AppWalletProvider from "@/connector";
+import Head from "next/head";
 const inter = Inter({ subsets: ["latin"] });
 import BgImg from "../assets/home/bgImg.png"
 export const metadata = {
@@ -15,8 +16,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <head>
-      <link rel="icon" href="./logo.png" /> 
+     <head>
+        <link rel="icon" href="/logo.svg" />
       </head>
 
       <body className={inter.className}>
