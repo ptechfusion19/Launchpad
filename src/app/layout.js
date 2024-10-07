@@ -8,12 +8,16 @@ export const metadata = {
   title: "Bundle Bee",
   description: "The Best Launchpad ever to exist...",
 
+
 };
 
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+      <link rel="icon" href="./logo.png" /> 
+      </head>
 
       <body className={inter.className}>
         <AppWalletProvider>
