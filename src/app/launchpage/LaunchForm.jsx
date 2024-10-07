@@ -2,7 +2,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import LauchTable from "./LauchTable";
-import { burnLPCall, sellAllAPi, postLaunch, sellAllAPi, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
+import { burnLPCall, sellAllAPi, postLaunch, upsertWallet } from "../../hooks/useLaunch"; // Ensure upsertWallet is imported
 import toast from "react-hot-toast";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { generateWallets } from "./generateWallets";
