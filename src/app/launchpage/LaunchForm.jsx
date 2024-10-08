@@ -592,7 +592,7 @@ const LaunchFormComp = () => {
                   id="mint"
                   name="mint"
                   type="text"
-                  placeholder="Enter Token Address"
+                  placeholder=""
                   value={formData.mint}
                   onChange={handleChange}
                 />
