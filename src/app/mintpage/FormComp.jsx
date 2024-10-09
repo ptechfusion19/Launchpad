@@ -34,6 +34,7 @@ const FormComp = () => {
     discordUrl: ""
 
   });
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
   const [showModal, setShowModal] = useState(false); // Modal visibility state
 
   const handlePreview = (e) => {
@@ -302,16 +303,21 @@ const FormComp = () => {
 
       const itemArray = Object.values(res.transactions);
       const tx = VersionedTransaction.deserialize(itemArray);
-      let mintToken = await window.solana.signAndSendTransaction(tx)
-
-      console.log(mintToken);
+      
+      let mintToken = await window.solana.signTransaction(tx);
+      // const itemArray1 = Object.values(mintToken);
+      // console.log(mintToken);
+      // const tx1 = VersionedTransaction.deserialize(mintToken);
+      const simResp = await connection.sendTransaction(mintToken);
+      console.log(simResp);
+      console.log(mintToken, 'signAndSendResp');
 
 
       toast.success("Token Mint Successfully")
       setTokenAddress(res?.key)
 
     } catch (error) {
-
+      console.log(error);
       toast.error("Failed to Mint Token")
     }
   }

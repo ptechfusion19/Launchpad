@@ -39,7 +39,7 @@ import { TOKEN_PROGRAM_ID } from '@raydium-io/raydium-sdk';
 // const bs58 = require('bs58');
 // require('dotenv').config();
 // async function main () {
-// const umi = createUmi(process.env.RPC_URL);
+// const umi = createUmi(process.env.NEXT_PUBLIC_RPC_URL);
 // const secretKeyBase58 = "3FpYDWWDCtp5oXhUixmyjB1aFSmsJdtHcV3UmoTmeiBa6MXEH2z927Rb3p3P9njuybapYbUHjQgNc1md7SaG1SKW"
 // const secret = bs58.decode(secretKeyBase58);
 // // const userWallet = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(secret));
@@ -70,7 +70,7 @@ import { TOKEN_PROGRAM_ID } from '@raydium-io/raydium-sdk';
 //     tokenStandard: TokenStandard.Fungible,
 // })
 // .getInstructions();
-// const connection = new Connection(process.env.RPC_URL, 'processed');
+// const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
 // const blockHash = ((await connection.getLatestBlockhash()).blockhash)
 // // console.log(ixs);
 // console.log(ixs[0].keys);
@@ -110,8 +110,8 @@ require('dotenv').config();
 export async function POST(req) {
     const { metaData, hash, publicKey, freeze, mintAuthority } = await req.json();
     try {
-        const umi = createUmi("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
-        const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5", 'processed');
+        const umi = createUmi(process.env.NEXT_PUBLIC_RPC_URL);
+        const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
         const pubkey = new PublicKey(publicKey)
         const ownerKeys = Keypair.generate();
         console.log(ownerKeys, "we are owner")
@@ -157,7 +157,7 @@ export async function POST(req) {
             .getInstructions();
         const blockHash = ((await connection.getLatestBlockhash()).blockhash)
 
-        console.log(ixs, "we are keys bro");
+        // console.log(ixs, "we are keys bro");
         if (mintAuthority) {
             const RevokeMintAuthority =
                 createSetAuthorityInstruction(
@@ -201,14 +201,14 @@ export async function POST(req) {
         const fee = 0.2;
         const platformFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: feeReceiver, lamports: fee*10**9 });
         instructions.push(platformFeeInstruction);
-        console.log(instructions, "W eerererererer")
+        // console.log(instructions, "W eerererererer")
         const message = MessageV0.compile({ payerKey: pubkey, instructions: instructions, recentBlockhash: blockHash });
 
 
         const txn = new VersionedTransaction(message);
 
         txn.sign([mintSigner])
-        console.log(txn, " I am the boss")
+        // console.log(txn, " I am the boss")
 
         const serilaizedTransactions = txn.serialize()
         const mintadress = mintSigner.publicKey.toString()

@@ -38,8 +38,8 @@ import { Liquidity, SPL_ACCOUNT_LAYOUT } from '@raydium-io/raydium-sdk';
 
 import { TOKEN_PROGRAM_ID, createBurnInstruction } from '@solana/spl-token';
 
-// const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
-const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+// const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL);
+const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
 
 
 const { getAssociatedTokenAddressSync } = require("@solana/spl-token");
@@ -77,7 +77,7 @@ export async function POST(req) {
         let marketInfo = await MarketInfo.find({ projectId });
         marketInfo = marketInfo[marketInfo.length - 1];
         const marketId = new PublicKey(marketInfo.marketInfo.id);
-        const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+        const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
         const baseMint = new PublicKey(marketInfo.marketInfo.baseMint);
         const quoteMint = new PublicKey(marketInfo.marketInfo.quoteMint);
 

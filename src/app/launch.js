@@ -14,7 +14,7 @@ import bs58 from "bs58";
 
 export async function testLaunch(signedTransactions, userId, projectId) {
   await connectDB();
-  const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
   const settings = await LaunchSettings.findOne({ projectId });
   const user = await User.findById(userId);
   console.log(user);
@@ -55,7 +55,7 @@ export async function launch(signedTransactions, userId, projectId) {
   // console.log(userId, "___userid")
   //console.log(projectId,"___projectId")
   await connectDB();
-  const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
   const settings = await LaunchSettings.findOne({ projectId });
   const user = await User.findById(userId);
   // console.log(user);
@@ -110,7 +110,7 @@ export async function launch(signedTransactions, userId, projectId) {
 
   // Must Uncomment
   // Create Market
-  console.log(marketInfo, "____marketInfo");
+  // console.log(marketInfo, "____marketInfo");
   const createMarketResponse = await jito_executeAndConfirm(connection, [signedCreateMarketTx1, signedCreateMarketTx2], ownerPubkey, 0.001, false);
   console.log("Create Market Response", createMarketResponse);
 
@@ -123,8 +123,11 @@ export async function launch(signedTransactions, userId, projectId) {
   const baseDecimals = decodedAI.decimals;
   const quoteDecimals = 9;
   const marketId = new PublicKey(marketInfo.marketInfo.id);
+  // console.log(marketId);
+  // return
+  // console.log(baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
   const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
-  const swapResponse = await prepareSwapTxs(connection, distributorWallet, wallets, freshPoolKeys);
+  const swapResponse = await prepareSwapTxs(connection, distributorWallet, wallets, freshPoolKeys, baseMint);
 
 
   const pubKeys = swapResponse.keys.map((key) => {
@@ -197,12 +200,12 @@ export async function launch(signedTransactions, userId, projectId) {
   // console.log(addLiqSimResponse);
   const addLiquiditySnipeResponse = await jito_executeAndConfirm(connection, [signedAddLiquidtyTransaction, ...swapTxs], ownerPubkey, 0.001, false);
   console.log('Add Liquidity Response', addLiquiditySnipeResponse);
-  const deactivateLUTIns = await deactivateLookupTableInstruction(distKeypair.publicKey, lookupTableAddress);
-  const closeLUTIns = await closeLookupTableInstruction(distKeypair.publicKey, lookupTableAddress);
+  // const deactivateLUTIns = await deactivateLookupTableInstruction(distKeypair.publicKey, lookupTableAddress);
+  // const closeLUTIns = await closeLookupTableInstruction(distKeypair.publicKey, lookupTableAddress);
 
-  const closeLUTTxn = await buildUnsignedTransaction(connection, distKeypair.publicKey, [deactivateLUTIns.instruction, jitoInstruction]);
-  closeLUTTxn.sign([distKeypair]);
-  const closeLUTResp = await jito_executeAndConfirm(connection, [closeLUTTxn], distKeypair.publicKey, 0.0001, false);
+  // const closeLUTTxn = await buildUnsignedTransaction(connection, distKeypair.publicKey, [deactivateLUTIns.instruction, jitoInstruction]);
+  // closeLUTTxn.sign([distKeypair]);
+  // const closeLUTResp = await jito_executeAndConfirm(connection, [closeLUTTxn], distKeypair.publicKey, 0.0001, false);
 
   return true;
 
@@ -215,7 +218,7 @@ export async function launch(signedTransactions, userId, projectId) {
 export async function sellAllSnipes(signedTransactions, settings, user) {
   
   await connectDB();
-  const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+  const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
   
   // console.log(user);
   const ownerPubkey = new PublicKey(user.walletAddress);
@@ -252,7 +255,7 @@ export async function sellAllSnipes(signedTransactions, settings, user) {
   const quoteDecimals = 9;
   const marketId = new PublicKey(marketInfo.marketInfo.id);
   const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
-  const swapResponse = await prepareSwapTxs(connection, distributorWallet, wallets, freshPoolKeys);
+  const swapResponse = await prepareSwapTxs(connection, distributorWallet, wallets, freshPoolKeys, baseMint);
 
 
   const pubKeys = swapResponse.keys.map((key) => {

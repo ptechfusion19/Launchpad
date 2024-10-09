@@ -34,7 +34,7 @@ const usePhantom = () => {
                     // setUserId(userCheck.id);
                     // Initialize connection to the Solana devnet (or mainnet-beta if needed)
                     // //debuger;
-                    const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/kgYyEi-DvcfTHEiTGeO7LGbPEJ5lofWm');
+                    const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
                     //const connection = new Connection('https://api.mainnet.solana.com');
                     // //debuger;
                     // Fetch balance

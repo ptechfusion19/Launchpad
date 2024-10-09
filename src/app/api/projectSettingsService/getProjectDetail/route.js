@@ -15,7 +15,7 @@ import PoolKey from "../../../../models/poolKeysModel"
 import MarketInfo from "../../../../models/marketInfoModel"
 // const BigNumber = require('bignumber.js');
 import BigNumber from "bignumber.js"
-import { AMM_V4, Raydium } from "@raydium-io/raydium-sdk-v2";
+import { AMM_V4, Raydium, DEVNET_PROGRAM_ID } from "@raydium-io/raydium-sdk-v2";
 import connectDB from '../../../../config/database';
 // const solanaWeb3 = require('@solana/web3.js');
 import { Connection, TransactionMessage, VersionedTransaction, TransactionInstruction } from "@solana/web3.js";
@@ -54,9 +54,9 @@ import { makeCreateMarketInstruction } from "@raydium-io/raydium-sdk-v2";
 import { generatePubKey, OPEN_BOOK_PROGRAM } from '@raydium-io/raydium-sdk-v2';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-// const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
+// const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL);
 // const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=aa012b11-cafb-4f4a-8944-ef9dec5172b0', 'processed');
-const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
 
 
 // const connection = new Connection("https://ultra-delicate-lambo.solana-mainnet.quiknode.pro/9e6a18285b47f9974b7cac73e999be568cfe9929");
@@ -77,6 +77,8 @@ const endpoints = [ // TODO: Choose a jito endpoint which is closest to your loc
     "https://ny.mainnet.block-engine.jito.wtf/api/v1/bundles",
     "https://tokyo.mainnet.block-engine.jito.wtf/api/v1/bundles",
 ];
+
+const DEVNET = process.env.NEXT_PUBLIC_DEVNET === '1';
 
 const signTxsPhantom = async (transactions) => {
     //console.log(typeof (transactions), "These are the transactions ")
@@ -136,7 +138,7 @@ const getWalletTokenAccount = async (connection, wallet) => {
 
 const addLiquidity = async (walletPublicKey, payer, marketIdString, mintString, tokenAmount, solAmount) => {
     //console.log(walletPublicKey, payer, marketIdString, mintString, tokenAmount, solAmount)
-    console.log(walletPublicKey, payer, marketIdString, mintString, tokenAmount, solAmount);
+    // console.log(walletPublicKey, payer, marketIdString, mintString, tokenAmount, solAmount);
     const mint = new PublicKey(mintString);
     //console.log(mint, connection, "I am a new mint")
     const mintInfo = await getMint(connection, mint);
@@ -164,13 +166,27 @@ const addLiquidity = async (walletPublicKey, payer, marketIdString, mintString, 
     const walletTokenAccounts = await getWalletTokenAccount(connection, walletPublicKey);
     //console.log(walletTokenAccounts, "WALLLLETTSTTSSSTTSTTTS")
     const startTime = Math.floor(Date.now() / 1000);
-    
+    let OPENBOOK_ID;
+    let RAYDIUM_ID;
+    let feeAccount;
+    if (DEVNET) {
+        OPENBOOK_ID = DEVNET_PROGRAM_ID.OPENBOOK_MARKET;
+        RAYDIUM_ID = DEVNET_PROGRAM_ID.AmmV4;
+        feeAccount = new PublicKey("3XMrhbv989VxAMi3DErLV9eJht1pHppW5LbKxe9fkEFR");
+
+    }
+    else {
+        
+        OPENBOOK_ID = OPEN_BOOK_PROGRAM;
+        RAYDIUM_ID = AMM_V4;
+        feeAccount = new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5");
+    }
     const { innerTransactions, address } = await Liquidity.makeCreatePoolV4InstructionV2Simple({
         connection,
-        programId: AMM_V4,
+        programId: RAYDIUM_ID,
         marketInfo: {
             marketId: marketId,
-            programId: OPEN_BOOK_PROGRAM,
+            programId: OPENBOOK_ID,
         },
         baseMintInfo: baseToken,
         quoteMintInfo: quoteToken,
@@ -186,7 +202,7 @@ const addLiquidity = async (walletPublicKey, payer, marketIdString, mintString, 
         associatedOnly: false,
         checkCreateATAOwner: true,
         makeTxVersion: makeTxVersion,
-        feeDestinationId: new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5"), // only mainnet use this
+        feeDestinationId: feeAccount, // only mainnet use this
     })
     // console.log(innerTransactions[0].instructions);
     const liqInstructions = innerTransactions[0].instructions;
@@ -338,7 +354,14 @@ const createMarket = async (walletPublicKeyStr, mintString, mintDecimals) => {
     };
     const tickSize = 0.0001;
     const lotSize = 1;
-    const OPENBOOK_MARKET = OPEN_BOOK_PROGRAM;
+    let OPENBOOK_MARKET;
+    if (DEVNET) {
+        OPENBOOK_MARKET = new PublicKey("EoTcMgcDRTJVZDMZWBoU6rhYHZfkNTVEAfz3uUJRcYGj");
+    }
+    else {
+        OPENBOOK_MARKET = OPEN_BOOK_PROGRAM;
+    }
+    
     // //console.log(OPENBOOK_MARKET);
     const marketInfo = fetchMarketInfo({ wallet, dexProgramId: OPENBOOK_MARKET, baseInfo, quoteInfo, tickSize, lotSize, requestQueueSpace, eventQueueSpace, orderbookQueueSpace })
     //console.log(marketInfo, "I am merket");
@@ -563,7 +586,7 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     const stringifiedKey = marketInfo.id.publicKey.toString();
 
 
-    // const stringifiedKey = "7yi3br1TxTVw1sLkqCJ25hsGgfwFrhDLTAzGoZZr7N4Z";
+    // const stringifiedKey = "BCLT4Mi8JyGZxShGPe45eQZ8mzsRNZdSzvZuwxueQxyC";
     
     const addLiquidityResponse = await addLiquidity(ownerPubkey, ownerPubkey, stringifiedKey, mint, tokenInitialLiquidity, solInitialLiquidity);
     // console.log(addLiquidityResponse, 'After Liquidity')

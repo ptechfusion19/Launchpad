@@ -371,7 +371,7 @@ const LaunchFormComp = () => {
         // const res = await TokenLaunch();
         //console.log(res, "this is res");
         // toast.success(" Token Launched");
-        const connection = new Connection("https://api.mainnet-beta.solana.com");
+        // const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL);
         const strFeePayer = localStorage.getItem("solanaKey");
         //  
         // if (

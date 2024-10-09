@@ -2,17 +2,18 @@ import { PublicKey,SystemProgram, TransactionInstruction, TransactionMessage, Ve
 import { getAssociatedTokenAddressSync, createCloseAccountInstruction, createTransferInstruction, createAssociatedTokenAccountInstruction, createSyncNativeInstruction } from "@solana/spl-token";
 import { Liquidity, MarketV2, MAINNET_PROGRAM_ID, MARKET_STATE_LAYOUT_V2 } from "@raydium-io/raydium-sdk";
 import { jito_executeAndConfirm, getJitoTipInstruction } from "@/app/jito";
+import { AMM_V4, Raydium, DEVNET_PROGRAM_ID } from "@raydium-io/raydium-sdk-v2";
 import bs58 from "bs58";
 const crypto = require('crypto');
 require('dotenv').config();
-
-const encryptionKey = process.env.encryptionKey;
+const DEVNET = process.env.NEXT_PUBLIC_DEVNET === '1';
+const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
 const transferSolInstruction = async (from_wallet, to_wallet, lamports) => {
     return SystemProgram.transfer({ fromPubkey: from_wallet, toPubkey: to_wallet, lamports: lamports })
 }
 
 export function encryptPrivateKey(privateKey) {
-    console.log(process.env.encryptionKey);
+    console.log(process.env.NEXT_PUBLIC_ENCRYPTION_KEY);
     // debugger
     const iv = crypto.randomBytes(16); 
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
@@ -35,15 +36,20 @@ function generateEncryptionKey() {
 
 
 export function decryptPrivateKey(encryptedPrivateKey) {
-    const parts = encryptedPrivateKey.split(':');
+    if (encryptedPrivateKey) {
+        const parts = encryptedPrivateKey.split(':');
     const iv = Buffer.from(parts[0], 'hex');
     const encryptedText = parts[1];
+    debugger;
     const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(encryptionKey, 'hex'), iv);
 
     let decrypted = decipher.update(encryptedText, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
 
     return decrypted;
+    }
+
+    
 }
 
 
@@ -370,7 +376,23 @@ export const prepareWallets = async (connection, distributorWallet, wallets, min
 
 export const getPoolKeys = async (connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId) => {
     // console.log(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId, "We are necessary")
-    let poolKeys = Liquidity.getAssociatedPoolKeys({ marketId: marketId, version: 4, marketVersion: 3, baseMint: baseMint, quoteMint: quoteMint, baseDecimals: baseDecimals, quoteDecimals: quoteDecimals, programId: MAINNET_PROGRAM_ID.AmmV4, marketProgramId: MAINNET_PROGRAM_ID.OPENBOOK_MARKET })
+    let OPENBOOK_ID;
+    let RAYDIUM_ID;
+    let feeAccount;
+    // console.log(DEVNET_PROGRAM_ID.OPEN_BOOK_PROGRAM);
+    // console.log(DEVNET_PROGRAM_ID.AmmV4);
+    if (DEVNET) {
+        OPENBOOK_ID = new PublicKey("EoTcMgcDRTJVZDMZWBoU6rhYHZfkNTVEAfz3uUJRcYGj");
+        RAYDIUM_ID = DEVNET_PROGRAM_ID.AmmV4;
+        feeAccount = new PublicKey("3XMrhbv989VxAMi3DErLV9eJht1pHppW5LbKxe9fkEFR");
+
+    }
+    else {
+        OPENBOOK_ID = MAINNET_PROGRAM_ID.OPENBOOK_MARKET;
+        RAYDIUM_ID = AMM_V4;
+        feeAccount = new PublicKey("7YttLkHDoNj9wyDur5pM1ejNaAvT9X4eqaYcHQqtj2G5");
+    }
+    let poolKeys = Liquidity.getAssociatedPoolKeys({ marketId: marketId, version: 4, marketVersion: 3, baseMint: baseMint, quoteMint: quoteMint, baseDecimals: baseDecimals, quoteDecimals: quoteDecimals, programId: RAYDIUM_ID, marketProgramId: OPENBOOK_ID })
     const marketInfo = await connection.getAccountInfoAndContext(marketId);
     const marketData = MARKET_STATE_LAYOUT_V2.decode(marketInfo.value.data);
     const modifiedMarketData = {
@@ -405,7 +427,7 @@ export const makeSellSwapInstructions = async (owner, poolKeys, connection, toke
 }
 
 
-export const prepareSwapTxs = async (connection, distributorWallet, wallets, poolKeys) => {
+export const prepareSwapTxs = async (connection, distributorWallet, wallets, poolKeys, mint) => {
     const payerWallet = distributorWallet;
     const payer = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(payerWallet.privateKey)));
 
@@ -417,8 +439,8 @@ export const prepareSwapTxs = async (connection, distributorWallet, wallets, poo
     let tx;
     for (let i = 0; i < wallets.length; i++) {
         const wallet = Keypair.fromSecretKey(bs58.decode(decryptPrivateKey(wallets[i].privateKey)));
-        const coinATA = new PublicKey(wallets[i].coinATA);
-        const solATA = new PublicKey(wallets[i].solATA);
+        const coinATA = getAssociatedTokenAddressSync(mint, wallet.publicKey);
+        const solATA = getAssociatedTokenAddressSync(new PublicKey("So11111111111111111111111111111111111111112"), wallet.publicKey);
         // console.log(wallet.publicKey, poolKeys, wallet.lamports, coinATA, solATA);
         // console.log(wallet);
         console.log(wallets[i]);

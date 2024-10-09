@@ -4,7 +4,7 @@ import LaunchSettings from '../../../models/launchSettingsModel';
 // import Wallet from '../../../models/walletModel';
 import User from '../../../models/userModel';
 import { getJitoTipInstruction, jito_executeAndConfirm } from "@/app/jito";
-import { transferAllCoins, getPoolKeys, buildUnsignedTransaction } from "@/app/utils";
+import { transferAllCoins, getPoolKeys, buildUnsignedTransaction, decryptPrivateKey } from "@/app/utils";
 import MarketInfo from "../../../models/marketInfoModel"
 // const solanaWeb3 = require('@solana/web3.js');
 import { Connection, TransactionMessage, VersionedTransaction, TransactionInstruction } from "@solana/web3.js";
@@ -14,8 +14,8 @@ import Wallet from "@/models/walletModel";
 import bs58 from "bs58";
 // import { i } from '@raydium-io/raydium-sdk-v2/lib/raydium-a023305c';
 
-// const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
-const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+// const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL);
+const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
 
 
 

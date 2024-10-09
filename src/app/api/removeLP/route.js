@@ -52,8 +52,8 @@ import { makeCreateMarketInstruction } from "@raydium-io/raydium-sdk-v2";
 import { generatePubKey, OPEN_BOOK_PROGRAM } from '@raydium-io/raydium-sdk-v2';
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 
-// const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
-const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+// const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL);
+const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
 
 // const connection = new Connection("https://ultra-delicate-lambo.solana-mainnet.quiknode.pro/9e6a18285b47f9974b7cac73e999be568cfe9929");
 const jito_Validators = [
@@ -175,7 +175,7 @@ export async function POST(req) {
         const marketId = new PublicKey(marketInfo.marketInfo.id);
         // const marketId = new PublicKey("FgQ7djJeYzRHm2nVSiUEqYxkc5hUC8rKQQSJ7CVo9f58");
         
-        const connection = new Connection('https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5', 'processed');
+        const connection = new Connection(process.env.NEXT_PUBLIC_RPC_URL, 'processed');
         
 
         const baseMint = new PublicKey(marketInfo.marketInfo.baseMint);

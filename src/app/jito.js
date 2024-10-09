@@ -2,7 +2,7 @@ import {
     
     PublicKey,
     SystemProgram,
-    
+    sendAndConfirmTransaction,
     TransactionMessage,
     VersionedTransaction
 } from "@solana/web3.js";
@@ -10,7 +10,9 @@ import {
 import axios from "axios";
 import bs58 from "bs58";
 import { Currency, CurrencyAmount } from "@raydium-io/raydium-sdk";
+import { sleep } from "@raydium-io/raydium-sdk-v2";
 
+const DEVNET = process.env.NEXT_PUBLIC_DEVNET === '1';
   const jito_Validators = [
     "DfXygSm4jCyNCybVYYK6DwvWqjKee8pbDmJGcLWNDXjh",
     "ADuUkR4vqLUMWXxW9gh6D6L8pMSawimctcNZ5pGwDcEt",
@@ -118,34 +120,55 @@ import { Currency, CurrencyAmount } from "@raydium-io/raydium-sdk";
         final_transaction = [];
         jitoTxSignature = bs58.encode(transactions[0].signatures[0])
       }
-      
-      for (let i=0; i<transactions.length; i++) {
-        const serializedTransaction = bs58.encode(transactions[i].serialize());
-        final_transaction.push(serializedTransaction);
-      }
-      // console.log(final_transaction);
-      
-      const requests = endpoints.map((url) =>
-        axios.post(url, {
-          jsonrpc: "2.0",
-          id: 1,
-          method: "sendBundle",
-          params: [final_transaction],
-        })
-      );
-      //console.log("Sending tx to Jito validators...");
-      const res = await Promise.all(requests.map((p) => p.catch((e) => e)));
-      const success_res = res.filter((r) => !(r instanceof Error));
-      // console.log(success_res);
-      // console.log(success_res);
-      if (success_res.length > 0) {
+      if (DEVNET) {
+        let txResp;
+        let simResp;
+        for (let i=0; i<transactions.length; i++) {
+          // const serializedTransaction = bs58.encode(transactions[i].serialize());
+          // simResp = await connection.simulateTransaction(transactions[i]);
+          // console.log("__________________________");
+          // console.log(simResp);
+          // console.log("__________________________");
+          txResp = await sendAndConfirmTransaction(connection, transactions[i]);
+          console.log(txResp);
         
-        //console.log("Jito validator accepted the tx");
-        return await jito_confirm(connection, jitoTxSignature, lastestBlockhash);
-      } else {
-        //console.log("No Jito validators accepted the tx");
-        return { confirmed: false, signature: jitoTxSignature };
+          
+          // await connection.confirmTransaction(txResp);
+          
+          // final_transaction.push(serializedTransaction);
+        }
+        return {confirmed: true, signature: ""}
       }
+      else {
+        for (let i=0; i<transactions.length; i++) {
+          const serializedTransaction = bs58.encode(transactions[i].serialize());
+          final_transaction.push(serializedTransaction);
+        }
+        // console.log(final_transaction);
+        
+        const requests = endpoints.map((url) =>
+          axios.post(url, {
+            jsonrpc: "2.0",
+            id: 1,
+            method: "sendBundle",
+            params: [final_transaction],
+          })
+        );
+        //console.log("Sending tx to Jito validators...");
+        const res = await Promise.all(requests.map((p) => p.catch((e) => e)));
+        const success_res = res.filter((r) => !(r instanceof Error));
+        // console.log(success_res);
+        // console.log(success_res);
+        if (success_res.length > 0) {
+          
+          //console.log("Jito validator accepted the tx");
+          return await jito_confirm(connection, jitoTxSignature, lastestBlockhash);
+        } else {
+          //console.log("No Jito validators accepted the tx");
+          return { confirmed: false, signature: jitoTxSignature };
+        }
+      }
+      
     } catch (e) {
       if (e instanceof axios.AxiosError) {
         console.log("Failed to execute the jito transaction");
