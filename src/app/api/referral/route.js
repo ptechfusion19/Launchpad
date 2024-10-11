@@ -2,7 +2,6 @@ import { nanoid } from "nanoid";
 import { NextResponse } from "next/server";
 import connectDB from "@/config/database";
 import Referral from "@/models/referralModel";
-import BASE from "@/hooks/useLaunch";
 
 export async function POST(req) {
     try {
