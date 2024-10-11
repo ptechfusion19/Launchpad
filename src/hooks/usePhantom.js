@@ -11,9 +11,7 @@ const usePhantom = () => {
 
     const { connected, setConnected, setAccount, setWeb3, setSignedMessage, setSolanaKey, setBalance, solanaKey, setUserId } = useContext(LaunchPadContext);
     const connectToPhantom = async () => {
-        if (window.solana) {        
-          
-            // debugger
+        if (window.solana) {
             try {
                 if (window.solana.isConnected) {
                     await window.solana.connect();
@@ -23,27 +21,29 @@ const usePhantom = () => {
                     setConnected(true);
                     localStorage.setItem("solanaKey", solanaPublicKey);
                     localStorage.setItem("connected", true);
-                    const obj = {
-                        walletAddress: solanaPublicKey
-                    }
-                    const userCheck = await postUser(obj);
-                    // debugger
-                    console.log(userCheck)
-                    setUserId(userCheck?._id)
-                    //console.log(userCheck)
-                    // setUserId(userCheck.id);
+
+                    // Retrieve the referral wallet address from local storage
+                    const referralWalletAddress = localStorage.getItem('referralWalletAddress') || null;
+
+                    // Create the object with walletAddress and referralWalletAddress
+                    const userPayload = {
+                        walletAddress: solanaPublicKey,
+                        referralWalletAddress, // This will be null if no referral
+                    };
+
+                    // Call the API to add the user
+                    const userCheck = await postUser(userPayload);
+                    console.log(userCheck);
+                    setUserId(userCheck?._id);
+
                     // Initialize connection to the Solana devnet (or mainnet-beta if needed)
-                    // //debuger;
                     const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/kgYyEi-DvcfTHEiTGeO7LGbPEJ5lofWm');
-                    //const connection = new Connection('https://api.mainnet.solana.com');
-                    // //debuger;
-                    // Fetch balance
                     const publicKey = new PublicKey(solanaPublicKey);
                     const balance = await connection.getBalance(publicKey);
                     setBalance(balance / 1e9);
                     console.log(`Balance for wallet ${solanaPublicKey}: ${balance / 1e9} SOL`);
                 } else {
-                    // navi("/new-pairs");
+                    // Handle navigation or other actions if not connected
                 }
             } catch (error) {
                 console.error(error);
@@ -51,7 +51,6 @@ const usePhantom = () => {
         } else {
             alert('Phantom extension not detected!');
         }
-        // }
     };
 
 
@@ -105,6 +104,7 @@ const usePhantom = () => {
         localStorage.removeItem("connected");
         localStorage.removeItem("solanaKey");
         localStorage.removeItem("publicKey");
+        localStorage.removeItem("referralWalletAddress");
         localStorage.removeItem("connectedToSolflare");
         localStorage.removeItem("-walletlink:https://www.walletlink.org:EIP6963ProviderUUID");
 
