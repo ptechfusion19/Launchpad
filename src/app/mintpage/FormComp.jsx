@@ -1,14 +1,21 @@
+"use client";
 import React, { useState, useContext, useEffect } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import uploadImg from "../../../public/Vector.png";
 import vanityImg from "../../assets/home/vanity.png";
 import forwardImg from "../../assets/home/forward.png";
 import { Toaster, toast } from "react-hot-toast";
-import { imageUpload, mintToken, meteDataUpload, tokenCreate } from "@/hooks/useLaunch";
+import {
+  imageUpload,
+  mintToken,
+  meteDataUpload,
+  tokenCreate,
+  findUser,
+} from "@/hooks/useLaunch";
 import { getMintsettings } from "@/hooks/useLaunch";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { Connection, VersionedTransaction } from "@solana/web3.js";
-import {User} from "../../models/userModel";
+
 import ToolTip from "@/components/ToolTip";
 const FormComp = () => {
   const {
@@ -22,7 +29,7 @@ const FormComp = () => {
     setBalance,
     solanaKey,
     setUserId,
-    userId
+    userId,
   } = useContext(LaunchPadContext);
   const [formData, setFormData] = useState({
     tokenName: "",
@@ -32,27 +39,26 @@ const FormComp = () => {
     websiteUrl: "",
     twitterUrl: "",
     telegramUrl: "",
-    discordUrl: ""
-
+    discordUrl: "",
   });
   const [showModal, setShowModal] = useState(false); // Modal visibility state
 
   const handlePreview = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setShowModal(true); // Open modal on preview button click
   };
 
   const closeModal = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     setShowModal(false); // Close modal
   };
 
-  const [file, setFile] = useState(null)
-  const [tokenAddress, setTokenAddress] = useState("")
+  const [file, setFile] = useState(null);
+  const [tokenAddress, setTokenAddress] = useState("");
   const [isFreezeChecked, setIsFreezeChecked] = useState(true);
   const [isMintChecked, setIsmintChecked] = useState(true);
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
   const handleToggle = () => {
     setIsFreezeChecked(!isFreezeChecked);
   };
@@ -61,7 +67,7 @@ const FormComp = () => {
   };
   const handleChange = (e) => {
     if (!connected) {
-      toast.error("Please connect your Wallet first")
+      toast.error("Please connect your Wallet first");
     } else {
       const { name, value } = e.target;
       setFormData((prevData) => ({
@@ -69,48 +75,46 @@ const FormComp = () => {
         [name]: value,
       }));
     }
-
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 
+    //
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length === 0) {
       console.log(formData);
 
-      console.log(res)
+      console.log(res);
 
       // toast.success("Token Created successfully")
     } else {
       setErrors(validationErrors);
     }
-
   };
   const validateForm = () => {
     const errors = {};
     if (!formData.tokenName.trim()) {
-      errors.tokenName = 'Token name is required';
+      errors.tokenName = "Token name is required";
     }
     if (!formData.symbol.trim()) {
-      errors.symbol = 'symbol is required';
+      errors.symbol = "symbol is required";
     }
     if (!formData.logoUrl.trim()) {
-      errors.logoUrl = 'logoUrl is required';
+      errors.logoUrl = "logoUrl is required";
     }
     if (!formData.description.trim()) {
-      errors.description = 'description is required';
+      errors.description = "description is required";
     }
     if (!formData.websiteUrl.trim()) {
-      errors.websiteUrl = 'websiteUrl is required';
+      errors.websiteUrl = "websiteUrl is required";
     }
     if (!formData.twitterUrl.trim()) {
-      errors.twitterUrl = 'twitterUrl is required';
+      errors.twitterUrl = "twitterUrl is required";
     }
     if (!formData.telegramUrl.trim()) {
-      errors.telegramUrl = 'telegramUrl is required';
+      errors.telegramUrl = "telegramUrl is required";
     }
     if (!formData.discordUrl.trim()) {
-      errors.discordUrl = 'discordUrl is required';
+      errors.discordUrl = "discordUrl is required";
     }
 
     return errors;
@@ -118,12 +122,11 @@ const FormComp = () => {
 
   const handleTokenAddress = () => {
     if (!tokenAddress.trim()) {
-      toast.error("input field is empty")
+      toast.error("input field is empty");
     } else {
-      toast.success("add token address successfully")
+      toast.success("add token address successfully");
       console.log("Token address:", tokenAddress);
     }
-
   };
 
   const handleTokenChange = (e) => {
@@ -131,10 +134,9 @@ const FormComp = () => {
     console.log(e.target.value);
   };
   const getMint = async () => {
-
     const res = await getMintsettings();
     if (res) {
-      console.log(res)
+      console.log(res);
       setFormData({
         tokenName: res.tokenName,
         symbol: res.symbol,
@@ -143,29 +145,25 @@ const FormComp = () => {
         websiteUrl: res.websiteUrl,
         twitterUrl: res.twitterUrl,
         telegramUrl: res.telegramUrl,
-        discordUrl: res.discordUrl
-      })
-      toast.success("Mint Setting Found Successfully")
+        discordUrl: res.discordUrl,
+      });
+      toast.success("Mint Setting Found Successfully");
     }
-  }
+  };
   useEffect(() => {
     if (userId) {
       getMint();
     }
-
-  }, [userId])
+  }, [userId]);
 
   const Uploading = async (event) => {
     event.preventDefault();
 
-    const imageUrl = await toast.promise(
-      fileUpload(event),
-      {
-        loading: 'Please Wait, Uploading Image ...',
-        success: <b>Image Uploaded Successfully</b>,
-        error: <b>Failed to upload Image, Try Again Later ...</b>,
-      }
-    );
+    const imageUrl = await toast.promise(fileUpload(event), {
+      loading: "Please Wait, Uploading Image ...",
+      success: <b>Image Uploaded Successfully</b>,
+      error: <b>Failed to upload Image, Try Again Later ...</b>,
+    });
 
     // Set the image URL in formData after successful upload
     if (imageUrl) {
@@ -182,22 +180,22 @@ const FormComp = () => {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onloadend = async () => {
-          const base64data = reader.result.split(',')[1];
+          const base64data = reader.result.split(",")[1];
           try {
-            const response = await fetch('/api/imageUpload', {
-              method: 'POST',
+            const response = await fetch("/api/imageUpload", {
+              method: "POST",
               headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
               },
               body: JSON.stringify({ file: base64data }),
             });
 
             if (!response.ok) {
-              throw new Error('Upload failed');
+              throw new Error("Upload failed");
             }
 
             const data = await response.json();
-            console.log('Uploaded Image URL:', data.imageUrl);
+            console.log("Uploaded Image URL:", data.imageUrl);
             setFormData({
               logoUrl: data.imageUrl,
               ...formData,
@@ -213,12 +211,11 @@ const FormComp = () => {
       });
     }
   };
-  const [hash, sethash] = useState("")
-  const [data, setMetaData] = useState({})
+  const [hash, sethash] = useState("");
+  const [data, setMetaData] = useState({});
 
   const metaDataUpload = async (e) => {
     e.preventDefault();
-
 
     // Check for required fields and show error messages if any are missing
     if (!formData.tokenName) {
@@ -278,53 +275,51 @@ const FormComp = () => {
   const createToken = async (e) => {
     e.preventDefault();
 
-
-    const imageUrl = await toast.promise(
-      newtoken(e),
-      {
-        loading: 'Please Wait, minting token ...',
-        success: <b>Token Mint Successfuly</b>,
-        error: <b>Failed to Mint token ..</b>,
-      }
-    );
-
-  }
+    const imageUrl = await toast.promise(newtoken(e), {
+      loading: "Please Wait, minting token ...",
+      success: <b>Token Mint Successfuly</b>,
+      error: <b>Failed to Mint token ..</b>,
+    });
+  };
 
   const newtoken = async (e) => {
-    const { hash, metadata } = await toast.promise(metaDataUpload(e),
-      {
-        loading: 'Please Wait, Uploading Metadata ...',
-        success: <b>Metadata Uploaded Successfully</b>,
-        error: <b>Failed to upload Metadata, Try Again Later ...</b>,
-      })
-    const user = await User.findById(userId);
-    const referralWallet = user.referralWallet;
-    const res = await tokenCreate(hash, metadata, solanaKey, isFreezeChecked, isMintChecked, referralWallet)
+    const { hash, metadata } = await toast.promise(metaDataUpload(e), {
+      loading: "Please Wait, Uploading Metadata ...",
+      success: <b>Metadata Uploaded Successfully</b>,
+      error: <b>Failed to upload Metadata, Try Again Later ...</b>,
+    });
+    const user = await findUser(userId);
+    // debugger;
+    const referralWallet = user.referralWalletAddress;
+    const res = await tokenCreate(
+      hash,
+      metadata,
+      solanaKey,
+      isFreezeChecked,
+      isMintChecked,
+      referralWallet
+    );
     try {
-
       const itemArray = Object.values(res.transactions);
       const tx = VersionedTransaction.deserialize(itemArray);
       let mintToken = await window.solana.signAndSendTransaction(tx);
-      toast.success("Token Mint Successfully")
-      setTokenAddress(res?.key)
-
+      toast.success("Token Mint Successfully");
+      setTokenAddress(res?.key);
     } catch (error) {
-
-      toast.error("Failed to Mint Token")
+      toast.error("Failed to Mint Token");
     }
-  }
-
+  };
 
   return (
     <div>
       <Toaster position="top-center" reverseOrder={false} />
-      <form className="w-full max-w-2xl" >
+      <form className="w-full max-w-2xl">
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <div className="flex justify-between items-center">
               <label
                 className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                for="grid-first-name"
+                htmlFor="grid-first-name"
               >
                 {/* Token Name */}
                 Token name
@@ -340,20 +335,21 @@ const FormComp = () => {
               value={formData.tokenName}
               onChange={handleChange}
             />
-            {errors.tokenName && <p className="error text-red-500">{errors.tokenName}</p>}
+            {errors.tokenName && (
+              <p className="error text-red-500">{errors.tokenName}</p>
+            )}
             {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
           </div>
           <div className="w-full md:w-1/2 px-3">
             <div className="flex justify-between items-center">
               <label
                 className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                for="grid-last-name"
+                htmlFor="grid-last-name"
               >
                 {/* Symbol */}
                 Token Symbol $TOKEN
               </label>
               {/* <ToolTip tooltipContent={"I am tooltip content"} /> */}
-
             </div>
             <input
               className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
@@ -364,7 +360,9 @@ const FormComp = () => {
               type="text"
               placeholder=""
             />
-            {errors.symbol && <p className="error text-red-500">{errors.symbol}</p>}
+            {errors.symbol && (
+              <p className="error text-red-500">{errors.symbol}</p>
+            )}
           </div>
         </div>
 
@@ -386,8 +384,14 @@ const FormComp = () => {
               placeholder=""
             />
 
-            {errors.logoUrl && <p className="error text-red-500">{errors.logoUrl}</p>}
-            <Image src={uploadImg} className="mx-3 cursor-pointer" alt="Upload" />
+            {errors.logoUrl && (
+              <p className="error text-red-500">{errors.logoUrl}</p>
+            )}
+            <Image
+              src={uploadImg}
+              className="mx-3 cursor-pointer"
+              alt="Upload"
+            />
 
             <input
               value={file}
@@ -395,18 +399,24 @@ const FormComp = () => {
               className="cursor-pointer"
               onChange={Uploading}
             />
-            {
-              formData.logoUrl && <button
+            {formData.logoUrl && (
+              <button
                 onClick={handlePreview}
                 className=" bg-gradient-to-r from-[#565656] to-[#000000] text-white font-light py-3 px-4 rounded-3xl "
               >
                 Preview
               </button>
-            }
+            )}
             {showModal && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={closeModal}>
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                onClick={closeModal}
+              >
                 <div className="bg-white p-6 rounded-md shadow-lg max-w-sm">
-                  <button onClick={closeModal} className="absolute top-2 right-2 text-gray-600">
+                  <button
+                    onClick={closeModal}
+                    className="absolute top-2 right-2 text-gray-600"
+                  >
                     Close
                   </button>
                   <h2 className="text-lg font-bold mb-4">Logo Preview</h2>
@@ -421,8 +431,6 @@ const FormComp = () => {
               </div>
             )}
           </div>
-
-
         </div>
         <div className="flex flex-wrap -mx-3 mb-3">
           <div className="w-full px-3 flex items-center">
@@ -443,7 +451,9 @@ const FormComp = () => {
               placeholder=""
             />
             {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Description */}
-            {errors.description && <p className="error text-red-500">{errors.description}</p>}
+            {errors.description && (
+              <p className="error text-red-500">{errors.description}</p>
+            )}
           </div>
         </div>
 
@@ -466,7 +476,9 @@ const FormComp = () => {
               placeholder=""
             />
             {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Website URL */}
-            {errors.websiteUrl && <p className="error text-red-500">{errors.websiteUrl}</p>}
+            {errors.websiteUrl && (
+              <p className="error text-red-500">{errors.websiteUrl}</p>
+            )}
           </div>
         </div>
 
@@ -489,7 +501,9 @@ const FormComp = () => {
               placeholder=""
             />
             {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Twitter URL */}
-            {errors.twitterUrl && <p className="error text-red-500">{errors.twitterUrl}</p>}
+            {errors.twitterUrl && (
+              <p className="error text-red-500">{errors.twitterUrl}</p>
+            )}
           </div>
         </div>
 
@@ -512,7 +526,9 @@ const FormComp = () => {
               placeholder=""
             />
             {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Telegram URL */}
-            {errors.telegramUrl && <p className="error text-red-500">{errors.telegramUrl}</p>}
+            {errors.telegramUrl && (
+              <p className="error text-red-500">{errors.telegramUrl}</p>
+            )}
           </div>
         </div>
 
@@ -535,10 +551,11 @@ const FormComp = () => {
               placeholder=""
             />
             {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Discord URL */}
-            {errors.discordUrl && <p className="error text-red-500">{errors.discordUrl}</p>}
+            {errors.discordUrl && (
+              <p className="error text-red-500">{errors.discordUrl}</p>
+            )}
           </div>
         </div>
-
 
         {/* <div>
           <label className="inline-flex items-center mb-5 cursor-pointer">
@@ -600,10 +617,17 @@ const FormComp = () => {
             disabled
             placeholder=""
           />
-          <a href={`https://explorer.solana.com/address/${tokenAddress}`} target="_blank" rel="noopener noreferrer">
-            <Image className="mx-2 w-full " src={forwardImg} alt="View Token on Explorer" />
+          <a
+            href={`https://explorer.solana.com/address/${tokenAddress}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Image
+              className="mx-2 w-full "
+              src={forwardImg}
+              alt="View Token on Explorer"
+            />
           </a>
-
         </div>
       </div>
     </div>

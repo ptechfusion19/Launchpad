@@ -2,7 +2,7 @@ import axios from "axios";
 import FormData from "form-data";
 // import { cors } from "./cors";
 
-const BASE_URL = "http://localhost:3000/api";
+// const BASE_URL = "http://localhost:3000/api";
 const API_KEY = "b0d3c83fda71caff078b";
 const API_SECRET =
   "b2893d5c88b25af6ef4e58fadb4be3afd89af090dce647247f818699819d00ae";
@@ -11,7 +11,7 @@ const JWT =
 
 // const BASE_URL = "https://launch-pad-g69q.vercel.app/api";
 
-//  const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
+const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
 const BASE = "https://launchpad-wine-three.vercel.app";
 
 export const postLaunch = async (data) => {
@@ -92,6 +92,20 @@ export const removeLPCall = async (data) => {
   }
 };
 
+export const findUser = async (data) => {
+  //
+  try {
+    console.log("object", data);
+    // data.userId = localStorage.getItem("userId");
+    const response = await axios.get(
+      `${BASE_URL}/user/findUserByMongoId?userId=${data}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error getting User", error);
+    throw error;
+  }
+};
 export const burnLPCall = async (data) => {
   //
   try {
