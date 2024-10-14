@@ -1,32 +1,29 @@
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
 import LaunchPadProvider from "@/context/LauchPadProvider";
 import AppWalletProvider from "@/connector";
 import Head from "next/head";
-const inter = Inter({ subsets: ["latin"] });
-import BgImg from "../assets/home/bgImg.png"
+const inter = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "500"],
+});
+import BgImg from "../assets/home/bgImg.png";
 export const metadata = {
   title: "Bundle Bee",
   description: "The Best Launchpad ever to exist...",
-
-
 };
-
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-     <head>
+      <head>
         <link rel="icon" href="/logo.svg" />
       </head>
 
       <body className={inter.className}>
         <AppWalletProvider>
-          <LaunchPadProvider>
-            {children}
-          </LaunchPadProvider>
+          <LaunchPadProvider>{children}</LaunchPadProvider>
         </AppWalletProvider>
-
       </body>
     </html>
   );
