@@ -43,10 +43,8 @@
 
 
 import axios from "axios";
-import FormData from 'form-data';
-import fs from 'fs';
+
 import { NextResponse } from 'next/server';
-import ProjectSettings from '@/models/projectSettingsModel';
 import connectDB from '@/config/database';
 const API_KEY = 'b0d3c83fda71caff078b';
 const API_SECRET = 'b2893d5c88b25af6ef4e58fadb4be3afd89af090dce647247f818699819d00ae';
@@ -127,11 +125,7 @@ export async function POST(req) {
     console.log(metadata, "Iam euygds")
     try {
         await connectDB();
-        // let projectSettings = await ProjectSettings.findOneAndUpdate(
-        //     { projectId },
-        //     { ...settingsData, projectId }, // Ensure projectId is set in both update and insert cases
-        //     { new: true, runValidators: true, upsert: true } // upsert: true will create a new document if it doesn't exist
-        // );
+
 
         const url = 'https://api.pinata.cloud/pinning/pinJSONToIPFS';
 
@@ -155,20 +149,7 @@ export async function POST(req) {
             throw error;
         }
 
-        // let projectSettings = await ProjectSettings.findOne({ projectId });
 
-        // if (projectSettings) {
-        //   projectSettings = await ProjectSettings.findOneAndUpdate(
-        //     { projectId },
-        //     { ...settingsData },
-        //     { new: true, runValidators: true }
-        //   );
-        // } else {
-        //   projectSettings = new ProjectSettings({ projectId, ...settingsData });
-        //   await projectSettings.save();
-        // }
-
-        // return NextResponse.json(projectSettings, { status: 200 });
     } catch (error) {
         console.error('Error In Uploading MetaData', error);
         return NextResponse.json({ error: 'Error In Uploading MetaData' }, { status: 500 });

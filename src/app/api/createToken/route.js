@@ -108,35 +108,26 @@ require('dotenv').config();
 
 
 export async function POST(req) {
-    const { metaData, hash, publicKey, freeze, mintAuthority } = await req.json();
+    const { metaData, hash, publicKey, freeze, mintAuthority, referralWallet } = await req.json();
     try {
         const umi = createUmi("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5");
         const connection = new Connection("https://mainnet.helius-rpc.com/?api-key=e2090957-8cc3-44ab-bb60-82985d36cad5", 'processed');
         const pubkey = new PublicKey(publicKey)
         const ownerKeys = Keypair.generate();
-        console.log(ownerKeys, "we are owner")
         const secretKeyBase58 = ownerKeys.secretKey
-
-        // const keyPair = 
-        // const secretKeyBase58 = "3FpYDWWDCtp5oXhUixmyjB1aFSmsJdtHcV3UmoTmeiBa6MXEH2z927Rb3p3P9njuybapYbUHjQgNc1md7SaG1SKW"
+        // let referralWallet;
         const secret = (secretKeyBase58);
-        console.log(secret, "i am top sectrets")
-        //  const userWallet = umi.eddsa.createKeypairFromSecretKey(new Uint8Array(secret));
-        //  const userWallet = new Keypair();
-        // const userWalletSigner = createSignerFromKeypair(umi, userWallet);
-        // const secretKeyBase582 = "5XV3eW4MeeYakeQAg2s6zzbZLkVi6jLm31DZxEFWcDwxMt9QEWe8ec5cNy9R7baTCauHgXkCBontYdmWWBBBhPds";
+        
+        
         const payer = Keypair.fromSecretKey((secretKeyBase58));
-        console.log(payer, "i am payer ")
         const signer = { publicKey: pubkey, secretKey: new Uint8Array(secret) }
-        // console.log(userWalletSigner);
-        // console.log(metaData, "I am meta datattatatatatat")
+        
 
         const metadata = {
             name: metaData.name,
             symbol: metaData.symbol,
             uri: `https://gateway.pinata.cloud/ipfs/${hash}`,
         };
-        console.log(metadata, "hello matdata")
         const mint = generateSigner(umi);
         const mintSigner = Keypair.fromSecretKey(mint.secretKey);
         umi.use(signerIdentity(signer));
@@ -157,7 +148,7 @@ export async function POST(req) {
             .getInstructions();
         const blockHash = ((await connection.getLatestBlockhash()).blockhash)
 
-        console.log(ixs, "we are keys bro");
+        
         if (mintAuthority) {
             const RevokeMintAuthority =
                 createSetAuthorityInstruction(
@@ -197,11 +188,20 @@ export async function POST(req) {
                 programId: new PublicKey(item.programId) // Assuming programId is already a string or PublicKey object
             });
         });
+
+        let refFee = 0;
+        if (referralWallet) {
+            const refFeeReceiever = new PublicKey(referralWallet);
+            refFee = 0.1;
+            const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
+            instructions.push(refFeeInstruction);
+        }
+        
         const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
-        const fee = 0.2;
+        const fee = 0.2 - refFee;
         const platformFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: feeReceiver, lamports: fee*10**9 });
         instructions.push(platformFeeInstruction);
-        console.log(instructions, "W eerererererer")
+        // console.log(instructions, "W eerererererer")
         const message = MessageV0.compile({ payerKey: pubkey, instructions: instructions, recentBlockhash: blockHash });
 
 

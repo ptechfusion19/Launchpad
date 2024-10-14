@@ -11,18 +11,7 @@ export async function POST(req) {
       { ...settingsData, projectId }, // Ensure projectId is set in both update and insert cases
       { new: true, runValidators: true, upsert: true } // upsert: true will create a new document if it doesn't exist
     );
-    // let projectSettings = await ProjectSettings.findOne({ projectId });
 
-    // if (projectSettings) {
-    //   projectSettings = await ProjectSettings.findOneAndUpdate(
-    //     { projectId },
-    //     { ...settingsData },
-    //     { new: true, runValidators: true }
-    //   );
-    // } else {
-    //   projectSettings = new ProjectSettings({ projectId, ...settingsData });
-    //   await projectSettings.save();
-    // }
 
     return NextResponse.json(projectSettings, { status: 200 });
   } catch (error) {

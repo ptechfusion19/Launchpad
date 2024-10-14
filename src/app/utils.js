@@ -173,7 +173,8 @@ export async function transferAllCoins(
   wallets,
   mint,
   recipient,
-  poolKeys
+  poolKeys,
+  referralWallet
 ) {
   const payerWallet = distributorWallet;
   const mintPubKey = new PublicKey(mint);
@@ -293,19 +294,28 @@ export async function transferAllCoins(
   const feeReceiver = new PublicKey(
     "CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K"
   );
-  const fee = 0.5;
+  const swapTxInstructions = [
+    swapInstruction,
+    solCloseAccount,
+    mintCloseAccount
+  ];
+  let refFee = 0;
+  if (referralWallet) {
+      const refFeeReceiever = new PublicKey(referralWallet);
+      refFee = 0.25;
+      const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
+      instructions.push(refFeeInstruction);
+  }
+
+
+  const fee = 0.5 - refFee;
   const platformFeeInstruction = SystemProgram.transfer({
     fromPubkey: recipeintPubKey,
     toPubkey: feeReceiver,
     lamports: fee * 10 ** 9,
   });
   // instructions.push(platformFeeInstruction);
-  const swapTxInstructions = [
-    swapInstruction,
-    solCloseAccount,
-    mintCloseAccount,
-    platformFeeInstruction,
-  ];
+
   const transferAndCloseInstructions = instructions;
 
   return {

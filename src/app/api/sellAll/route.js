@@ -4,7 +4,7 @@ import LaunchSettings from '../../../models/launchSettingsModel';
 // import Wallet from '../../../models/walletModel';
 import User from '../../../models/userModel';
 import { getJitoTipInstruction, jito_executeAndConfirm } from "@/app/jito";
-import { transferAllCoins, getPoolKeys, buildUnsignedTransaction } from "@/app/utils";
+import { transferAllCoins, getPoolKeys, decryptPrivateKey, buildUnsignedTransaction } from "@/app/utils";
 import MarketInfo from "../../../models/marketInfoModel"
 // const solanaWeb3 = require('@solana/web3.js');
 import { Connection, TransactionMessage, VersionedTransaction, TransactionInstruction } from "@solana/web3.js";
@@ -34,6 +34,7 @@ export async function POST(req) {
             projectId: projectId
         });
         const user = await User.findById(project.userId);
+        const referralWallet = user.referralWallet;
         let mint = project.mint;
         const owner = new PublicKey(user.walletAddress);
         
@@ -61,7 +62,7 @@ export async function POST(req) {
         const quoteDecimals = 9;
         const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
 
-        const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys);
+        const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys, referralWallet);
         // const bundles = allInstructions.bundles;
         // console.log(bundles.length);
         // for (let i=0; i<bundles.length; i++) {

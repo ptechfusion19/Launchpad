@@ -1,10 +1,31 @@
-"use client"
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
-import CardComp from "@/components/CardComp";
 import NewCardComp from "@/components/NewCardComp";
-import Logo from "../../../public/logo.png"
+
 const HomePage = () => {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const referrer = searchParams.get("referrer");
+    const walletAddress = searchParams.get("walletAddress");
+    // const walletAddress = searchParams.get("walletAddress");
+
+    const [referralInfo, setReferralInfo] = useState(null);
+
+    useEffect(() => {
+        if (referrer && walletAddress) {
+            setReferralInfo({ referrer, walletAddress });
+            localStorage.setItem('referralWalletAddress', walletAddress);
+            // Optionally, store this info in local storage or context if needed for later use
+        }
+    }, [referrer, walletAddress]);
+
+    const handleSignUpClick = () => {
+        router.push("/referral");
+    };
+
     return (
         <>
             <Toaster position="top-center" reverseOrder={false} />
@@ -15,6 +36,12 @@ const HomePage = () => {
                         <h3 className="text-center pb-2 mb-4 text-2xl">
                             Welcome to Bundle Bee – Your Solana Meme Launchpad
                         </h3>
+                        {referralInfo && (
+                            <div className="bg-yellow-100 p-4 rounded mb-4">
+                                <p>Referred by: <strong>{referralInfo.referrer}</strong></p>
+                                <p>Wallet Address: <strong>{referralInfo.walletAddress}</strong></p>
+                            </div>
+                        )}
                         <h4 className="font-medium">
                             Tired of the same old launchpad routines? Say hello to Bundle Bee, where innovation meets opportunity.
                             <br />
@@ -24,7 +51,6 @@ const HomePage = () => {
                         <h3 className="text-center pb-2 mb-4 text-2xl">
                             Why Bundle Bee?
                         </h3>
-
                         <ul className="list-item list-inside text-left mx-auto w-2/3 text-lg font-medium">
                             <li className="bg-gray-800 text-white p-4 rounded-lg shadow-md mb-2 hover:bg-gray-700 transition duration-300">
                                 <strong className="text-yellow-600">Strategic Launches</strong>: We bundle launches to secure better positioning for developers, steering clear of snipers. It's about strategic placement, not just speed.
@@ -61,7 +87,7 @@ const HomePage = () => {
                         </h3>
                         <ul>
                             <li>
-                                <strong>BundleBee Telegram APP</strong>:  Launching soon after our Solana debut. Stay tuned for a new way to engage with your favorite projects right from your Telegram.
+                                <strong>BundleBee Telegram APP</strong>: Launching soon after our Solana debut. Stay tuned for a new way to engage with your favorite projects right from your Telegram.
                             </li>
                         </ul>
                         <br />
@@ -74,11 +100,17 @@ const HomePage = () => {
                             </li>
                         </ul>
 
-
-
                         <h4 className="py-7 text-lg font-medium">
                             Get Started Today and Be Part of the Revolution!
                         </h4>
+
+                        {/* Referral Sign-Up Button */}
+                        <button
+                            onClick={handleSignUpClick}
+                            className="mt-6 bg-yellow-600 text-white p-3 rounded-lg hover:bg-yellow-500 transition duration-300"
+                        >
+                            Sign Up for the Referral Program
+                        </button>
                     </div>
                 </NewCardComp>
             </div>

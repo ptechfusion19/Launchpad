@@ -494,7 +494,7 @@ const prepareTestTxs = async (walletPubkeyStr) => {
 }
 
 
-const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solInitialLiquidity, snipeSolAmount, projectId) => {
+const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solInitialLiquidity, snipeSolAmount, projectId, referralWallet) => {
     console.log("Hello", mint, walletPubkeyStr, tokenInitialLiquidity, solInitialLiquidity, snipeSolAmount);
     // const prepareTxs = async (mintString, walletPubkeyStr) => {
     const jitofee_sol = 0.001;
@@ -502,7 +502,6 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     const mintPubKey = new PublicKey(mint);
     const mintInfo = await getMint(connection, mintPubKey)
     const mintDecimals = mintInfo.decimals;
-    console.log(mintDecimals);
     const allTransactionsArray = [];
     // const allLamports = calculatePercentages(snipeSolAmount - 0.3);
     const snipeSolLamports = parseInt(snipeSolAmount * 10 ** 9);
@@ -588,9 +587,16 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     
     const jitoTipLiq = await getJitoTipInstruction(ownerPubkey, jitofee_sol);
     const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
-    const fee = 0.5;
-    const platformFeeInstruction = await transferSolInstruction(ownerPubkey,feeReceiver,fee*10**9);
     liquidityInstructions.push(jitoTipLiq);
+    let refFee = 0;
+    if (referralWallet) {
+        const refFeeReceiever = new PublicKey(referralWallet);
+        refFee = 0.25;
+        const refFeeInstruction = await transferSolInstruction(ownerPubkey,refFeeReceiever,refFee*10**9);
+        liquidityInstructions.push(refFeeInstruction);
+    }
+    const fee = 0.5 - refFee;
+    const platformFeeInstruction = await transferSolInstruction(ownerPubkey,feeReceiver,fee*10**9);
     liquidityInstructions.push(platformFeeInstruction);
     
     const liquidityTx = await buildUnsignedTransaction(ownerPubkey, liquidityInstructions);
@@ -620,6 +626,7 @@ export async function POST(req) {
             projectId: projectId
         });
         const user = await User.findById(project.userId);
+        const referralWallet = user.referralWallet;
         let mint = project.mint;
         //console.log(project)
         // let walletPubkeyStr = user.walletAddress;
@@ -629,7 +636,7 @@ export async function POST(req) {
         let tokenInitialLiquidity = project.amountTokens;
         let solInitialLiquidity = project.amountSol;
         let snipeSolAmount = project.amountSolForSnipping;
-        const baseData = await prepareTxs(mint, walletPubkeyStr, tokenInitialLiquidity, solInitialLiquidity, snipeSolAmount, projectId);
+        const baseData = await prepareTxs(mint, walletPubkeyStr, tokenInitialLiquidity, solInitialLiquidity, snipeSolAmount, projectId, referralWallet);
         // const baseData = await prepareTestTxs(walletPubkeyStr);
         // const bs58EncodedTxs = await signTxsPhantom(baseData.allTxs);
         const  bs58EncodedTxs = await signTxsPhantom(baseData.allTxs);

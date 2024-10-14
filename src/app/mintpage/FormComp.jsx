@@ -8,6 +8,7 @@ import { imageUpload, mintToken, meteDataUpload, tokenCreate } from "@/hooks/use
 import { getMintsettings } from "@/hooks/useLaunch";
 import LaunchPadContext from "../../context/LaunchPadContext";
 import { Connection, VersionedTransaction } from "@solana/web3.js";
+import {User} from "../../models/userModel";
 import ToolTip from "@/components/ToolTip";
 const FormComp = () => {
   const {
@@ -296,17 +297,14 @@ const FormComp = () => {
         success: <b>Metadata Uploaded Successfully</b>,
         error: <b>Failed to upload Metadata, Try Again Later ...</b>,
       })
-
-    const res = await tokenCreate(hash, metadata, solanaKey, isFreezeChecked, isMintChecked)
+    const user = await User.findById(userId);
+    const referralWallet = user.referralWallet;
+    const res = await tokenCreate(hash, metadata, solanaKey, isFreezeChecked, isMintChecked, referralWallet)
     try {
 
       const itemArray = Object.values(res.transactions);
       const tx = VersionedTransaction.deserialize(itemArray);
-      let mintToken = await window.solana.signAndSendTransaction(tx)
-
-      console.log(mintToken);
-
-
+      let mintToken = await window.solana.signAndSendTransaction(tx);
       toast.success("Token Mint Successfully")
       setTokenAddress(res?.key)
 

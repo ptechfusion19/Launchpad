@@ -33,6 +33,7 @@
     "fs": "^0.0.1-security",
     "launchpad": "file:",
     "mongoose": "^8.5.4",
+    "nanoid": "^5.0.7",
     "next": "14.2.6",
     "pino-pretty": "^11.2.2",
     "react": "^18",
