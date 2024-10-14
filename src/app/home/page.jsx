@@ -37,13 +37,26 @@ const HomePage = () => {
               Welcome to Bundle Bee – Your Solana Meme Launchpad
             </h3>
             {referralInfo && (
-              <div className="bg-yellow-100 p-4 rounded mb-4">
-                <p>
-                  Referred by: <strong>{referralInfo.referrer}</strong>
-                </p>
-                <p>
-                  Wallet Address: <strong>{referralInfo.walletAddress}</strong>
-                </p>
+              <div className="bg-white border-l-4 border-yellow-500 p-6 rounded-lg mb-6 shadow-lg">
+                <div className="mb-4">
+                  <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                    Referral Information
+                  </h2>
+                  <p className="text-gray-600">
+                    <span className="font-bold text-yellow-600">
+                      Referred by:
+                    </span>{" "}
+                    {referralInfo.referrer}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-gray-600">
+                    <span className="font-bold text-yellow-600">
+                      Wallet Address:
+                    </span>{" "}
+                    {referralInfo.walletAddress}
+                  </p>
+                </div>
               </div>
             )}
             <h4 className="font-medium">
