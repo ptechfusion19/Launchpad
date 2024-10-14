@@ -15,7 +15,7 @@ export async function POST(req) {
 
         // Generate a unique referral code using nanoid
         const referralCode = nanoid(10);
-        const referralLink = `https://launchpad-wine-three.vercel.app/referral/${referralCode}`;
+        const referralLink = `https://launchpad-0imn.onrender.com/referral/${referralCode}`;
 
         // Save the referral data in the database
         const newReferral = new Referral({
