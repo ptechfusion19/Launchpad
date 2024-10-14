@@ -2,6 +2,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import LaunchPadProvider from "@/context/LauchPadProvider";
 import AppWalletProvider from "@/connector";
+import { Suspense } from "react";
 import Head from "next/head";
 const inter = Poppins({
   subsets: ["latin"],
@@ -22,7 +23,9 @@ export default function RootLayout({ children }) {
 
       <body className={inter.className}>
         <AppWalletProvider>
-          <LaunchPadProvider>{children}</LaunchPadProvider>
+          <Suspense fallback={<div>Loading...</div>}>
+            <LaunchPadProvider>{children}</LaunchPadProvider>
+          </Suspense>
         </AppWalletProvider>
       </body>
     </html>
