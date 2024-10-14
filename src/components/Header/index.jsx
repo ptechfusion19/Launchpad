@@ -163,7 +163,7 @@ function Header() {
               </li> */}
               <li className="py-2">
                 <Link
-                  href="/referral"
+                  href="/bee"
                   className="text-white bg-gradient-to-r from-yellow-700 to-yellow-600 hover:from-yellow-500 hover:to-yellow-700 px-4 py-2 rounded-lg font-medium shadow-lg transition-all"
                 >
                   Referral
