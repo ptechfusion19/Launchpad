@@ -34,6 +34,7 @@ export async function POST(req) {
             projectId: projectId
         });
         const user = await User.findById(project.userId);
+        const referralWallet = user.referralWallet;
         let mint = project.mint;
         const owner = new PublicKey(user.walletAddress);
         
@@ -61,7 +62,7 @@ export async function POST(req) {
         const quoteDecimals = 9;
         const freshPoolKeys = await getPoolKeys(connection, baseMint, quoteMint, baseDecimals, quoteDecimals, marketId);
 
-        const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys);
+        const allInstructions = await transferAllCoins(connection, distributorWallet, wallets, mint, user.walletAddress, freshPoolKeys, referralWallet);
         // const bundles = allInstructions.bundles;
         // console.log(bundles.length);
         // for (let i=0; i<bundles.length; i++) {

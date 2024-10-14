@@ -2,7 +2,7 @@ import axios from "axios";
 import FormData from 'form-data';
 // import { cors } from "./cors";
 
-// const BASE_URL = "http://localhost:3000/api";
+const BASE_URL = "http://localhost:3000/api";
 const API_KEY = 'b0d3c83fda71caff078b';
 const API_SECRET = 'b2893d5c88b25af6ef4e58fadb4be3afd89af090dce647247f818699819d00ae';
 const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiI5YmUyNTI4Ni1iMDQ0LTRjYzYtYWE3Ni1hZDgzZGY5YTVkNDgiLCJlbWFpbCI6ImVodGFzaGFtLnNweXJlc3luY0BnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwicGluX3BvbGljeSI6eyJyZWdpb25zIjpbeyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJGUkExIn0seyJkZXNpcmVkUmVwbGljYXRpb25Db3VudCI6MSwiaWQiOiJOWUMxIn1dLCJ2ZXJzaW9uIjoxfSwibWZhX2VuYWJsZWQiOmZhbHNlLCJzdGF0dXMiOiJBQ1RJVkUifSwiYXV0aGVudGljYXRpb25UeXBlIjoic2NvcGVkS2V5Iiwic2NvcGVkS2V5S2V5IjoiYjBkM2M4M2ZkYTcxY2FmZjA3OGIiLCJzY29wZWRLZXlTZWNyZXQiOiJiMjg5M2Q1Yzg4YjI1YWY2ZWY0ZTU4ZmFkYjRiZTNhZmQ4OWFmMDkwZGNlNjQ3MjQ3ZjgxODY5OTgxOWQwMGFlIiwiZXhwIjoxNzU4Nzc0MzY3fQ.i-UnCaUnIoKd_S19krFwqOxEKUcAA7XWfrtUEfn2VEA';
@@ -11,7 +11,7 @@ const JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaW
 
 // const BASE_URL = "https://launch-pad-g69q.vercel.app/api";
 
- const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
+//  const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
  const BASE = "https://launchpad-wine-three.vercel.app";
 
 
@@ -38,7 +38,7 @@ export const postUser = async (data) => {
         return response.data;
 
     } catch (error) {
-        console.error("Error getting User", error);
+        console.error("Error adding User", error);
         throw error;
     }
 };
@@ -182,18 +182,19 @@ export const sellAllAPi = async (data) => {
     }
 };
 
-export const tokenCreate = async (hash, metadata, key, freeze, mint) => {
+export const tokenCreate = async (hash, metadata, key, freeze, mint, referralWallet) => {
     // debugger
     //  
     try {
         // debugger
-        console.log(metadata )
+        console.log(metadata)
         const response = await axios.post(`${BASE_URL}/createToken`, {
             metaData: metadata,
             hash: hash,
             publicKey: key,
             freeze: freeze,
-            mintAuthority: mint
+            mintAuthority: mint,
+            referralWallet: referralWallet
         });
         return response.data;
     } catch (error) {

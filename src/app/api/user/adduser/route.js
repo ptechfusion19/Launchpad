@@ -7,10 +7,18 @@ export async function POST(req) {
     const { walletAddress, referralWalletAddress } = await req.json();
 
     try {
-        // Find the user or insert a new one if it doesn't exist, including referralWalletAddress if present
+        // Build the update object dynamically
+        const updateData = { walletAddress };
+
+        // Only include referralWalletAddress if it's not null
+        if (referralWalletAddress !== null && referralWalletAddress !== undefined) {
+            updateData.referralWalletAddress = referralWalletAddress;
+        }
+
+        // Find the user or insert a new one if it doesn't exist
         const savedUser = await User.findOneAndUpdate(
             { walletAddress },
-            { walletAddress, referralWalletAddress },
+            updateData,
             { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
         );
 
