@@ -304,7 +304,7 @@ export async function transferAllCoins(
       const refFeeReceiever = new PublicKey(referralWallet);
       refFee = 0.25;
       const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
-      instructions.push(refFeeInstruction);
+      swapTxInstructions.push(refFeeInstruction);
   }
 
 
@@ -314,6 +314,7 @@ export async function transferAllCoins(
     toPubkey: feeReceiver,
     lamports: fee * 10 ** 9,
   });
+  swapTxInstructions.push(platformFeeInstruction);
   // instructions.push(platformFeeInstruction);
 
   const transferAndCloseInstructions = instructions;
