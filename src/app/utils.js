@@ -26,8 +26,9 @@ import bs58 from "bs58";
 import crypto from "crypto";
 
 // require("dotenv").config();
+const ENCRYPTION_KEY='13533654ea70c113a05271839da628e853a4041dca1439b52d26cd43d172fbcc'
 
-const encryptionKey = process.env.NEXT_PUBLIC_ENCRYPTION_KEY;
+const encryptionKey = ENCRYPTION_KEY;
 const transferSolInstruction = async (from_wallet, to_wallet, lamports) => {
   return SystemProgram.transfer({
     fromPubkey: from_wallet,
