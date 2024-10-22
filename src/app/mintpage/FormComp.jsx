@@ -324,14 +324,14 @@ const FormComp = () => {
                 {/* Token Name */}
                 Token name
               </label>
-              {/* <ToolTip tooltipContent={"I am tooltip content"} /> */}
+              <ToolTip tooltipContent={"Token name"} />
             </div>
             <input
               className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
               id="tokenName"
               name="tokenName"
               type="text"
-              placeholder=""
+              placeholder="Token Name"
               value={formData.tokenName}
               onChange={handleChange}
             />
@@ -349,7 +349,7 @@ const FormComp = () => {
                 {/* Symbol */}
                 Token Symbol $TOKEN
               </label>
-              {/* <ToolTip tooltipContent={"I am tooltip content"} /> */}
+              <ToolTip tooltipContent={"Token Symbol $TOKEN"} />
             </div>
             <input
               className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2  py-1 px-4 mb-3 border-custom_bg"
@@ -358,7 +358,7 @@ const FormComp = () => {
               value={formData.symbol}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="Token Symbol"
             />
             {errors.symbol && (
               <p className="error text-red-500">{errors.symbol}</p>
@@ -381,7 +381,7 @@ const FormComp = () => {
               value={formData.logoUrl}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="Logo URI"
             />
 
             {errors.logoUrl && (
@@ -448,9 +448,9 @@ const FormComp = () => {
               value={formData.description}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="Token Description"
             />
-            {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Description */}
+            <ToolTip tooltipContent={"Token Description"} /> 
             {errors.description && (
               <p className="error text-red-500">{errors.description}</p>
             )}
@@ -473,9 +473,9 @@ const FormComp = () => {
               value={formData.websiteUrl}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="Website URL"
             />
-            {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Website URL */}
+            <ToolTip tooltipContent={"Website"} />
             {errors.websiteUrl && (
               <p className="error text-red-500">{errors.websiteUrl}</p>
             )}
@@ -498,9 +498,9 @@ const FormComp = () => {
               value={formData.twitterUrl}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="https://www.x.com/..."
             />
-            {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Twitter URL */}
+            <ToolTip tooltipContent={"Twitter URL"} />
             {errors.twitterUrl && (
               <p className="error text-red-500">{errors.twitterUrl}</p>
             )}
@@ -523,9 +523,9 @@ const FormComp = () => {
               value={formData.telegramUrl}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="https://t.me/..."
             />
-            {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Telegram URL */}
+            <ToolTip tooltipContent={"Telegram"} />
             {errors.telegramUrl && (
               <p className="error text-red-500">{errors.telegramUrl}</p>
             )}
@@ -548,9 +548,9 @@ const FormComp = () => {
               value={formData.discordUrl}
               onChange={handleChange}
               type="text"
-              placeholder=""
+              placeholder="https://www.discord.com/...."
             />
-            {/* <ToolTip tooltipContent={"I am tooltip content"} /> Tooltip for Discord URL */}
+            <ToolTip tooltipContent={"Discord"} />
             {errors.discordUrl && (
               <p className="error text-red-500">{errors.discordUrl}</p>
             )}
@@ -615,7 +615,7 @@ const FormComp = () => {
             onChange={handleTokenChange}
             type="text"
             disabled
-            placeholder=""
+            placeholder="Mint Address will be displayed here"
           />
           <a
             href={`https://explorer.solana.com/address/${tokenAddress}`}

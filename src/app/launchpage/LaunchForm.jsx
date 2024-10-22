@@ -1,5 +1,5 @@
 "use client";
-
+import ToolTip from "@/components/ToolTip";
 import React, { useState, useContext, useEffect } from "react";
 import LauchTable from "./LauchTable";
 import {
@@ -23,6 +23,8 @@ import {
   TransactionInstruction,
   VersionedTransaction,
 } from "@solana/web3.js";
+
+import {MintLayout} from "@solana/spl-token";
 
 import { getPoolKeys } from "../utils";
 import Loader from "@/components/Loader";
@@ -70,16 +72,32 @@ const LaunchFormComp = () => {
     amountTokens: "",
     amountSolForSnipping: "",
   });
-  const handleChange = (e) => {
+  const setTokens = async (mint) => {
+    const connection = new Connection(
+      process.env.NEXT_PUBLIC_RPC_URL
+    );
+    const accountInfo = await connection.getAccountInfo(new PublicKey(mint));
+    const amount = MintLayout.decode(accountInfo.data)
+    setFormData((prevData) => ({
+      ...prevData,
+      
+      amountTokens: (Number(amount.supply)/(10**amount.decimals)).toFixed(0), // Set amountTokens to 10000
+    }));
+  };
+  const handleChange =  (e) => {
     if (!connected) {
       toast.error("Please connect your wallet first");
       return; // Prevent typing if not connected
     }
+
     const { name, value } = e.target;
-    setFormData((prevData) => ({
+     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
+    if (e.target.name == "mint") {
+      setTokens(value);
+    }
   };
 
   const [projectId, setProjectId] = useState("");
@@ -371,9 +389,7 @@ const LaunchFormComp = () => {
         // const res = await TokenLaunch();
         //console.log(res, "this is res");
         // toast.success(" Token Launched");
-        const connection = new Connection(
-          "https://api.mainnet-beta.solana.com"
-        );
+        
         const strFeePayer = localStorage.getItem("solanaKey");
         //
         // if (
@@ -581,18 +597,21 @@ const LaunchFormComp = () => {
           <form className="w-full max-w-2xl my-3">
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                  htmlFor="mint"
-                >
-                  Token Address
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                    htmlFor="mint"
+                  >
+                    Token Address
+                  </label>
+                  <ToolTip tooltipContent={"Token Description"} />
+                </div>
                 <input
                   className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="mint"
                   name="mint"
                   type="text"
-                  placeholder=""
+                  placeholder="Mint Address"
                   value={formData.mint}
                   onChange={handleChange}
                 />
@@ -600,28 +619,36 @@ const LaunchFormComp = () => {
             </div>
             <div className="flex flex-wrap -mx-3 mb-3">
               <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                  htmlFor="amountTokens"
-                >
-                  Token Initial Liquidity
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                    htmlFor="amountTokens"
+                  >
+                    Token Initial Liquidity
+                  </label>
+                  <ToolTip tooltipContent={"Token Description"} />
+                </div>
                 <input
                   className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountTokens"
                   name="amountTokens"
                   type="text"
+                  disabled
                   value={formData.amountTokens}
                   onChange={handleChange}
+                  placeholder="1000000000"
                 />
               </div>
               <div className="w-full md:w-1/3 px-3">
-                <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                  htmlFor="amountSol"
-                >
-                  SOL Initial Liquidity
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                    htmlFor="amountSol"
+                  >
+                    SOL Initial Liquidity
+                  </label>
+                  <ToolTip tooltipContent={"Token Description"} />
+                </div>
                 <input
                   className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountSol"
@@ -629,15 +656,19 @@ const LaunchFormComp = () => {
                   value={formData.amountSol}
                   onChange={handleChange}
                   type="text"
+                  placeholder="10"
                 />
               </div>
               <div className="w-full md:w-1/3 px-3">
-                <label
-                  className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
-                  htmlFor="amountSolForSnipping"
-                >
-                  Snipe SOL Amount
-                </label>
+                <div className="flex justify-between items-center">
+                  <label
+                    className="block uppercase tracking-wide text-black text-xs font-bold mb-2"
+                    htmlFor="amountSolForSnipping"
+                  >
+                    Snipe SOL Amount
+                  </label>
+                  <ToolTip tooltipContent={"Token Description"} />
+                </div>
                 <input
                   className="appearance-none block w-full bg-[#4b4b4b]   text-white border-2 py-1 px-4 mb-3 border-custom_bg"
                   id="amountSolForSnipping"
@@ -645,6 +676,7 @@ const LaunchFormComp = () => {
                   value={formData.amountSolForSnipping}
                   onChange={handleChange}
                   type="text"
+                  placeholder="5"
                 />
               </div>
             </div>

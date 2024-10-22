@@ -23,7 +23,7 @@ const HomePage = () => {
   }, [referrer, walletAddress]);
 
   const handleSignUpClick = () => {
-    router.push("/referral");
+    router.push("/bee");
   };
 
   return (
