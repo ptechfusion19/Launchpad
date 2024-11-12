@@ -189,18 +189,18 @@ export async function POST(req) {
             });
         });
 
-        let refFee = 0;
-        if (referralWallet) {
-            const refFeeReceiever = new PublicKey(referralWallet);
-            refFee = 0.1;
-            const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
-            instructions.push(refFeeInstruction);
-        }
+        // let refFee = 0;
+        // if (referralWallet) {
+        //     const refFeeReceiever = new PublicKey(referralWallet);
+        //     refFee = 0.1;
+        //     const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
+        //     instructions.push(refFeeInstruction);
+        // }
         
         const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
-        const fee = 0.2 - refFee;
+        const fee = 0.05 ;
         const platformFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: feeReceiver, lamports: fee*10**9 });
-        instructions.push(platformFeeInstruction);
+        // instructions.push(platformFeeInstruction);
         // console.log(instructions, "W eerererererer")
         const message = MessageV0.compile({ payerKey: pubkey, instructions: instructions, recentBlockhash: blockHash });
 

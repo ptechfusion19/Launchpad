@@ -2,7 +2,7 @@ import axios from "axios";
 import FormData from "form-data";
 // import { cors } from "./cors";
 
-const BASE_URL = "http://localhost:3000/api";
+// const BASE_URL = "http://localhost:3000/api";
 const API_KEY = "b0d3c83fda71caff078b";
 const API_SECRET =
 
@@ -12,8 +12,8 @@ const JWT =
 
 // const BASE_URL = "https://launch-pad-g69q.vercel.app/api";
 
-// const BASE_URL = "https://launchpad-q0bw6im7o-bundlebees-projects.vercel.app/api";
-// const BASE = "https://launchpad-wine-three.vercel.app";
+//const BASE_URL = "launchpad-wine-three.vercel.app/api";
+const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
 
 export const postLaunch = async (data) => {
   //

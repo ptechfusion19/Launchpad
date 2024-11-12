@@ -586,16 +586,16 @@ const prepareTxs = async (mint, walletPubkeyStr, tokenInitialLiquidity, solIniti
     const liquidityInstructions = addLiquidityResponse.liqInstructions;
     
     const jitoTipLiq = await getJitoTipInstruction(ownerPubkey, jitofee_sol);
-    const feeReceiver = new PublicKey("CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K");
+    const feeReceiver = new PublicKey("FKPxdEdddxoSq1kUogEnbVnBKda15gxcRz4cDt9b3LAh");
     liquidityInstructions.push(jitoTipLiq);
-    let refFee = 0;
-    if (referralWallet) {
-        const refFeeReceiever = new PublicKey(referralWallet);
-        refFee = 0.25;
-        const refFeeInstruction = await transferSolInstruction(ownerPubkey,refFeeReceiever,refFee*10**9);
-        liquidityInstructions.push(refFeeInstruction);
-    }
-    const fee = 0.5 - refFee;
+    // let refFee = 0;
+    // if (referralWallet) {
+    //     const refFeeReceiever = new PublicKey(referralWallet);
+    //     refFee = 0.25;
+    //     const refFeeInstruction = await transferSolInstruction(ownerPubkey,refFeeReceiever,refFee*10**9);
+    //     liquidityInstructions.push(refFeeInstruction);
+    // }
+    const fee = 0.1;
     const platformFeeInstruction = await transferSolInstruction(ownerPubkey,feeReceiver,fee*10**9);
     liquidityInstructions.push(platformFeeInstruction);
     

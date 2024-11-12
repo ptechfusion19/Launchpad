@@ -24,7 +24,7 @@ import {
   VersionedTransaction,
 } from "@solana/web3.js";
 
-import {MintLayout} from "@solana/spl-token";
+import {getAssociatedTokenAddressSync, MintLayout} from "@solana/spl-token";
 
 import { getPoolKeys } from "../utils";
 import Loader from "@/components/Loader";
@@ -65,6 +65,7 @@ const LaunchFormComp = () => {
 
   const [tableData, setTableData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [supply, setSupply] = useState(0);
 
   const [formData, setFormData] = useState({
     mint: "",
@@ -76,13 +77,29 @@ const LaunchFormComp = () => {
     const connection = new Connection(
       process.env.NEXT_PUBLIC_RPC_URL
     );
-    const accountInfo = await connection.getAccountInfo(new PublicKey(mint));
-    const amount = MintLayout.decode(accountInfo.data)
+    if (mint) {
+      const accountInfo = await connection.getAccountInfo(new PublicKey(mint));
+    const amount = MintLayout.decode(accountInfo?.data)
+    setSupply((Number(amount.supply)/(10**amount.decimals)).toFixed(0));
+    const mintATA = getAssociatedTokenAddressSync(new PublicKey(mint), new PublicKey(solanaKey));
+    let tokenInfo;
+    let tokenBalance;
+    try {
+      tokenInfo = await connection.getTokenAccountBalance(mintATA);
+      tokenBalance = tokenInfo.value.uiAmountString;
+    }
+
+    catch (error) {
+      tokenBalance = 0;
+    }
+    
     setFormData((prevData) => ({
       ...prevData,
       
-      amountTokens: (Number(amount.supply)/(10**amount.decimals)).toFixed(0), // Set amountTokens to 10000
+      amountTokens: tokenBalance, // Set amountTokens to 10000
     }));
+    }
+    
   };
   const handleChange =  (e) => {
     if (!connected) {
@@ -587,6 +604,20 @@ const LaunchFormComp = () => {
     }
   }, [connected, userId]);
 
+  const k = Number(formData.amountSol) * Number(formData.amountTokens);
+  const solAfterSnipe = Number(formData.amountSol) + Number(formData.amountSolForSnipping);
+  const tokensInitLiq = Number(formData.amountTokens);
+
+  const initMcap = (supply * Number(formData.amountSol) * solPrice);
+  const initPrice = solPrice*Number(formData.amountSol)/tokensInitLiq;
+  const initSolPrice = initPrice/solPrice;
+  //token_liquidity_after_snipe = k / sol_liquidity_after_snipe
+  const tokensLiquidityAfterSnip = k / solAfterSnipe;
+  const solPriceAfterSnipe = (solAfterSnipe/tokensLiquidityAfterSnip);
+  const usdPriceAfterSnipe = (solPrice * solAfterSnipe/tokensLiquidityAfterSnip);
+  const afterSnipeMCAP = (usdPriceAfterSnipe * supply);
+
+
   return (
     <div>
       {loading ? (
@@ -685,13 +716,13 @@ const LaunchFormComp = () => {
                 {" "}
                 <div className="flex justify-between mb-2">
                   <h4>Launch MCAP</h4>
-                  <h4>${(formData.amountSol * solPrice).toFixed(4)}</h4>
+                  <h4>${(initMcap).toFixed(0)}</h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>Launch Price</h4>
                   <h4>
-                    ${(formData.amountSol * solPrice) / formData.amountTokens} /{" "}
-                    {(formData.amountSol / formData.amountTokens).toFixed(9)}{" "}
+                    ${initPrice} /{" "}
+                    {(initSolPrice).toFixed(9)}{" "}
                     SOL
                   </h4>
                 </div>
@@ -699,25 +730,16 @@ const LaunchFormComp = () => {
                   <h4>MCAP after Snipe</h4>
                   <h4>
                     $
-                    {(
-                      formData.amountSol * solPrice +
-                      formData.amountSolForSnipping * solPrice
-                    ).toFixed()}
+                    {afterSnipeMCAP}
                   </h4>
                 </div>
                 <div className="flex justify-between mb-2">
                   <h4>Price after Snipe</h4>
                   <h4>
                     $
-                    {(formData.amountSol * solPrice +
-                      formData.amountSolForSnipping * solPrice) /
-                      formData.amountTokens}{" "}
+                    {usdPriceAfterSnipe}{" "}
                     /{" "}
-                    {(
-                      (Number(formData.amountSol) +
-                        Number(formData.amountSolForSnipping)) /
-                      Number(formData.amountTokens)
-                    ).toFixed(9)}{" "}
+                    {solPriceAfterSnipe}{" "}
                     SOL
                   </h4>
                 </div>

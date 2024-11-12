@@ -97,6 +97,11 @@ const ReferralSignUpPage = () => {
             <h4 className="py-7 text-lg font-medium">
               Share your link to invite friends to Bundle Bee!
             </h4>
+
+            <p className="text-[#DB0002]">
+              Once you refer some one , you wil receive 50% of the comission
+              share earned by the system.
+            </p>
           </div>
         </NewCardComp>
       </div>

