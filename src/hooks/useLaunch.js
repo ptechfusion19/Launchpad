@@ -13,7 +13,7 @@ const JWT =
 // const BASE_URL = "https://launch-pad-g69q.vercel.app/api";
 
 //const BASE_URL = "launchpad-wine-three.vercel.app/api";
-const BASE_URL = "https://launchpad-wine-three.vercel.app/api";
+const BASE_URL = "https://launchpad-sage-sigma.vercel.app/api";
 
 export const postLaunch = async (data) => {
   //
